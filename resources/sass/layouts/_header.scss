@@ -1,0 +1,140 @@
+@keyframes grow-top {
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    height: calc(100vh - 78px);
+  }
+}
+
+@keyframes reveal-header {
+  to {
+    height: 100vh;
+  }
+}
+
+header.header {
+  background: white;
+
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &.header-open {
+    background: red;
+    animation: reveal-header cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.4s
+    forwards;
+
+    .container,
+    .row {
+      height: calc(100vh - 78px);
+    }
+    .nav {
+      animation: grow-top cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.5s
+      forwards;
+    }
+    .navbar {
+      background-color: green;
+    }
+    .menu {
+      align-items: center;
+    }
+  }
+  .logo {
+    @include center-flex-y;
+    box-sizing: content-box;
+    padding-bottom: 0;
+    a {
+      text-decoration: none;
+      color: rgb(255, 255, 255);
+    }
+  }
+
+  .navbar {
+    @include center-flex-y;
+    background-color: transparent;
+    @include transition(background-color, 0.5s);
+    padding: {
+      top: 1.5rem;
+      bottom: 1.5rem;
+    }
+
+    @include mq("tablet", max) {
+      z-index: 3;
+      flex-direction: column;
+      align-items: flex-start;
+      @include make-container();
+    }
+  }
+
+  .nav {
+    justify-content: flex-end;
+    @include center-flex-y;
+    @include mq("tablet", max) {
+      opacity: 0;
+      justify-content: center;
+      flex-direction: column;
+      height: 0;
+      transform: translateY(-100vh);
+    }
+
+    &-right {
+      @include mq("tablet") {
+        @include push--auto;
+      }
+      @include mq("tablet", max) {
+        margin-bottom: 6rem;
+      }
+    }
+    &-auth .menu-link {
+      text-transform: uppercase;
+    }
+  }
+
+  .menu {
+    @include center-flex-y;
+    justify-content: space-between;
+    list-style-type: none;
+
+    @include mq("tablet", max) {
+      flex-direction: column;
+      align-items: flex-start;
+      &-item {
+        padding-right: 0 !important;
+        &:not(:last-child) {
+          padding-bottom: 2rem;
+        }
+      }
+    }
+
+    &-item {
+      padding: 10px 20px;
+    }
+    &-link {
+      text-decoration: none;
+      font-size: 16px;
+      font-family: "Playfair Display";
+      color: rgb(15, 15, 15);
+      line-height: 1.875;
+      text-align: left;
+    }
+  }
+  .hamburger {
+    display: none;
+    @include mq("tablet", max) {
+      display: initial;
+      align-self: flex-end;
+      position: absolute;
+    }
+  }
+}
+.scroll-bg {
+  background-color: rgb(42, 46, 106) !important;
+  @include transition(background-color, 0.5s);
+  .navbar {
+    background-color: rgb(39, 43, 99);
+  }
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="347px" height="207px" viewBox="0 0 347 207" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>Group 8</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="32.2068948%" x2="0%" y2="67.7931052%" id="linearGradient-1">
+            <stop stop-color="#000000" offset="0%"></stop>
+            <stop stop-color="#685354" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Cart-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Cart-Page-3.2.1" transform="translate(-136.000000, -2382.000000)">
+            <g id="Group-6" transform="translate(136.000000, 2382.000000)">
+                <g id="Group-8">
+                    <rect id="Bg" fill="url(#linearGradient-1)" x="0" y="0" width="347" height="207" rx="10"></rect>
+                    <text id="11/19" font-family="Helvetica" font-size="16" font-weight="normal" letter-spacing="2" fill="#FFFFFF">
+                        <tspan x="224" y="159">11/1</tspan>
+                        <tspan x="261.960938" y="159">9</tspan>
+                    </text>
+                    <text id="EXP-DATE" font-family="Helvetica" font-size="7" font-weight="normal" letter-spacing="2" fill="#FFFFFF">
+                        <tspan x="224" y="135">EXP DATE</tspan>
+                    </text>
+                    <text id="Marius-Other" font-family="Helvetica" font-size="16" font-weight="normal" letter-spacing="-0.5" fill="#FFFFFF">
+                        <tspan x="24" y="159">Marius Other</tspan>
+                    </text>
+                    <text id="CARD-HOLDER" font-family="Helvetica" font-size="7" font-weight="normal" letter-spacing="2" fill="#FFFFFF">
+                        <tspan x="24" y="135">CARD HOLDER</tspan>
+                    </text>
+                    <text id="3384-4003-4885-2334" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="2.25" fill="#FFFFFF">
+                        <tspan x="24" y="104">3384 4003 4885 2334</tspan>
+                    </text>
+                    <path d="M68.688,45.814 L65.684,45.814 C64.751,45.814 64.057,46.068 63.647,46.998 L57.874,60.072 L61.957,60.072 C61.957,60.072 62.623,58.314 62.774,57.929 C63.221,57.929 67.188,57.935 67.753,57.935 C67.869,58.433 68.227,60.072 68.227,60.072 L71.834,60.072 L68.688,45.814 Z M63.893,55.01 C64.213,54.191 65.442,51.023 65.442,51.023 C65.421,51.062 65.759,50.198 65.96,49.661 L66.222,50.891 C66.222,50.891 66.967,54.297 67.123,55.01 L63.893,55.01 Z M58.146,55.404 C58.118,58.367 55.462,60.279 51.375,60.279 C49.632,60.261 47.953,59.918 47.043,59.519 L47.59,56.326 L48.091,56.554 C49.368,57.086 50.195,57.301 51.752,57.301 C52.869,57.301 54.065,56.863 54.077,55.908 C54.084,55.283 53.576,54.838 52.061,54.138 C50.585,53.455 48.631,52.311 48.656,50.262 C48.677,47.489 51.385,45.554 55.227,45.554 C56.733,45.554 57.94,45.864 58.71,46.153 L58.184,49.245 L57.833,49.08 C57.117,48.792 56.195,48.514 54.923,48.534 C53.401,48.534 52.695,49.168 52.695,49.761 C52.687,50.429 53.519,50.869 54.879,51.531 C57.126,52.546 58.163,53.783 58.146,55.404 Z M24,45.962 L24.05,45.676 L30.078,45.676 C30.891,45.707 31.546,45.966 31.772,46.835 L33.083,53.139 C31.795,49.842 28.691,47.099 24,45.962 Z M41.581,45.812 L35.458,60.051 L31.344,60.058 L27.862,48.161 C30.365,49.763 32.497,52.305 33.248,54.075 L33.654,55.544 L37.462,45.815 L41.581,45.812 L41.581,45.812 Z M43.153,45.8 L47.043,45.8 L44.61,60.066 L40.722,60.066 L43.153,45.8 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

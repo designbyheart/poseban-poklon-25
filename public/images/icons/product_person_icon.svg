@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M949.991398,414 C943.920846,414 939,418.930074 939,425 C939.10334,431.212426 943.657658,435.9054 949.991398,436 C955.965847,435.97395 960.94033,431.408851 961,425 C961,418.929454 956.06195,414 949.991398,414 L949.991398,414 Z M949.991398,415.10086 C955.466878,415.10086 959.899138,419.524514 959.899138,425.000001 C959.899138,427.527051 958.950329,429.824501 957.396386,431.570751 C956.364194,429.615976 954.596022,428.110101 952.451135,427.451126 C953.680706,426.647001 954.498041,425.259576 954.498041,423.684116 C954.498041,421.203232 952.472297,419.186084 949.991398,419.186084 C947.518923,419.186084 945.493339,421.201597 945.493339,423.684116 C945.493339,425.260201 946.310895,426.647226 947.54028,427.451126 C945.395251,428.110076 943.6218,429.614926 942.594994,431.570751 C941.043885,429.824701 940.100861,427.526801 940.100861,425.000001 C940.100861,419.523894 944.515918,415.10086 949.991398,415.10086 Z M949.991398,420.286942 C951.879263,420.286942 953.39718,421.796242 953.39718,423.684116 C953.39718,425.572001 951.879263,427.081301 949.991398,427.081301 C948.114597,427.081301 946.5942,425.570376 946.5942,423.684116 C946.5942,421.797892 948.114597,420.286942 949.991398,420.286942 Z M949.991398,428.182176 C952.91118,428.182176 955.415996,429.910901 956.579352,432.3878 C954.829818,433.94435 952.523099,434.899125 949.991398,434.899125 C947.461734,434.899125 945.158816,433.950675 943.412054,432.3964 C944.564267,429.913951 947.066638,428.182176 949.991398,428.182176 L949.991398,428.182176 Z" id="path-1"></path>
+        <filter x="-10.0%" y="-10.0%" width="120.0%" height="120.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="1.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Product-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.5">
+        <g id="Product-Page-3.2" transform="translate(-938.000000, -413.000000)">
+            <g id="Shape">
+                <use fill="#000000" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use stroke="#000000" stroke-width="0.4" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

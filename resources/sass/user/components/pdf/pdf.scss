@@ -1,0 +1,354 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.pdf-a4-template {
+    position: relative;
+    width: 100%;
+
+    .pdf-a4-col-left {
+        position: absolute;
+        padding: 28px;
+        width: 80%;
+        height: 100%;
+    }
+    .pdf-a4-col-right {
+        padding: 28px 0;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 13%;
+        height: 100%;
+        background: $main-color;
+    }
+}
+
+.pdf-a4-col-left {
+    .pdf-a4-row-1 {
+        padding-bottom: 2mm;
+        width: 100%;
+        border-bottom: 0.5px solid black;
+        .pdf-a4-logo {
+            width: 74mm;
+        }
+    }
+    .pdf-a4-row-2 {
+        width: 100%;
+        border-bottom: 1px solid black;
+        .pdf-a4-greeting {
+            height: 11.5mm;
+            font-family: Rubik-medium;
+            font-size: 15px;
+            color: $main-color;
+            text-align: center;
+            overflow: hidden;
+            line-height: 1;
+        }
+    }
+    .pdf-a4-row-3 {
+        padding: 2mm 0;
+        width: 100%;
+        height: 16mm;
+        border-bottom: 1px solid black;
+        .pdf-a4-product-title {
+            margin: auto;
+            height: 16mm;
+            font-family: Rubik-bold;
+            font-size: 21px;
+            line-height: 1;
+            color: $main-color;
+            text-align: center;
+            overflow: hidden;
+        }
+    }
+    .pdf-a4-row-4 {
+        padding: 2mm 0;
+        width: 100%;
+        .pdf-a4-desc {
+            max-height: 44.5mm;
+            font-family: Rubik;
+            font-size: 13px;
+            color: $main-text-color;
+            text-align: center;
+            overflow: hidden;
+        }
+    }
+    .pdf-a4-row-5 {
+        width: 100%;
+        border: 0;
+        tr {
+            border: 0;
+            .a4-row-5-left {
+                position: relative;
+                border: 0;
+                .pdf-a4-product-images {
+                    margin-right: 3px;
+                    width: 325px;
+                    height: 55mm;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                        min-height: 55mm;
+                        overflow: hidden;
+                    }
+                }
+            }
+            .a4-row-5-right {
+                position: relative;
+                border: 0;
+                .pdf-a4-product-images {
+                    margin-left: 3px;
+                    width: 305px;
+                    height: 55mm;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                        min-height: 55mm;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+    }
+    .pdf-a4-row-6 {
+        padding: 2.4mm 0 2.4mm 0;
+        width: 100%;
+        tr .pdf-a4-information-col {
+            width: 33.33333%;
+            vertical-align: top;
+            .pdf-a4-information-item {
+                margin-top: 1.5mm;
+                tr {
+                    td {
+                        vertical-align: top;
+                        .pdf-a4-information-icon {
+                            width: 30px;
+                            text-align: left;
+                            .a4-information-icon {
+                                width: 25px;
+                            }
+                        }
+                    }
+                }
+                tr {
+                    td {
+                        .pdf-a4-information-desc {
+                            margin-right: 1mm;
+                            width: 175px;
+                            &.a4-info {
+                                .pdf-a4-information-text {
+                                    width: 100%;
+                                }
+                            }
+                            &.a4-loc {
+                                height: 15mm;
+                                overflow: hidden;
+                            }
+                            &.a4-clock {
+                                height: 15mm;
+                                overflow: hidden;
+                            }
+                            &.a4-user {
+                                height: 15mm;
+                                overflow: hidden;
+                            }
+                            &.a4-cloud {
+                                height: 15mm;
+                                overflow: hidden;
+                            }
+                            &.a4-tsh {
+                                height: 15mm;
+                                overflow: hidden;
+                            }
+                            .pdf-a4-information-title {
+                                font-family: Rubik-medium;
+                                font-size: 12px;
+                                color: $main-text-color;
+                            }
+                            .pdf-a4-information-text {
+                                margin-top: 0.5mm;
+                                font-family: Rubik;
+                                font-size: 12px;
+                                color: $main-text-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .pdf-a4-full-width {
+        .pdf-a4-information-item {
+            margin-top: 1.5mm;
+            tr {
+                td {
+                    vertical-align: top;
+                    .pdf-a4-information-icon {
+                        width: 30px;
+                        text-align: left;
+                        .a4-information-icon {
+                            width: 25px;
+                        }
+                    }
+                }
+            }
+            tr {
+                td {
+                    .pdf-a4-information-desc {
+                        margin-right: 1mm;
+                        width: 100%;
+                        &.a4-info {
+                            .pdf-a4-information-text {
+                                width: 100%;
+                            }
+                        }
+                        &.a4-loc {
+                            height: 15mm;
+                            overflow: hidden;
+                        }
+                        &.a4-clock {
+                            height: 15mm;
+                            overflow: hidden;
+                        }
+                        &.a4-user {
+                            height: 15mm;
+                            overflow: hidden;
+                        }
+                        &.a4-cloud {
+                            height: 15mm;
+                            overflow: hidden;
+                        }
+                        &.a4-tsh {
+                            height: 15mm;
+                            overflow: hidden;
+                        }
+                        .pdf-a4-information-title {
+                            font-family: Rubik-medium;
+                            font-size: 12px;
+                            color: $main-text-color;
+                        }
+                        .pdf-a4-information-text {
+                            margin-top: 0.5mm;
+                            font-family: Rubik;
+                            font-size: 12px;
+                            color: $main-text-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .pdf-a4-row-7 {
+        position: absolute;
+        bottom: 310px;
+        left: 28px;
+        padding: 2.4mm 0;
+        width: 100%;
+        border-top: 1px solid black;
+        .pdf-a4-row-7-col {
+            .pdf-a4-footer-text {
+                font-size: 12px;
+                font-family: Rubik;
+                color: $main-text-color;
+                .a4-footer-text-color {
+                    color: $main-color;
+                    font-family: Rubik-bold;
+                }
+            }
+            &.pdf-a4-footer-qrcode {
+                vertical-align: bottom;
+                table {
+                    margin-top: 72px;
+                    margin-bottom: 0;
+                    margin-left: auto;
+                }
+                .pdf-a4-footer-text {
+                    padding-right: 20px;
+                    text-align: right;
+                }
+                .a4-footer-qrcode-image {
+                    .a4-qrcode-image {
+                        width: 80px;
+                        height: 80px;
+                        object-fit: cover;
+                        object-position: center;
+                    }
+                }
+            }
+        }
+    }
+    .pdf-a4-row-8 {
+        padding: 2.4mm 0 0 0;
+        position: absolute;
+        bottom: 10%;
+        left: 28px;
+        right: 0;
+        width: 100%;
+        .a4-sub-footer-item {
+            width: 25%;
+            .a4-sub-footer-icon {
+                width: 16px;
+                height: 16px;
+            }
+            .a4-sub-footer-text {
+                margin: auto;
+                vertical-align: text-top;
+                margin-left: 1mm;
+                font-family: Rubik;
+                font-size: 11px;
+                color: $main-text-color;
+            }
+            &.a4-sub-footer-item-2 {
+                padding-left: 0px;
+            }
+            &.a4-sub-footer-item-3 {
+                padding-left: 25px;
+            }
+        }
+    }
+}
+
+.pdf-a4-col-right {
+    .pdf-a4-right-table {
+        position: relative;
+        width: 100%;
+        height: 1200px;
+        tr {
+            .pdf-a4-right-top {
+                position: relative;
+                height: 700px;
+                .pdf-a4-right-text {
+                    position: absolute;
+                    width: 375px;
+                    height: 255px;
+                    text-align: center;
+                    font-family: Rubik;
+                    font-size: 16px;
+                    color: $main-text-color-white;
+                    transform: rotate(270deg);
+                }
+            }
+            .pdf-a4-right-bottom {
+                padding: 28px 28px 0 28px;
+                height: 200px;
+                vertical-align: bottom;
+                position: relative;
+                .pdf-a4-logo-white {
+                    position: absolute;
+                    top: -10px;
+                    left: 10px;
+                    text-align: center;
+                    width: 80px;
+                    min-height: 255px;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+        }
+    }
+}
+
+.without_message {
+    height: 100px;
+}

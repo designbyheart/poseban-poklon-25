@@ -1,0 +1,1 @@
+<p>Welcome to poliszdesign. Thanks for registration!</p>

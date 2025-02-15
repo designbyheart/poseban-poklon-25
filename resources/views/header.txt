@@ -1,0 +1,269 @@
+<section class="cart-order-information container">
+        <div class="row">
+            <div class="cart-type-tabs col-lg-9">
+                <h3 class="cart-type-title">
+                    Odaberite način dostave
+                </h3>
+                <div class="cart-type-tabs-row">
+                    <button id="defaultOpen" class="type-tabs-item" onclick="openTab(event, 'shipping-a')">
+                        <img src="images/emai_cart_page_icon.svg" alt="PosebanPoklon" class="type-tabs-icon">
+                        <div class="type-tabs-btn">
+                            <span class="type-tabs-btn-title">
+                                eVoucher
+                            </span>
+                            <span class="type-tabs-btn-desc">
+                                For free
+                            </span>
+                        </div>
+                    </button>
+                    <button class="type-tabs-item" onclick="openTab(event, 'shipping-b')">
+                        <img src="images/post_cart_page_icon.svg" alt="PosebanPoklon" class="type-tabs-icon">
+                        <div class="type-tabs-btn">
+                            <span class="type-tabs-btn-title">
+                                Posta Srbije
+                            </span>
+                            <span class="type-tabs-btn-desc">
+                                70 RSD
+                            </span>
+                        </div>
+                    </button>
+                    <button class="type-tabs-item" onclick="openTab(event, 'shipping-c')">
+                        <img src="images/gift_cart_page_icon.svg" alt="PosebanPoklon" class="type-tabs-icon">
+                        <div class="type-tabs-btn">
+                            <span class="type-tabs-btn-title">
+                                Kurirska sluzba
+                            </span>
+                            <span class="type-tabs-btn-desc">
+                                190 RSD
+                            </span>
+                        </div>
+                    </button>
+                </div>
+                <div class="cart-type-tabs-content">
+                    <div id="shipping-a" class="type-tabs-content tabs-email-container">
+                        <div class="tabs-email-checkbox-row">
+                            <label class="tabs-email-checkbox">
+                                <input type="radio" name="gender" value="male" class="email-checkbox-input">
+                                <span class="email-checkbox-check"></span>
+                                <span class="email-checkbox-text">
+                                    Personal information
+                                </span>
+                            </label>
+                            <label class="tabs-email-checkbox">
+                                <input type="radio" name="gender" value="male" class="email-checkbox-input">
+                                <span class="email-checkbox-check"></span>
+                                <span class="email-checkbox-text">
+                                    Posalji dar na adresu primatelja
+                                </span>
+                            </label>
+                        </div>
+                        <div class="tabs-email-form-row">
+                            <div class="tabs-email-col-title">
+                                <div class="tabs-email-title">Name</div>
+                                <div class="tabs-email-title">Last Name</div>
+                                <div class="tabs-email-title">Number</div>
+                                <div class="tabs-email-title">Email</div>
+                            </div>
+                            <div class="tabs-email-col">
+                                <form action="">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Name">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Last Name">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Number">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Email">
+                                </form>
+                            </div>
+                            <div class="tabs-email-checkbox-agree">
+                                <label class="tabs-email-label">
+                                    <input type="checkbox" class="tabs-email-checkbox" checked>
+                                    <span class="tabs-email-check"></span>
+                                    I agree to send information
+                                </label>
+                                <label class="tabs-email-label">
+                                    <input type="checkbox" class="tabs-email-checkbox">
+                                    <span class="tabs-email-check"></span>
+                                    I agree to send information
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="shipping-b" class="type-tabs-content tabs-post-container">
+                        <h3 class="tabs-post-title">
+                            Shipping Address
+                        </h3>
+                        <div class="tabs-email-form-row">
+                            <div class="tabs-email-col-title">
+                                <div class="tabs-email-title">Name</div>
+                                <div class="tabs-email-title">Last Name</div>
+                                <div class="tabs-email-title">Number</div>
+                                <div class="tabs-email-title">Email</div>
+                                <div class="tabs-email-title">Address</div>
+                                <div class="tabs-email-title">City</div>
+                                <div class="tabs-email-title">Postal Code</div>
+                                <div class="tabs-email-title">Phone</div>
+                            </div>
+                            <div class="tabs-email-col">
+                                <form action="">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Name">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Last Name">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Number">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Email">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Address">
+                                    <select name="" id="" class="tabs-email-input">
+                                        <option value="tabs-email-option tabs-email-option-default">Lorem ipsum</option>
+                                    </select>
+                                    <input type="text" name="" id="" class="tabs-email-input "
+                                        placeholder="Postal Code">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Phone">
+                                </form>
+                            </div>
+                            <div class="tabs-email-checkbox-agree">
+                                <label class="tabs-email-label">
+                                    <input type="checkbox" class="tabs-email-checkbox" checked>
+                                    <span class="tabs-email-check"></span>
+                                    I agree to send information
+                                </label>
+                                <label class="tabs-email-label">
+                                    <input type="checkbox" class="tabs-email-checkbox">
+                                    <span class="tabs-email-check"></span>
+                                    I agree to send information
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="shipping-c" class="type-tabs-content tabs-courier-container">
+                        <h3 class="tabs-post-title">
+                            Shipping Address Courier
+                        </h3>
+                        <div class="tabs-email-form-row">
+                            <div class="tabs-email-col-title">
+                                <div class="tabs-email-title">Name</div>
+                                <div class="tabs-email-title">Last Name</div>
+                                <div class="tabs-email-title">Number</div>
+                                <div class="tabs-email-title">Email</div>
+                                <div class="tabs-email-title">Address</div>
+                                <div class="tabs-email-title">City</div>
+                                <div class="tabs-email-title">Postal Code</div>
+                                <div class="tabs-email-title">Phone</div>
+                            </div>
+                            <div class="tabs-email-col">
+                                <form action="">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Name">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Last Name">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Number">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Email">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Address">
+                                    <select name="" id="" class="tabs-email-input">
+                                        <option value="tabs-email-option tabs-email-option-default">Lorem ipsum</option>
+                                    </select>
+                                    <input type="text" name="" id="" class="tabs-email-input "
+                                        placeholder="Postal Code">
+                                    <input type="text" name="" id="" class="tabs-email-input " placeholder="Phone">
+                                </form>
+                            </div>
+                            <div class="tabs-email-checkbox-agree">
+                                <label class="tabs-email-label">
+                                    <input type="checkbox" class="tabs-email-checkbox" checked>
+                                    <span class="tabs-email-check"></span>
+                                    I agree to send information
+                                </label>
+                                <label class="tabs-email-label">
+                                    <input type="checkbox" class="tabs-email-checkbox">
+                                    <span class="tabs-email-check"></span>
+                                    I agree to send information
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-type-tabs col-lg-9">
+                <h3 class="cart-type-title">
+                    Odaberite kako placati
+                </h3>
+                <div class="cart-payment-tabs-row">
+                    <button id="defaultOpenPayment" class="payment-tabs-item"
+                        onclick="openTabPayment(event, 'payment-a')">
+                        <img src="images/hand_card_cart_page_icon.svg" alt="PosebanPoklon" class="type-tabs-icon">
+                        <div class="type-tabs-btn">
+                            <span class="type-tabs-btn-title">
+                                Placanje <br> kartica
+                            </span>
+                        </div>
+                    </button>
+                    <button class="payment-tabs-item" onclick="openTabPayment(event, 'payment-b')">
+                        <img src="images/hand_cash_cart_page_icon.svg" alt="PosebanPoklon" class="type-tabs-icon">
+                        <div class="type-tabs-btn">
+                            <span class="type-tabs-btn-title">
+                                Placanje <br> u gotovini
+                            </span>
+                        </div>
+                    </button>
+                    <button class="payment-tabs-item" onclick="openTabPayment(event, 'payment-c')">
+                        <img src="images/bank_cart_page_icon.svg" alt="PosebanPoklon" class="type-tabs-icon">
+                        <div class="type-tabs-btn">
+                            <span class="type-tabs-btn-title">
+                                Bankovni <br> prijenos
+                            </span>
+                        </div>
+                    </button>
+                </div>
+                <div class="cart-payment-tabs-content">
+                    <div id="payment-a" class="payment-tabs-content tabs-cart-container">
+                        <h3 class="cart-type-title">
+                            Pojedinosti o kartici
+                        </h3>
+                        <div class="tabs-payment-form-row">
+                            <div class="tabs-email-col-title">
+                                <img src="images/visa_cart_image.svg" alt="PosebanPoklon" class="tabs-payment-image">
+                            </div>
+                            <div class="tabs-payment-col">
+                                <form action="">
+                                    <input type="text" name="" id="" class="tabs-payment-input payment-input-full"
+                                        placeholder="Cart Holder">
+                                    <input type="text" name="" id="" class="tabs-payment-input payment-input-full"
+                                        placeholder="Cart Number">
+                                    <input type="text" name="" id="" class="tabs-payment-input payment-input-half"
+                                        placeholder="Exp Date">
+                                    <input type="text" name="" id="" class="tabs-payment-input payment-input-half"
+                                        placeholder="CVV">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="tabs-payment-btn-row">
+                            <button class="tabs-payment-btn">Placanje</button>
+                        </div>
+                    </div>
+                    <div id="payment-b" class="payment-tabs-content tabs-cash-container">
+                        <div class="tabs-payment-btn-row">
+                            <button class="tabs-payment-btn">Placanje</button>
+                        </div>
+                    </div>
+                    <div id="payment-c" class="payment-tabs-content tabs-bank-container">
+                        <h3 class="tabs-bank-title">
+                            Shipping Address Courier
+                        </h3>
+                        <p class="tabs-bank-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima
+                            possimus suscipit atque maxime, corporis nam blanditiis eligendi. Mollitia non, culpa beatae
+                            inventore, doloremque neque, veritatis minus numquam nulla vero adipisci?</p>
+                        <div class="tabs-bank-information">
+                            <div class="bank-col-title">
+                                <div class="bank-col-item">Name:</div>
+                                <div class="bank-col-item">Account number:</div>
+                                <div class="bank-col-item">Together to pay:</div>
+                                <div class="bank-col-item bank-item-red">Order number:</div>
+                            </div>
+                            <div class="bank-col-numbers">
+                                <div class="bank-col-item">PosebanPoklon</div>
+                                <div class="bank-col-item">69 1111 2202 2300 1200 9318 3430</div>
+                                <div class="bank-col-item">1160 RSD</div>
+                                <div class="bank-col-item">#45 236</div>
+                            </div>
+                        </div>
+                        <div class="tabs-payment-btn-row">
+                            <button class="tabs-payment-btn">Placanje</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

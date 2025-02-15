@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="17px" viewBox="0 0 16 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Cart-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.300000012">
+        <g id="Cart-Page-3.1-" transform="translate(-732.000000, -612.000000)" fill="#000000">
+            <g id="Group" transform="translate(134.000000, 250.000000)">
+                <g id="Group-4-Copy" transform="translate(123.000000, 351.000000)">
+                    <path d="M483,11.75 C483.414214,11.75 483.75,12.0857864 483.75,12.5 L483.75,19 L490.25,19 C490.664214,19 491,19.3357864 491,19.75 C491,20.1642136 490.664214,20.5 490.25,20.5 L483.749,20.5 L483.75,27 C483.75,27.4142136 483.414214,27.75 483,27.75 C482.585786,27.75 482.25,27.4142136 482.25,27 L482.249,20.5 L475.75,20.5 C475.335786,20.5 475,20.1642136 475,19.75 C475,19.3357864 475.335786,19 475.75,19 L482.25,19 L482.25,12.5 C482.25,12.0857864 482.585786,11.75 483,11.75 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

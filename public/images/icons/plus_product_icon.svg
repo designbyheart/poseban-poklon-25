@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="36" height="36" rx="4"></rect>
+        <filter x="-20.8%" y="-20.8%" width="141.7%" height="141.7%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.621320199   0 0 0 0 0.621320199   0 0 0 0 0.621320199  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icon/new" transform="translate(5.000000, 5.000000)">
+            <g id="Group">
+                <g id="Rectangle">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFD949" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <path d="M18,11.7 L18,24.65" id="Line-4" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path>
+                <path d="M18,11.7 L18,24.65" id="Line-4" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" transform="translate(17.666667, 18.000000) rotate(-90.000000) translate(-17.666667, -18.000000) "></path>
+                <circle id="Oval" stroke="#FFFFFF" stroke-width="2" cx="18" cy="18" r="13"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

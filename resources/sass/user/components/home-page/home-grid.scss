@@ -1,0 +1,12 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 1rem;
+}
+.grid > div {
+    background: #ede7f6;
+    padding: 1.5rem;
+    border-radius: 1rem;
+}

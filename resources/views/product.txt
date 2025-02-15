@@ -1,0 +1,272 @@
+<section class="breadcrumb-container container">
+        <div class="row">
+            <div class="col-lg-12 breadcrumb-row">
+                <div class="breadcrumb-row-item">
+                    <div class="breadcrumb-item-text">Pocetne</div>
+                    <div class="breadcrumb-arrow">></div>
+                </div>
+                <div class="breadcrumb-row-item">
+                    <div class="breadcrumb-item-text">Spa & nega</div>
+                    <div class="breadcrumb-arrow">></div>
+                </div>
+                <div class="breadcrumb-row-item">
+                    <div class="breadcrumb-item-text">Tretmani tela</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="product-content container">
+        <div class="row">
+            <div class="col-lg-8 product-col-left">
+                <div class="product-main-image">
+                    <img src="images/carousel-product-image.jpg" alt="" class="main-image">
+                </div>
+                <div class="product-main-carousel">
+                    <!-- <div class="carousel-left-arrow">
+                        <a href="" class="left-arrow-link">
+                            <img src="" alt="" class="left-arrow">
+                        </a>
+                    </div> -->
+                    <div class="main-carousel-row">
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="images/carousel-product-image.jpg" alt="" class="carousel-item-image">
+                        </div>
+                    </div>
+                    <!-- <div class="carousel-right-arrow">
+                        <a href="" class="right-arrow-link">
+                            <img src="" alt="" class="right-arrow">
+                        </a>
+                    </div> -->
+                </div>
+            </div>
+            <div class="col-lg-4 product-col-right">
+                <div class="product-desc">
+                    <h2 class="product-desc-title">Bowling with your friends</h2>
+                    <div class="product-stars-row">
+                        <img src="images/product_price_star.svg" alt="" class="product-star-icon">
+                        <img src="images/product_price_star.svg" alt="" class="product-star-icon">
+                        <img src="images/product_price_star.svg" alt="" class="product-star-icon">
+                        <img src="images/product_price_star.svg" alt="" class="product-star-icon">
+                        <img src="images/product_price_star.svg" alt="" class="product-star-icon">
+                        <span class="product-star-number">57</span>
+                    </div>
+                    <div class="product-info-row">
+                        <div class="product-info-location">
+                            <img src="images/product_location_icon.svg" alt="" class="product-location-icon">
+                            <span class="product-location-city">Belgrad</span>
+                        </div>
+                        <div class="product-info-person">
+                            <img src="images/product_person_icon.svg" alt="" class="product-person-icon">
+                            <span class="product-person-number">1 Person</span>
+                        </div>
+                    </div>
+                    <p class="product-desc-text">
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Neque laudantium ex temporibus totam
+                        nostrum, non, voluptatibus id inventore quos illum tempora quis similique sapiente natus in a.
+                        Cum, nemo quod.
+                    </p>
+                    <!-- <div class="product-desc-select">
+                        <select name="" id="" class="product-select-field">
+                            <option value="Offer_1" class="product-select-item">Offer 1</option>
+                            <option value="Offer_2" class="product-select-item">Offer 2</option>
+                            <option value="Offer_3" class="product-select-item">Offer 3</option>
+                            <option value="Offer_4" class="product-select-item">Offer 4</option>
+                            <option value="Offer_5" class="product-select-item">Offer 5</option>
+                        </select>
+                    </div> -->
+                    <p class="product-offer-title">Izabieri paket</p>
+                    <div class="product-desc-offers">
+                        <label class="product-offer-row">
+                            <input type="radio" name="gender" value="male" class="product-offer-check">
+                            <span class="product-check"></span>
+                            <span class="product-offer-text">
+                                <span class="product-offer-text-title">
+                                    Product Description
+                                </span>
+                                <span class="product-offer-text-desc">( New Product, description 240 ms, 250 )</span>
+                            </span>
+                            <span class="product-offer-price">
+                                <span class="offer-price-number">2934</span>
+                                <span class="offer-price-currency">rsd</span>
+                            </span>
+                        </label>
+                        <label class="product-offer-row">
+                            <input type="radio" name="gender" value="male" class="product-offer-check">
+                            <span class="product-check"></span>
+                            <span class="product-offer-text">
+                                <span class="product-offer-text-title">
+                                    Product Description
+                                </span>
+                                <span class="product-offer-text-desc">( New Product, description 240 ms, 250 )</span>
+                            </span>
+                            <span class="product-offer-price">
+                                <span class="offer-price-number">2934</span>
+                                <span class="offer-price-currency">rsd</span>
+                            </span>
+                        </label>
+                        <!--  -->
+                        <label class="product-offer-row">
+                            <input type="radio" name="gender" value="male" class="product-offer-check">
+                            <span class="product-check"></span>
+                            <span class="product-offer-text">
+                                <span class="product-offer-text-title">
+                                    Product Description
+                                </span>
+                                <span class="product-offer-text-desc">( New Product, description 240 ms, 250 )</span>
+                            </span>
+                            <span class="product-offer-price">
+                                <span class="offer-price-number">2934</span>
+                                <span class="offer-price-currency">rsd</span>
+                            </span>
+                        </label>
+                        <label class="product-offer-row">
+                            <input type="radio" name="gender" value="male" class="product-offer-check">
+                            <span class="product-check"></span>
+                            <span class="product-offer-text">
+                                <span class="product-offer-text-title">
+                                    Product Description
+                                </span>
+                                <span class="product-offer-text-desc">( New Product, description 240 ms, 250 )</span>
+                            </span>
+                            <span class="product-offer-price">
+                                <span class="offer-price-number">2934</span>
+                                <span class="offer-price-currency">rsd</span>
+                            </span>
+                        </label>
+                        <label class="product-offer-row">
+                            <input type="radio" name="gender" value="male" class="product-offer-check">
+                            <span class="product-check"></span>
+                            <span class="product-offer-text">
+                                <span class="product-offer-text-title">
+                                    Product Description
+                                </span>
+                                <span class="product-offer-text-desc">( New Product, description 240 ms, 250 )</span>
+                            </span>
+                            <span class="product-offer-price">
+                                <span class="offer-price-number">2934</span>
+                                <span class="offer-price-currency">rsd</span>
+                            </span>
+                        </label>
+                        <label class="product-offer-row">
+                            <input type="radio" name="gender" value="male" class="product-offer-check">
+                            <span class="product-check"></span>
+                            <span class="product-offer-text">
+                                <span class="product-offer-text-title">
+                                    Product Description
+                                </span>
+                                <span class="product-offer-text-desc">( New Product, description 240 ms, 250 )</span>
+                            </span>
+                            <span class="product-offer-price">
+                                <span class="offer-price-number">2934</span>
+                                <span class="offer-price-currency">rsd</span>
+                            </span>
+                        </label>
+                        <!--  -->
+                    </div>
+                    <div class="product-main-price">
+                        <div class="main-price">
+                            <span class="main-price-number">2490</span>
+                            <span class="main-price-currency">RSD</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-btn-container">
+                    <div class="product-btn">Dodaj u korpu</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="product-description container">
+        <div class="row">
+            <div class="col-lg-12 product-info-container">
+                <h3 class="product-info-title">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In velit sequi nemo qui quas.
+                </h3>
+                <div class="product-info-text">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias illum quo cum vitae delectus
+                    adipisci labore non quibusdam distinctio incidunt dicta quidem odio provident minus assumenda cumque
+                    deserunt, doloribus dignissimos! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa
+                    distinctio repellendus quod quam corporis? Excepturi quidem cumque dolor corporis, rerum officiis
+                    veniam laborum fuga numquam debitis accusamus molestias explicabo tempore! Lorem ipsum dolor sit
+                    amet consectetur, adipisicing elit. Natus quis ducimus voluptas laboriosam numquam sequi nulla dolor
+                    quidem qui ea, consectetur aperiam exercitationem beatae provident, voluptatum non doloribus
+                    officiis et!
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="product-information-table container">
+        <div class="row">
+            <div class="col-lg-12 product-table-container">
+                <h3 class="product-table-title">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. In velit sequi nemo qui quas.
+                </h3>
+                <div class="product-table">
+                    <div class="product-table-item">
+                        <img src="images/product_table_user.svg" alt="" class="table-item-icon">
+                        <span class="table-item-desc">
+                            <span class="table-item-title">Pokloni za niego</span>
+                            <span class="table-item-subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                Hic consequuntur doloremque rerum nam illum</span>
+                        </span>
+                    </div>
+                    <div class="product-table-item">
+                        <img src="images/product_table_clock.svg" alt="" class="table-item-icon">
+                        <span class="table-item-desc">
+                            <span class="table-item-title">Pokloni za niego</span>
+                            <span class="table-item-subtitle">Lorem inpsum</span>
+                        </span>
+                    </div>
+                    <div class="product-table-item">
+                        <img src="images/product_table_tshirt.svg" alt="" class="table-item-icon">
+                        <span class="table-item-desc">
+                            <span class="table-item-title">Pokloni za niego</span>
+                            <span class="table-item-subtitle">Lorem ipsum dolor sit amet</span>
+                        </span>
+                    </div>
+                    <div class="product-table-item">
+                        <img src="images/product_table_location.svg" alt="" class="table-item-icon">
+                        <span class="table-item-desc">
+                            <span class="table-item-title">Pokloni za niego</span>
+                            <span class="table-item-subtitle">Lorem ipsum dolor sit amet consectetur adipisicing</span>
+                        </span>
+                    </div>
+                    <div class="product-table-item">
+                        <img src="images/product_table_weather.svg" alt="" class="table-item-icon">
+                        <span class="table-item-desc">
+                            <span class="table-item-title">Pokloni za niego transiliowane uslugowie za porodicu</span>
+                            <span class="table-item-subtitle">Lorem inpsum</span>
+                        </span>
+                    </div>
+                    <div class="product-table-item">
+                        <img src="images/product_table_info.svg" alt="" class="table-item-icon">
+                        <span class="table-item-desc">
+                            <span class="table-item-title">Pokloni za niego</span>
+                            <span class="table-item-subtitle">Lorem inpsum</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

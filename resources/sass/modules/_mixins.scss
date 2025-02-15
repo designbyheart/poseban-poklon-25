@@ -1,0 +1,102 @@
+//MEDIA QUERIES
+$breakpoints: (
+        "phone": 400px,
+        "phone-wide": 480px,
+        "phablet": 560px,
+        "tablet-small": 640px,
+        "tablet": 768px,
+        "tablet-narrow": 992px,
+        "tablet-wide": 1024px,
+        "desktop": 1248px,
+        "desktop-wide": 1440px,
+        "desktop-huge": 2000px
+);
+@mixin mq($width, $type: min) {
+  @if map_has_key($breakpoints, $width) {
+    $width: map_get($breakpoints, $width);
+    @if $type==max {
+      $width: $width - 1px;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  } @else {
+    @if $type==max {
+      $width: $width - 1px;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  }
+}
+
+//MIXIN TRANSITION
+@mixin transition(
+  $what: all,
+  $time: 0.2s,
+  $how: cubic-bezier(0.25, 0.8, 0.25, 1)
+) {
+  -webkit-transition: $what $time $how;
+  -moz-transition: $what $time $how;
+  -ms-transition: $what $time $how;
+  -o-transition: $what $time $how;
+  transition: $what $time $how;
+}
+
+@mixin push--auto {
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
+
+@mixin border($color: red, $important: false) {
+  @if $important == true {
+    border: 1px solid $color !important;
+  } @else {
+    border: 1px solid $color;
+  }
+}
+
+@mixin shadow {
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+  @include transition(all, 0.3s, cubic-bezier(0.25, 0.8, 0.25, 1))
+  // transition: all 0.3s cubic-bezier(.25, .8, .25, 1);;;;;;;;;;;;;;;;;;;;
+}
+
+// MIXIN CENTER-X
+@mixin center-x {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+// MIXIN CENTER-Y
+@mixin center-y {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+}
+@mixin center-full {
+  @include center-x;
+  @include center-y;
+}
+
+@mixin center-flex-x {
+  display: flex;
+  justify-content: center;
+}
+@mixin center-flex-y {
+  display: flex;
+  align-items: center;
+}
+@mixin center-flex-full {
+  @include center-flex-x;
+  @include center-flex-y;
+}
+// MIXIN PSEUDO
+@mixin pseudo($display: block, $pos: absolute, $content: "") {
+  content: $content;
+  display: $display;
+  position: $pos;
+}

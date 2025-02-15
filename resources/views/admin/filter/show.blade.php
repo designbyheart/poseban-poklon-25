@@ -1,0 +1,1 @@
+<p>Admin filter single</p>

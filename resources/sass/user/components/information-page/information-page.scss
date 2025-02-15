@@ -1,0 +1,203 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.information-sidebar-dropdown-list {
+    margin-left: 35px;
+    .information-sidebar-list-child {
+        padding: 10px 0;
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+    }
+}
+
+.information-title {
+    padding: 30px 0;
+    font-family: Rubik-medium;
+    font-size: 28px;
+    color: $main-text-color;
+    text-transform: uppercase;
+}
+.information-text-container {
+    width: 100%;
+    font-family: Rubik;
+    font-size: 16px;
+    color: $main-text-color;
+    .information-text-title {
+        font-family: Rubik-medium;
+        font-size: 16px;
+        color: $main-text-color;
+    }
+    .information-text {
+        padding: 10px 0;
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+    }
+}
+
+.contact-info {
+    .contact-info-title {
+        font-family: Rubik-medium;
+        font-size: 16px;
+        color: $main-text-color;
+        text-transform: uppercase;
+    }
+    .contant-info-desc {
+        padding: 10px 0;
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+        line-height: 1.4;
+    }
+    .contact-info-icons {
+        width: 100%;
+        .info-icon-number,
+        .info-icon-email,
+        .info-icon-locat {
+            padding: 10px 0;
+            .info-icon-link {
+                text-decoration: none;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                font-family: Rubik-medium;
+                font-size: 16px;
+                color: $main-text-color;
+                .info-image {
+                    margin-right: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    align-items: center;
+                    width: 23px;
+                    height: 23px;
+                    .icon-number {
+                        margin: auto;
+                        width: 21px;
+                        height: 22px;
+                    }
+                    .icon-email {
+                        margin: auto;
+                        width: 23px;
+                        height: 17px;
+                    }
+                    .icon-locat {
+                        margin: auto;
+                        width: 16px;
+                        height: 23px;
+                    }
+                }
+            }
+        }
+        .contact-open-time {
+            padding: 20px 0 80px 0;
+            font-family: Rubik;
+            font-size: 16px;
+            color: $main-text-color;
+            opacity: 0.5;
+        }
+        .contact-company-info{
+            padding: 10px 0 0 0;
+            p{
+                font-family: Rubik;
+                font-size: 16px;
+                color: $main-text-color;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+.contact-form {
+    .contact-info-title {
+        font-family: Rubik-medium;
+        font-size: 16px;
+        color: $main-text-color;
+        text-transform: uppercase;
+    }
+    .contant-info-desc {
+        padding: 10px 0;
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+        line-height: 1.4;
+    }
+    .contact-form-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        .form-col-title {
+            .form-input-title {
+                margin: 5px 0;
+                padding: 15px 0;
+                width: 120px;
+                font-family: Rubik;
+                font-size: 16px;
+                color: $main-text-color;
+                opacity: 0.5;
+            }
+        }
+        .form-col {
+            form {
+                .form-input {
+                    margin: 5px 0;
+                    padding: 13px;
+                    width: 100%;
+                    max-width: 535px;
+                    font-family: Rubik;
+                    font-size: 16px;
+                    color: $main-text-color;
+                    border: 1px solid #dcdcdc;
+                    border-radius: 4px;
+                    outline: none;
+                }
+                .form-textarea {
+                    margin: 5px 0;
+                    padding: 13px;
+                    width: 100%;
+                    max-width: 535px;
+                    font-family: Rubik;
+                    font-size: 16px;
+                    color: $main-text-color;
+                    border: 1px solid #dcdcdc;
+                    border-radius: 4px;
+                    outline: none;
+                }
+                .form-btn {
+                    padding: 13px;
+                    margin-top: 20px;
+                    width: 100%;
+                    max-width: 160px;
+                    font-family: Rubik;
+                    font-size: 16px;
+                    background: $main-color;
+                    color: $main-text-color-white;
+                    border: 0;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    &:hover {
+                        background: $main-color-hover;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.information-sidebar {
+    margin-bottom: 30px;
+}
+
+.information-text-container {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    p {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+    }
+}

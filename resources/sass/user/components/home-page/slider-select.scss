@@ -1,0 +1,137 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.slider-select-container {
+    position: relative;
+    width: 100%;
+    z-index: 3;
+    @include mq(1000px, min) {
+        margin-top: -39px;
+    }
+    @include mq(1000px, max) {
+        margin-top: 10px;
+    }
+    .container {
+        // position: absolute;
+        .slider-select-row {
+            padding: 18px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: center;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0 1px 20px 0 rgba(210, 210, 210, 0.5);
+            border-radius: 4px;
+            @include mq(1000px, min) {
+                flex-direction: row;
+            }
+            @include mq(1000px, max) {
+                flex-direction: column;
+                .slider-select-item {
+                    margin: 10px auto;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.slider-content {
+    width: 100%;
+    height: 550px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    h2 {
+        padding: 10px;
+        font-family: Rubik-bold;
+        font-size: 54px;
+        color: $main-text-color-white;
+    }
+    p {
+        padding-bottom: 30px;
+        font-family: Rubik;
+        font-size: 36px;
+        color: $main-text-color-white;
+    }
+    a {
+        padding: 17px 30px;
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color-white;
+        background: $main-color;
+        border-radius: 4px;
+        // display: flex;
+        // justify-content: center;
+        // align-content: center;
+        // align-items: center;
+        text-decoration: none;
+    }
+}
+
+.slider-select-item {
+    @include mq(992px, max) {
+        text-align: center;
+    }
+    .slider-select-button {
+        .select-button {
+            padding: 12px 30px;
+            border: none;
+            background: $main-color;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: Rubik-bold;
+            color: $main-text-color-white;
+            letter-spacing: 1px;
+            outline: none;
+            cursor: pointer;
+        }
+    }
+}
+
+.slider-select-item {
+    .slider-select-input {
+        position: relative;
+        min-width: 250px;
+        outline: none;
+        &::after {
+            content: " ";
+            position: absolute;
+            top: -6px;
+            right: -12px;
+            width: 40px;
+            height: 40px;
+            background: url("/images/icons/select_arrow_icon.svg");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+        }
+        .select-element {
+            padding: 7px 0;
+            position: relative;
+            width: 100%;
+            background: none;
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -o-appearance: none;
+            appearance: none;
+            outline: none;
+            z-index: 1;
+            .option-element {
+                font-size: 16px;
+                font-family: Rubik;
+                color: $main-text-color;
+            }
+        }
+    }
+}

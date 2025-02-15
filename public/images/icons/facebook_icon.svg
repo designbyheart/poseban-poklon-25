@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="21px" viewBox="0 0 12 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>facebook-f</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M282.486364,188 L282.486364,178.607422 L279,178.607422 L279,174.875 L282.486364,174.875 L282.486364,171.93418 C282.486364,168.739062 284.65,167 287.809091,167 C289.322727,167 290.622727,167.102539 291,167.147656 L291,170.486328 L288.809091,170.486328 C287.090909,170.486328 286.759091,171.224609 286.759091,172.30332 L286.759091,174.875 L290.636364,174.875 L290.104545,178.607422 L286.759091,178.607422 L286.759091,188" id="path-1"></path>
+    </defs>
+    <g id="Home-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Page-4.1" transform="translate(-279.000000, -3585.000000)">
+            <g id="Group-13" transform="translate(0.000000, 3418.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="facebook-f" fill="#FFFFFF" fill-rule="nonzero" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

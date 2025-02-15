@@ -1,0 +1,42 @@
+$breakpoints: (
+  "phone": 400px,
+  "phone-wide": 480px,
+  "phablet": 560px,
+  "tablet-small": 640px,
+  "tablet": 768px,
+  "tablet-max": 800px,
+  "tablet-narrow": 992px,
+  "tablet-wide": 1024px,
+  "tablet-wide-max": 1200px,
+  "desktop": 1248px,
+  "desktop-wide": 1440px,
+  "desktop-huge": 2000px
+);
+
+@mixin mq($width, $type: min) {
+  @if map_has_key($breakpoints, $width) {
+    $width: map_get($breakpoints, $width);
+    @if $type==max {
+      $width: $width - 1px;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  } @else {
+    @if $type==max {
+      $width: $width - 1px;
+    }
+    @media only screen and (#{$type}-width: $width) {
+      @content;
+    }
+  }
+}
+
+// Include border
+@mixin border($color: red, $important: false) {
+  @if $important == true {
+    border: 1px solid $color !important;
+  } @else {
+    border: 1px solid $color;
+  }
+}

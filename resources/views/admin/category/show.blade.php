@@ -1,0 +1,1 @@
+<p>Show category (Admin)</p>

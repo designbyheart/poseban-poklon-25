@@ -1,0 +1,1360 @@
+{
+  "auth": {
+
+    "formTitle": "Login",
+    "formSubtitle": "Welcome back, please login to your account.",
+    "login": "Login",
+    "register": "Register",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "email": "Email",
+    "password": "Password"
+
+  },
+  "sidebar": {
+
+    "home": "Home",
+    "store": "Store",
+    "products": "Products",
+    "producents": "Producents",
+    "categories": "Categories",
+    "filters": "Filters",
+    "attributes": "Attributes",
+    "options": "Options",
+    "optionValues": "Option values",
+    "sales": "Sales",
+    "orders": "Orders",
+    "shippingMethods": "Shipping methods",
+    "paymentMethods": "Payment methods",
+    "banners": "Banners",
+    "coupons": "Coupons",
+    "promotions": "Promotions",
+    "bundles": "Bundles",
+    "vouchers": "Vouchers",
+    "giftCards": "Gift cards",
+    "currencies": "Currencies",
+    "settings": "Settings",
+    "content": "Content",
+    "reviews": "Reviews",
+    "pages": "Pages",
+    "users": "Users",
+    "pageBuilder": "Page builder",
+    "homeBuilder": "Home page builder",
+    "newsletter": "Newsletter"
+
+  },
+  "routes": {
+      "dashboard": {
+        "label": "Dashboard",
+        "title": "Dashboard",
+        "description": "Dashboard"
+      },
+      "product": {
+
+        "index": {
+          "label": "Products",
+          "title": "All products",
+          "description": "List of all products"
+        },
+        "create": {
+          "title": "Create a new product",
+          "description": "Create a new product"
+        },
+        "edit": {
+          "title": "Edit a product",
+          "description": "Edit a product"
+        }
+
+      },
+      "producent": {
+
+        "index": {
+          "label": "Producents",
+          "title": "All producents",
+          "description": "List of all producents"
+        },
+        "create": {
+          "title": "Create a new producent",
+          "description": "Create a new producent"
+        },
+        "edit": {
+          "title": "Edit a producent",
+          "description": "Edit a producent"
+        }
+
+      },
+      "category": {
+
+        "index": {
+          "label": "Categories",
+          "title": "All categories",
+          "description": "List of all categories"
+        },
+        "create": {
+          "title": "Create a new category",
+          "description": "Create a new category"
+        },
+        "edit": {
+          "title": "Edit a category",
+          "description": "Edit a category"
+        }
+
+      },
+      "filter": {
+
+        "index": {
+          "label": "Filters",
+          "title": "All filters",
+          "description": "List of all filters"
+        },
+        "create": {
+          "title": "Create a new filter",
+          "description": "Create a new filter"
+        },
+        "edit": {
+          "title": "Edit a filter",
+          "description": "Edit a filter"
+        }
+
+      },
+      "attribute": {
+
+        "index": {
+          "label": "Attributes",
+          "title": "All attributes",
+          "description": "List of all attributes"
+        },
+        "create": {
+          "title": "Create a new attribute",
+          "description": "Create a new attribute"
+        },
+        "edit": {
+          "title": "Edit an attribute",
+          "description": "Edit an attribute"
+        }
+
+      },
+      "shippingMethod": {
+
+        "index": {
+          "label": "Shipping methods",
+          "title": "All shipping methods",
+          "description": "List of all shipping methods"
+        },
+        "create": {
+          "title": "Create a new shipping method",
+          "description": "Create a new shipping method"
+        },
+        "edit": {
+          "title": "Edit a shipping method",
+          "description": "Edit a shipping method"
+        }
+
+      },
+      "paymentMethod": {
+
+        "index": {
+          "label": "Payment methods",
+          "title": "All payment methods",
+          "description": "List of all payment methods"
+        },
+        "create": {
+          "title": "Create a new payment method",
+          "description": "Create a new payment method"
+        },
+        "edit": {
+          "title": "Edit a payment method",
+          "description": "Edit a payment method"
+        }
+
+      },
+      "banner": {
+
+        "index": {
+          "label": "Banners",
+          "title": "All banners",
+          "description": "List of all banners"
+        },
+        "create": {
+          "title": "Create a new banner",
+          "description": "Create a banner"
+        },
+        "edit": {
+          "title": "Edit a banner",
+          "description": "Edit a banner"
+        }
+
+      },
+      "coupon": {
+
+        "index": {
+          "label": "Coupons",
+          "title": "All coupons",
+          "description": "List of all coupons"
+        },
+        "create": {
+          "title": "Create a new coupon",
+          "description": "Create a coupon"
+        },
+        "edit": {
+          "title": "Edit a coupon",
+          "description": "Edit a coupon"
+        }
+
+      },
+      "promotion": {
+
+        "index": {
+          "label": "Promotions",
+          "title": "All promotions",
+          "description": "List of all promotions"
+        },
+        "create": {
+          "title": "Create a new promotion",
+          "description": "Create a promotion"
+        },
+        "edit": {
+          "title": "Edit a promotion",
+          "description": "Edit a promotion"
+        }
+
+      },
+      "bundle": {
+
+        "index": {
+          "label": "Bundles",
+          "title": "All bundles",
+          "description": "List of all bundles"
+        },
+        "create": {
+          "title": "Create a new bundle",
+          "description": "Create a bundle"
+        },
+        "edit": {
+          "title": "Edit a bundle",
+          "description": "Edit a bundle"
+        }
+
+      },
+      "voucher": {
+
+        "index": {
+          "label": "Vouchers",
+          "title": "All vouchers",
+          "description": "List of all vouchers"
+        },
+        "create": {
+          "title": "Create a new voucher",
+          "description": "Create a voucher"
+        },
+        "edit": {
+          "title": "Edit a voucher",
+          "description": "Edit a voucher"
+        }
+
+      },
+      "giftCard": {
+
+        "index": {
+          "label": "Gift cards",
+          "title": "All gift cards",
+          "description": "List of all gift cardss"
+        },
+        "create": {
+          "title": "Create a new gift card",
+          "description": "Create a gift card"
+        },
+        "edit": {
+          "title": "Edit a gift card",
+          "description": "Edit a gift card"
+        }
+
+      },
+      "currency": {
+
+        "index": {
+          "label": "Currencies",
+          "title": "All currencies",
+          "description": "List of all currencies"
+        },
+        "create": {
+          "title": "Add a new currency",
+          "description": "Add a currency"
+        },
+        "edit": {
+          "title": "Edit a currency",
+          "description": "Edit a currency"
+        }
+
+      },
+      "order": {
+
+        "index": {
+          "label": "Orders",
+          "title": "All orders",
+          "description": "List of all orders"
+        },
+        "create": {
+          "title": "Create a new order",
+          "description": "Create an order"
+        },
+        "show": {
+          "title": "Order details",
+          "description": "View order details"
+        }
+
+      },
+      "review": {
+
+        "index": {
+          "label": "Reviews",
+          "title": "All reviews",
+          "description": "List of all reviews"
+        }
+
+      },
+      "page": {
+
+        "index": {
+          "label": "Pages",
+          "title": "All pages",
+          "description": "List of all pages"
+        },
+        "create": {
+          "title": "Add a new page",
+          "description": "Add a page"
+        },
+        "edit": {
+          "title": "Edit a page",
+          "description": "Edit a page"
+        }
+
+      },
+      "setting": {
+        "index": {
+          "label": "Settings",
+          "title": "All settings",
+          "description": "List of all settings"
+        }
+      },
+      "user": {
+        "index": {
+          "label": "Users",
+          "title": "All users",
+          "description": "List of all users"
+        }
+      },
+      "builder": {
+        "home": {
+          "title": "Edit a home page",
+          "description": "Home page builder"
+        }
+      },
+      "newsletter": {
+        "index": {
+          "label": "Newsletter",
+          "title": "View all newsletter subscriptions",
+          "description": "Newsletter subscription"
+        }
+      }
+  },
+  "models": {
+
+    "product": {
+
+      "title": "product | products",
+      "properties": {
+
+        "title": "Title",
+        "price": "Price",
+        "company_price": "Company price",
+        "description": "Description",
+        "short_description": "Short description for product page",
+        "voucher_description": "Description for vouchers",
+        "za_koga": "Za koga",
+        "slug": "Slug",
+        "status": "Status",
+        "currency": "Currency",
+        "producentId": "Producent",
+        "categories": "Categories",
+        "seoTitle": "SEO title",
+        "seoDescription": "SEO description",
+        "seoKeywords": "SEO keywords",
+        "viewCount": "View count",
+        "likeCount": "Like count",
+        "type": "Type",
+        "image": "Image",
+        "version": {
+            "title": "Product",
+            "price": "Price",
+            "actions": "Actions",
+            "search": "Search versions"
+        },
+        "filter": {
+          "title": "Filter",
+          "attributes": "Attributes",
+          "search": "Search filter"
+        },
+        "location": "@:models.voucher.properties.location",
+        "weather": "@:models.voucher.properties.weather",
+        "duration": "@:models.voucher.properties.duration",
+        "visitors": "@:models.voucher.properties.visitors",
+        "dressCode": "@:models.voucher.properties.dressCode",
+        "additionalInformation": "@:models.voucher.properties.additionalInformation",
+        "zaGledaoce": "@:models.voucher.properties.zaGledaoce"
+
+      },
+      "form": {
+        "general": "General",
+        "price": "Price",
+        "connections": "Connections",
+        "attributes": "Attributes",
+        "properties": "Properties",
+        "images": "Images",
+        "seo": "SEO",
+        "versions": "Versions",
+        "settings": "Settings"
+      }
+
+    },
+    "producent": {
+
+      "title": "product | products",
+      "properties": {
+        "id": "ID",
+        "title": "Title",
+        "description": "Description",
+        "phone_number": "Phone",
+        "email": "Email",
+        "location": "Location"
+
+      }
+
+    },
+    "category": {
+
+      "title": "category | categories",
+      "properties": {
+
+        "title": "Title",
+        "description": "Description"
+
+      }
+
+    },
+    "filter": {
+
+      "title": "filter | filters",
+      "properties": {
+
+        "name": "Name",
+        "description": "Description"
+
+      }
+
+    },
+    "attribute": {
+
+      "title": "attribute | attributes",
+      "properties": {
+
+        "name": "Name",
+        "description": "Description",
+        "filter": "Filter"
+
+      }
+
+    },
+    "shippingMethod": {
+
+      "title": "shipping method | shipping methods",
+      "properties": {
+
+        "name": "Name",
+        "description": "Description",
+        "cost": "Cost",
+        "image": "Image"
+
+      }
+
+    },
+    "paymentMethod": {
+
+      "title": "payment method | payment methods",
+      "properties": {
+
+        "name": "Name",
+        "description": "Description",
+        "image": "Image"
+
+      }
+
+    },
+    "banner": {
+
+      "title": "banner | banners",
+      "properties": {
+
+        "title": "Title",
+        "button_text": "Text",
+        "button_link": "Link",
+        "image": "Image"
+
+      }
+
+    },
+    "coupon": {
+      "title": "coupon | coupons",
+      "properties": {
+        "title": "Title",
+        "coupon_code": "Code",
+        "value": "Value",
+        "uses_count": "Usage count"
+      }
+    },
+    "promotion": {
+      "title": "promotion | promotions",
+      "properties": {
+        "title": "Title",
+        "value": "Value",
+        "uses_count": "Usage count"
+      }
+    },
+    "giftCard": {
+      "title": "gift card | gift cards",
+      "properties": {
+        "id": "ID",
+        "value": "Value",
+        "code": "Code"
+      }
+    },
+    "currency": {
+      "title": "currency | currencies",
+      "properties": {
+        "title": "Title",
+        "code": "Code"
+      }
+    },
+    "rate": {
+      "title": "rate | rates",
+      "properties": {
+        "values": "Value",
+        "rate_date": "Date"
+      }
+    },
+    "order": {
+      "title": "order | orders",
+      "properties": {
+        "id": "ID",
+        "customer_email": "Customer",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "total": "Total",
+        "product_total": "Product total",
+        "currency": "Currency",
+        "order": "Order",
+        "date": "Date",
+        "shipping": "Ship to",
+        "status": "Status",
+        "actions": "Actions",
+        "phone": "Phone",
+        "email": "Email",
+        "customer": "Customer",
+        "customerName": "Name",
+        "customerSurname": "Surname",
+        "shippingMethod": "Shipping method",
+        "addressLabel": "Address",
+        "addressOne": "Address line one",
+        "addressTwo": "Address line two",
+        "postCode": "ZIP code",
+        "city": "City",
+        "country": "Country",
+        "paymentMethod": "Payment method",
+        "comment": "Comment",
+        "shippingLabel": "Shipping",
+        "couponLabel": "Coupon",
+        "giftCardLabel": "Gift card",
+        "personalMessages": "Personal messages",
+        "box_count": "Present boxes quantity",
+        "box_total": "Present boxes total",
+        "product": {
+          "label": "Product",
+          "title": "Title",
+          "price": "Price",
+          "quantity": "Quantity",
+          "total": "Total"
+        },
+        "voucher": {
+          "label": "Vouchers",
+          "code": "Code",
+          "validTo": "Valid to",
+          "paperSize": "Paper size"
+        }
+      }
+    },
+    "orderItem": {
+      "title": "product | products"
+    },
+    "voucher": {
+      "title": "voucher | vouchers",
+      "properties": {
+        "title": "Title",
+        "description": "Description",
+        "voucherCode": "Voucher code",
+        "activationCode": "Activation code",
+        "personalMessage": "Message",
+        "location": "Location",
+        "weather": "Weather",
+        "duration": "Duration",
+        "visitors": "Number of people",
+        "dressCode": "Clothing",
+        "endDate": "Valid to",
+        "activated": "Activated",
+        "additionalInformation": "Additional information",
+        "zaGledaoce": "Za gledaoce",
+        "customerEmail": "Customer email",
+        "paperSize": "Paper size",
+        "order": "Order number"
+      }
+    },
+    "review": {
+      "title": "review | reviews",
+      "properties": {
+        "product": "Product",
+        "user": "User",
+        "rating": "Rating",
+        "content": "Content",
+        "status": "Status",
+        "createdAt": "Date"
+      }
+    },
+    "page": {
+      "title": "page | pages",
+      "properties": {
+        "title": "Title",
+        "content": "Content",
+        "slug": "Slug",
+        "seoTitle": "SEO title",
+        "seoDescription": "SEO description",
+        "seoKeywords": "SEO keywords",
+        "status": "Status",
+        "showInMenu": "Show link in sidebar menu"
+      }
+    },
+    "productVersion": {
+      "title": "product version | product version"
+    },
+    "image": {
+      "title": "image | images",
+      "properties": {
+        "title": "Title",
+        "description": "Description",
+        "alt": "ALT",
+        "imageParameters": "Image parameters",
+        "uploaderTitle": "Images library"
+      }
+    },
+    "setting": {
+      "title": "setting | settings"
+    },
+    "user": {
+      "title": "user | users",
+      "properties": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "statuses": {
+          "active": "Active",
+          "suspended": "Suspended"
+        }
+      }
+    },
+    "builderLayout": {
+      "title": "page layout | page layouts"
+    },
+    "newsletterSubscription": {
+      "title": "subscription | subscriptions",
+      "properties": {
+        "email": "Email",
+        "actions": "Actions"
+      }
+    }
+
+  },
+  "messages": {
+
+    "success": "Success",
+    "error": "Error",
+    "request": {
+
+      "createdSuccess": "The {instance} was created successfully | The {instance} were created successfully",
+      "updatedSuccess": "The {instance} was updated successfully | The {instance} were updated successfully",
+      "deletedSuccess": "The {instance} was deleted successfully | The {instance} were deleted successfully",
+      "removedSuccess": "The {instance} was removed successfully | The {instance} were deleted successfully",
+      "addedSuccess": "The {instance} was added successfully | The {instance} were deleted successfully",
+      "generatedSuccess": "The {instance} was generated successfully | The {instance} were deleted successfully",
+      "activatedSuccess": "The {instance} was activated successfully | The {instance} were activated successfully",
+      "deactivatedSuccess": "The {instance} was deactivated successfully | The {instance} were deactivated successfully",
+      "sentSuccess": "The {instance} was sent successfully | The {instance} were sent successfully",
+      "approvedSuccess": "The {instance} was approved successfully | The {instance} were approved successfully",
+      "error": "There was an error. Please try again."
+
+    },
+    "confirmation": {
+      "delete": "Are you sure to delete {instance}? You would not be able to restore it."
+    },
+    "validation": {
+
+      "requiredField": "This field is required.",
+      "invalidField": "This field is invalid.",
+      "invalidForm": "The form is invalid. Please fill the necessary inputs and try again."
+
+    },
+    "notFound": "Nothing was found",
+    "errors": {
+
+      "rate": {
+
+        "invalidDate": "The currency rate for this date already exists."
+
+      }
+
+    }
+
+  },
+  "actions": {
+    "title": "Actions",
+    "create": "Create",
+    "edit": "Edit",
+    "update": "Save",
+    "delete": "Delete",
+    "cancel": "Back",
+    "search": "Search",
+    "add": "Add",
+    "addNew": "Add new",
+    "view": "View",
+    "confirm": "Confirm",
+    "accept": "Accept",
+    "approve": "Approve",
+    "print": "Print",
+    "send": "Send",
+    "generate": "Generate",
+    "choose": "Choose",
+    "select": "Select",
+    "upload": "Upload",
+    "close": "Close",
+    "save": "Save",
+    "filter": "Filter",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "back": "Back",
+    "import": "Import",
+    "export": "Export",
+    "download": "Download"
+  },
+  "settings": {
+    "pageTitle": "Manage settings",
+    "default_currency": {
+      "title": "Default currency"
+    },
+    "order_status": {
+      "title": "Default order status"
+    },
+    "analytics_code": {
+      "title": "Google Analytics code"
+    },
+    "pixel_code": {
+      "title": "Facebook pixel code"
+    },
+    "site_logo": {
+      "title": "Logo"
+    },
+    "custom_js": {
+      "title": "Custom JavaScript"
+    },
+    "custom_css": {
+      "title": "Custom CSS"
+    },
+    "fb_url": {
+      "title": "Facebook url"
+    },
+    "twitter_url": {
+      "title": "Twitter url"
+    },
+    "instagram_url": {
+      "title": "Instagram url"
+    },
+    "youtube_url": {
+      "title": "YouTube url"
+    },
+    "contact_phone": {
+      "title": "Contact phone"
+    },
+    "contact_email": {
+      "title": "Contact email"
+    },
+    "categories_seo_title": {
+      "title": "Categories SEO title"
+    },
+    "categories_seo_keywords": {
+      "title": "Categories SEO keywords"
+    },
+    "categories_seo_description": {
+      "title": "Categories SEO description"
+    },
+    "home_seo_title": {
+      "title": "Home SEO title"
+    },
+    "home_seo_keywords": {
+      "title": "Home SEO keywords"
+    },
+    "home_seo_description": {
+      "title": "Home SEO description"
+    }
+  },
+  "modals": {
+    "downloadUsers": {
+      "title": "Export users",
+      "properties": {
+        "from": "Registration date since",
+        "to": "Registration date to"
+      }
+    },
+    "downloadSubscriptions": {
+      "title": "Export newsletter subscriptions",
+      "properties": {
+        "from": "Subscription date since",
+        "to": "Subscription date to"
+      }
+    }
+  },
+  "forms": {
+
+    "product": {
+      "titles": {
+        "create": "Create a new product",
+        "edit": "Edit a product"
+      }
+    },
+    "producent": {
+
+      "titles": {
+
+        "create": "Create a new producent",
+        "edit": "Edit a producent"
+
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "title": "Title",
+            "description": "Description"
+          }
+        },
+        "contact": {
+          "label": "Contact",
+          "fields": {
+            "phone_number": "Phone",
+            "email": "Email",
+            "location": "Location"
+          }
+        }
+      }
+
+    },
+    "category": {
+
+      "titles": {
+
+        "create": "Create a new category",
+        "edit": "Edit a category"
+
+      },
+      "sections": {
+
+        "general": {
+
+          "label": "General",
+          "fields": {
+
+            "title": "Title",
+            "description": "Description",
+            "slug": "Slug"
+
+          }
+
+        },
+        "connections": {
+
+          "label": "Connections",
+          "fields": {
+
+            "parent_id": "Parent category",
+            "banner_id": "Banner",
+            "properties": {
+              "visibility": "Visibility"
+            },
+            "filters": "Filters"
+          }
+
+        },
+        "seo": {
+
+          "label": "SEO",
+          "fields": {
+
+            "seo_title": "SEO title",
+            "seo_description": "SEO description",
+            "seo_keywords": "SEO keywords",
+            "seo_text": "SEO text"
+
+          }
+
+        }
+
+      }
+
+    },
+    "filter": {
+
+      "titles": {
+
+        "create": "Create a new filter",
+        "edit": "Edit a filter"
+
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "name": "Name",
+            "description": "Description"
+          }
+        },
+        "connections": {
+          "label": "Connections",
+          "fields": {
+            "attributes": "Attributes"
+          }
+        }
+      }
+
+    },
+    "attribute": {
+
+      "titles": {
+
+        "create": "Create a new attribute",
+        "edit": "Edit an attribute"
+
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "name": "Name",
+            "description": "Description"
+          }
+        },
+        "connections": {
+          "label": "Connections",
+          "fields": {
+            "filter_id": "Filter"
+          }
+        }
+      }
+
+    },
+    "shippingMethod": {
+
+      "titles": {
+
+        "create": "Create a new shipping method",
+        "edit": "Edit a shipping method"
+
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "name": "Name",
+            "description": "Description"
+          }
+        },
+        "price": {
+          "label": "Price",
+          "fields": {
+            "cost": "Cost"
+          }
+        },
+        "images": {
+          "label": "Images",
+          "fields": {
+            "image_id": "Image"
+          }
+        }
+      }
+
+    },
+    "paymentMethod": {
+
+      "titles": {
+
+        "create": "Create a new payment method",
+        "edit": "Edit a payment method"
+
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "name": "Name",
+            "description": "Description"
+          }
+        },
+        "images": {
+          "label": "Images",
+          "fields": {
+            "image_id": "Image"
+          }
+        }
+      }
+
+    },
+    "banner": {
+      "titles": {
+        "create": "Create a new banner",
+        "edit": "Edit a banner"
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "title": "Title",
+            "button_text": "Button text",
+            "button_link": "Button link"
+          }
+        },
+        "images": {
+          "label": "Images",
+          "fields": {
+            "image_id": "Image"
+          }
+        }
+      }
+    },
+    "coupon": {
+      "titles": {
+        "create": "Create a new coupon",
+        "edit": "Edit a coupon"
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "title": "Title",
+            "coupon_code": "Code",
+            "value": "Value",
+            "is_percentage": "Percentage coupon",
+            "start_date": "Start date",
+            "end_date": "End date",
+            "limit": "Limit",
+            "status": "Status"
+          }
+        },
+        "connections": {
+          "label": "Connections",
+          "fields": {
+            "product_id": "Product",
+            "category_id": "Category"
+          }
+        }
+      }
+    },
+    "promotion": {
+      "titles": {
+        "create": "Create a new promotion",
+        "edit": "Edit a promotion"
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "title": "Title",
+            "is_fixed_price": "Fixed price promotion",
+            "value": "Value",
+            "start_date": "Start date",
+            "end_date": "End date",
+            "limit": "Limit",
+            "status": "Status"
+          }
+        },
+        "connections": {
+          "label": "Connections",
+          "fields": {
+            "product_id": "Product",
+            "category_id": "Category"
+          }
+        }
+      }
+    },
+    "bundle": {
+      "titles": {
+        "create": "Create a new bundle",
+        "edit": "Edit a bundle"
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "title": "Title",
+            "description": "Description",
+            "bundle_code": "Code",
+            "visibility": "Visibility",
+            "priority": "Priority",
+            "date_start": "Start date",
+            "date_end": "End date",
+            "status": "Status"
+          }
+        },
+        "connections": {
+          "label": "Connections",
+          "fields": {
+            "products": "Products",
+            "categories": "Categories",
+            "items": "Items"
+          }
+        }
+      }
+    },
+    "giftCard": {
+      "titles": {
+        "create": "Create a new gift card",
+        "edit": "Edit a gift card"
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "value": "Value",
+            "code": "Code",
+            "status": "Status"
+          }
+        }
+      }
+    },
+    "currency": {
+      "titles": {
+        "create": "Add a new currency",
+        "edit": "Edit a currency"
+      },
+      "sections": {
+        "general": {
+          "label": "General",
+          "fields": {
+            "title": "Title",
+            "code": "Code",
+            "status": "Status"
+          }
+        },
+        "rates": {
+          "label": "Rates",
+          "fields": {
+            "value": "Value",
+            "rate_date": "Date",
+            "actions": "Actions"
+          }
+        }
+      }
+    },
+    "order": {
+      "titles": {
+        "edit": "Order #{number} details"
+      },
+      "sections": {
+        "general": "General details",
+        "shipping": "Shipping details",
+        "payment": "Billing details",
+        "products": "Products and services"
+      },
+      "actions": {
+        "addItems": "Add items",
+        "generateVouchers": "Generate vouchers",
+        "updateDetails": "Update order details"
+      }
+    },
+    "voucher": {
+      "titles": {
+        "edit": "Edit a voucher"
+      },
+      "actions": {
+        "send": "Send a voucher"
+      }
+    },
+    "page": {
+      "titles": {
+        "create": "Add a new page",
+        "edit": "Edit a page"
+      },
+      "sections": {
+        "general": {
+          "label": "General"
+        },
+        "seo": {
+          "label": "SEO"
+        }
+      }
+    }
+  },
+  "statuses": {
+      "general": {
+        "published": "Published",
+        "hidden": "Hidden"
+      },
+      "giftCard": {
+        "activated": "Activated",
+        "notActivated": "Not activated"
+      }
+  },
+  "tables": {
+
+    "product": {
+      "title": "Products"
+    },
+    "producent": {
+      "title": "Producents"
+    },
+    "category": {
+      "title": "Categories"
+    },
+    "filter": {
+      "title": "Filters"
+    },
+    "attribute": {
+      "title": "Attributes"
+    },
+    "shippingMethod": {
+      "title": "Shipping methods"
+    },
+    "paymentMethod": {
+      "title": "Payment methods"
+    },
+    "banner": {
+      "title": "Banners"
+    },
+    "coupon": {
+      "title": "Coupons"
+    },
+    "promotion": {
+      "title": "Promotions"
+    },
+    "bundle": {
+      "title": "Bundles"
+    },
+    "giftCard": {
+      "title": "Gift cards"
+    },
+    "voucher": {
+      "title": "Vouchers"
+    },
+    "currency": {
+      "title": "Currencies"
+    },
+    "order": {
+      "title": "Orders"
+    },
+    "review": {
+      "title": "Reviews"
+    },
+    "page": {
+      "title": "Pages"
+    },
+    "user": {
+      "title": "Users"
+    },
+    "newsletterSubscription": {
+      "title": "Newsletter subscriptions"
+    }
+
+  },
+  "builder": {
+
+    "home": {
+
+      "slider": {
+        "sectionTitle": "Slider",
+        "modelTitle": "Slide",
+        "title": "Title",
+        "subtitle": "Subtitle",
+        "image": "Image",
+        "buttonText": "Button text",
+        "link": "URL",
+        "edit": "Edit a slider"
+      },
+      "categories": {
+        "modelTitle": "Category",
+        "title": "Category title",
+        "subtitle": "Category subtitle",
+        "image": "Category image",
+        "showButton": "Show button",
+        "buttonText": "Button text",
+        "link": "URL",
+        "edit": "Edit a category"
+      },
+      "aboutUs": {
+        "sectionTitle": "About us",
+        "title": "Section title",
+        "description": "Section description",
+        "image": "Section image",
+        "edit": "Edit a section"
+      },
+      "bottomLinks": {
+        "title": "Link title",
+        "link": "URL",
+        "edit": "Edit an item"
+      },
+      "edit": "Edit a home page"
+
+    }
+
+  },
+  "statistics": {
+    "pageTitle": "Store statistics",
+    "searchPlaceholder": "Search products",
+    "types": {
+      "general": "General statistics",
+      "product": "Product statistics",
+      "producent": "Producent statistics"
+    },
+    "filter": {
+      "from": "From:",
+      "to": "To:"
+    },
+    "grossSales": {
+      "label": "Gross sales in the period"
+    },
+    "grossSalesDaily": {
+      "label": "Average gross daily sales"
+    },
+    "netSales": {
+      "label": "Net sales in this period"
+    },
+    "netSalesDaily": {
+      "label": "Average net daily sales"
+    },
+    "ordersPlaced": {
+      "label": "Orders placed"
+    },
+    "itemsPurchased": {
+      "label": "Items purchased"
+    },
+    "couponsWorth": {
+      "label": "Worth of coupons used"
+    },
+    "giftCardsWorth": {
+      "label": "Worth of gift cards used"
+    }
+  }
+}

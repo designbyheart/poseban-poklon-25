@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="46px" height="46px" viewBox="0 0 46 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="36" height="36" rx="4"></rect>
+        <filter x="-20.8%" y="-20.8%" width="141.7%" height="141.7%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.621320199   0 0 0 0 0.621320199   0 0 0 0 0.621320199  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icon/star" transform="translate(5.000000, 5.000000)">
+            <g id="Group">
+                <g id="Rectangle">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#A2F121" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <polygon id="Star" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="17.8054299 23.525 11.4541575 26.7233259 12.6671426 19.9491629 7.52885538 15.1516741 14.6297937 14.1633371 17.8054299 8 20.981066 14.1633371 28.0820043 15.1516741 22.9437171 19.9491629 24.1567022 26.7233259"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

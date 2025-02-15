@@ -1,0 +1,152 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.home-footer {
+    padding: 20px 0;
+}
+.footer-row {
+    margin: auto;
+    padding: 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+    font-family: Rubik;
+    text-align: center;
+}
+.footer-logo-row {
+    .footer-logo-link {
+        text-decoration: none;
+        .footer-logo-image {
+            margin: auto;
+            width: 100%;
+            max-width: 210px;
+        }
+    }
+}
+.footer-desc-row {
+    .footer-desc-text {
+        font-family: Rubik;
+        font-size: 16px;
+    }
+}
+.footer-social-row {
+    .footer-social-icons {
+        padding: 0 13px;
+    }
+}
+.footer-links-row {
+    flex-wrap: wrap;
+    .footer-links-item {
+        .footer-link {
+            padding: 5px 5px;
+            border-bottom: 1px solid #fff;
+            color: $main-text-color;
+            font-size: 12px;
+            font-family: Rubik;
+            text-decoration: none;
+            &:hover {
+                border-bottom: 1px solid #000;
+            }
+        }
+    }
+}
+.footer-copyright-row {
+    .footer-copyright-text {
+        font-size: 16px;
+        font-family: Rubik-light;
+    }
+}
+.footer-bank-row{
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    a{
+        height: 40px;
+    }
+    img{
+        margin: 0 5px;
+        object-fit: contain;
+    }
+    .mastercard{
+        width: 62px;
+        height: 40px;
+    }
+    .maestro{
+        width: 62px;
+        height: 40px;
+    }
+    .dina{
+        width: 60px;
+        height: 40px;
+    }
+    .visa{
+        width: 62px;
+        height: 40px;
+    }
+    .american{
+        width: 40px;
+        height: 40px;
+    }
+    .intesa{
+        width: 267px;
+        height: 40px;
+        object-position: center;
+    }
+    .securecode{
+        height: 40px;
+    }
+    .visa-secure{
+        height: 40px;
+    }
+    @media screen and (max-width: 767px) {
+        padding: 0;
+        img{
+            margin: 0 5px 10px;
+        }
+        a{
+            margin: 0 5px 10px;
+            img{
+                margin: 0;
+            }
+        }
+        .mastercard{
+            order: 1;
+        }
+        .maestro{
+            order: 2;
+        }
+        .dina{
+            order: 3
+        }
+        .visa{
+            order: 4
+        }
+        .american{
+            order: 6;
+        }
+        .bank-img-intesa{
+            width: 100%;
+            order: 5;
+        }
+        .bank-img-securecode{
+            order: 7;
+        }
+        .bank-img-visa-secure{
+            order: 8;
+        }
+    }
+    @media screen and (min-width: 767px) and (max-width: 1023px) {
+        img{
+            margin: 0 5px 10px;
+        }
+        a{
+            margin: 0 5px 10px;
+            img{
+                margin: 0;
+            }
+        }
+    }
+}

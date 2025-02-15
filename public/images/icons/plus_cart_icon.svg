@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="17px" viewBox="0 0 16 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
+    <title>Combined Shape</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Home-Page" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.300000012">
+        <g id="Home-Page-4.3" transform="translate(-1065.000000, -513.000000)" fill="#000000">
+            <g id="Card" transform="translate(637.000000, 124.000000)">
+                <g id="Group-10-Copy" transform="translate(41.000000, 372.000000)">
+                    <g id="Group-4-Copy" transform="translate(304.000000, 6.000000)">
+                        <path d="M90.25,19 L90.25,12.5 C90.25,12.0857864 90.5857864,11.75 91,11.75 C91.4142136,11.75 91.75,12.0857864 91.75,12.5 L91.75,19 L98.25,19 C98.6642136,19 99,19.3357864 99,19.75 C99,20.1642136 98.6642136,20.5 98.25,20.5 L91.75,20.5 L91.75,27 C91.75,27.4142136 91.4142136,27.75 91,27.75 C90.5857864,27.75 90.25,27.4142136 90.25,27 L90.25,20.5 L83.75,20.5 C83.3357864,20.5 83,20.1642136 83,19.75 C83,19.3357864 83.3357864,19 83.75,19 L90.25,19 Z" id="Combined-Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

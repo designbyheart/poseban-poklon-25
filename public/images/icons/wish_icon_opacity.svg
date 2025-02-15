@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="36px" viewBox="0 0 36 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59 (86127) - https://sketch.com -->
+    <title>Icon/crown</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="36" height="36" rx="4"></rect>
+        <filter x="-20.8%" y="-20.8%" width="141.7%" height="141.7%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.760275136   0 0 0 0 0.760275136   0 0 0 0 0.760275136  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Icon/crown" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Rectangle">
+            <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+            <use fill="#F12127" fill-rule="evenodd" xlink:href="#path-1"></use>
+        </g>
+        <path d="M22.5333333,8 C20.6666667,8 19,9.03448276 18,10.5517241 C17,9.03448276 15.3333333,8 13.4666667,8 C10.4666667,8 8,10.5517241 8,13.7241379 C8,19.4482759 18,28 18,28 C18,28 28,19.4482759 28,13.7241379 C28,10.5517241 25.5333333,8 22.5333333,8 Z" id="Shape" stroke="#FFFFFF" stroke-width="2" fill-opacity="0" fill="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+    </g>
+</svg>

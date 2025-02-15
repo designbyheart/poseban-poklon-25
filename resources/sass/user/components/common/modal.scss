@@ -1,0 +1,206 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.modal-login-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    z-index: 9;
+}
+.modal-login-row {
+    position: relative;
+    padding: 20px 20px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    .modal-btn-close {
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        .modal-btn {
+            background: none;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            .modal-btn-image {
+                width: 16px;
+                height: 16px;
+                zoom: 1;
+            }
+        }
+    }
+    @include mq(768px, min) {
+        max-width: 800px;
+    }
+    @include mq(768px, max) {
+        max-width: 90%;
+    }
+    @include mq(628px, max) {
+        flex-direction: column;
+    }
+    .col-signin,
+    .col-signup {
+        padding: 10px 10px;
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+.modal-title {
+    margin: 5px 0;
+    padding: 15px 0;
+    font-family: Rubik;
+    font-size: 20px;
+    color: $main-text-color;
+    opacity: 0.8;
+}
+.signin-form {
+    form {
+        .signin-input {
+            margin: 5px 0;
+            padding: 13px;
+            width: 100%;
+            max-width: 535px;
+            font-family: Rubik;
+            font-size: 16px;
+            color: $main-text-color;
+            border: 1px solid #dcdcdc;
+            border-radius: 4px;
+            outline: none;
+        }
+    }
+}
+.signin-btn-row,
+.signup-btn-row {
+    width: 100%;
+    .signin-btn,
+    .signup-btn,
+    a .signup-btn {
+        padding: 13px;
+        margin-top: 20px;
+        width: 100%;
+        max-width: 160px;
+        font-family: Rubik;
+        font-size: 16px;
+        background: $main-color;
+        color: $main-text-color-white;
+        text-decoration: none;
+        border: 0;
+        border-radius: 4px;
+        cursor: pointer;
+        &:hover {
+            background: $main-color-hover;
+        }
+    }
+    a {
+        text-align: center;
+        text-decoration: none;
+    }
+}
+
+.modal-form-checkbox {
+    padding: 5px 0;
+    .modal-item-label {
+        padding-left: 25px;
+        display: block;
+        position: relative;
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+        opacity: 0.5;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        .modal-item-checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .modal-item-check {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 18px;
+            width: 18px;
+            background-color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            &:after {
+                content: "";
+                position: absolute;
+                display: none;
+                top: 3px;
+                left: 3px;
+                width: 10px;
+                height: 9px;
+                background: url("/images/icons/check.svg");
+                background-size: cover;
+                background-position: center;
+            }
+        }
+        &:hover .modal-item-checkbox ~ .modal-item-check {
+            background-color: $main-color;
+            &:after {
+                content: "";
+                position: absolute;
+                display: block;
+                top: 3px;
+                left: 3px;
+                width: 10px;
+                height: 9px;
+                background: url("/images/icons/check.svg");
+                background-size: cover;
+                background-position: center;
+            }
+        }
+        .modal-item-checkbox:checked ~ .modal-item-check {
+            background-color: #000000;
+        }
+        .modal-item-checkbox:checked ~ .modal-item-check:after {
+            display: block;
+        }
+    }
+}
+
+.col-signup {
+    .signup-btn-row {
+        width: 100%;
+        .signup-btn {
+            padding: 13px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 160px;
+            font-family: Rubik;
+            font-size: 16px;
+            background: $main-color;
+            color: $main-text-color-white;
+            border: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            &:hover {
+                background: $main-color-hover;
+            }
+        }
+    }
+}
+.signup-desc {
+    font-family: Rubik;
+    font-size: 16px;
+    color: $main-text-color;
+}

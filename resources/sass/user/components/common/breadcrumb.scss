@@ -1,0 +1,42 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.breadcrumb-row {
+    padding: 20px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    font-family: Rubik;
+    font-size: 14px;
+    color: $main-text-color;
+    opacity: 0.5;
+    .breadcrumb-row-item {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        a {
+            font-family: Rubik;
+            font-size: 14px;
+            color: $main-text-color;
+            &:active,
+            &:focus,
+            &:visited,
+            &:link {
+                color: $main-text-color;
+            }
+            &:hover {
+                color: $main-color;
+            }
+            .breadcrumb-item-text {
+                font-family: Rubik;
+                font-size: 14px;
+                // color: $main-text-color;
+            }
+        }
+        .breadcrumb-arrow {
+            padding: 0 10px;
+        }
+    }
+}

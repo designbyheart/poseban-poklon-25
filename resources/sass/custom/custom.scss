@@ -1,0 +1,86 @@
+div.vs-tabs--content {
+    padding: 10px 0;
+}
+div.vs-tabs-primary {
+    .con-tab button:not(:disabled):hover {
+        color: white !important;
+    }
+}
+div table {
+    table-layout: fixed;
+}
+
+body .con-vs-dialog {
+    z-index: 53001;
+}
+
+//Image uploader
+.con-vs-popup .vs-popup--content {
+    height: 100%;
+    max-height: calc(100% - 39px);
+    position: relative;
+}
+.abr-images-container {
+    height: 90%;
+    overflow: hidden;
+}
+.abr-images-pagination {
+    height: 10%;
+}
+.abr-images-item {
+    width: calc((100% - 100px) / 5);
+    height: 23%;
+    margin-right: 20px;
+    margin-bottom: 1.5%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    position: relative;
+}
+.abr-images-item img {
+    height: 100%;
+}
+.abr-images-item .abr-image-btn {
+    width: 35px;
+    height: 35px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+.abr-image-preview img {
+    width: auto;
+    height: 200px;
+}
+.abr-form-images .abr-form-image {
+    height: 200px;
+    margin-right: 1%;
+    margin-bottom: 20px;
+    position: relative;
+}
+.abr-form-images .abr-form-image img {
+    height: 100%;
+}
+.abr-form-images .abr-form-image .abr-image-btn {
+    width: 35px;
+    height: 35px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    cursor: pointer;
+}
+
+.abr-vouchers-container table {
+    table-layout: auto;
+}
+
+.vs-tabs--ul {
+    flex-wrap: wrap;
+}

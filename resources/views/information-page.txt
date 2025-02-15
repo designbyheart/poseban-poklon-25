@@ -1,0 +1,198 @@
+<section class="information-container container">
+        <div class="row">
+            <h2 class="information-title col-lg-12">
+                Kontaktiruj Nas 1
+            </h2>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="information-sidebar">
+                    <div class="information-sidebar-list">
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent">
+                                <span class="parent-title">O Nama</span>
+                            </div>
+                        </div>
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent">
+                                <span class="parent-title">Nasi Vauceri</span>
+                            </div>
+                        </div>
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent">
+                                <span class="parent-title">Cesto postavijana pitanja</span>
+                            </div>
+                        </div>
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent information-list-active">
+                                <span class="parent-title">Shipping Address</span>
+                            </div>
+                            <div class="information-sidebar-dropdown-list is-open">
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 information-content-text">
+                <div class="information-text-container">
+                    <h3 class="information-text-title">Kaku da kupim poklon?</h3>
+                    <p class="information-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                        facilis,
+                        mollitia debitis iure reprehenderit velit alias quae voluptatibus saepe harum magni totam
+                        facere?
+                        Non earum culpa rerum expedita fugiat ipsam.</p>
+                    <h3 class="information-text-title">Kaku da kupim poklon?</h3>
+                    <p class="information-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                        facilis,
+                        mollitia debitis iure reprehenderit velit alias quae voluptatibus saepe harum magni totam
+                        facere?
+                        Non earum culpa rerum expedita fugiat ipsam.</p>
+                    <h3 class="information-text-title">Kaku da kupim poklon?</h3>
+                    <p class="information-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                        facilis,
+                        mollitia debitis iure reprehenderit velit alias quae voluptatibus saepe harum magni totam
+                        facere?
+                        Non earum culpa rerum expedita fugiat ipsam.</p>
+                    <h3 class="information-text-title">Kaku da kupim poklon?</h3>
+                    <p class="information-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+                        facilis,
+                        mollitia debitis iure reprehenderit velit alias quae voluptatibus saepe harum magni totam
+                        facere?
+                        Non earum culpa rerum expedita fugiat ipsam.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="information-container container">
+        <div class="row">
+            <h2 class="information-title col-lg-12">
+                Kontaktiruj Nas 2
+            </h2>
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="information-sidebar">
+                    <div class="information-sidebar-list">
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent">
+                                <span class="parent-title">O Nama</span>
+                            </div>
+                        </div>
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent">
+                                <span class="parent-title">Nasi Vauceri</span>
+                            </div>
+                        </div>
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent">
+                                <span class="parent-title">Cesto postavijana pitanja</span>
+                            </div>
+                        </div>
+                        <div class="information-sidebar-list-item">
+                            <div class="sidebar-list-parent information-list-active">
+                                <span class="parent-title">Shipping Address</span>
+                            </div>
+                            <div class="information-sidebar-dropdown-list is-open">
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                                <div class="information-sidebar-list-child">
+                                    <span>Sub Category</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 information-content-text">
+                <div class="information-contact-container">
+                    <div class="contact-info">
+                        <h3 class="contact-info-title">
+                            Kontakt
+                        </h3>
+                        <p class="contant-info-desc">
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit ea vitae iusto illo esse
+                            itaque aliquam dignissimos temporibus consectetur voluptatem omnis voluptate dicta ab
+                            maiores fugiat, repudiandae animi assumenda facilis!
+                        </p>
+                        <div class="contact-info-icons">
+                            <div class="info-icon-number">
+                                <a href="#" class="info-icon-link">
+                                    <div class="info-image">
+                                        <img src="images/information_phone_icon.svg" alt="PosebanPoklon"
+                                            class="icon-number">
+                                    </div>
+                                    <div class="icon-number-text">+381 60 533 5345</div>
+                                </a>
+                            </div>
+                            <div class="info-icon-email">
+                                <a href="#" class="info-icon-link">
+                                    <div class="info-image">
+                                        <img src="images/information_email_icon.svg" alt="PosebanPoklon"
+                                            class="icon-email">
+                                    </div>
+                                    <div class="icon-email-text">kontakt@posebanpoklon.rs</div>
+                                </a>
+                            </div>
+                            <div class="info-icon-locat">
+                                <a href="#" class="info-icon-link">
+                                    <div class="info-image">
+                                        <img src="images/information_locat_icon.svg" alt="PosebanPoklon"
+                                            class="icon-locat">
+                                    </div>
+                                    <div class="icon-locat-text">Jurija Gagarina 231, Beograd, Serbia</div>
+                                </a>
+                            </div>
+                            <div class="contact-open-time">
+                                Monday - Friday 09:00 - 17:00
+                            </div>
+                            <div class="contact-map">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h3 class="contact-info-title">
+                            Kontakt
+                        </h3>
+                        <p class="contant-info-desc">
+                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit ea vitae iusto illo esse
+                            itaque aliquam dignissimos temporibus consectetur voluptatem omnis voluptate dicta ab
+                            maiores fugiat, repudiandae animi assumenda facilis!
+                        </p>
+                        <div class="contact-form-container">
+                            <div class="form-col-title">
+                                <div class="form-input-title">Vase imie</div>
+                                <div class="form-input-title">Vas email</div>
+                                <div class="form-input-title">Vasa poruka</div>
+                            </div>
+                            <div class="form-col">
+                                <form action="">
+                                    <input type="text" name="" id="" class="form-input" placeholder="Imie">
+                                    <input type="text" name="" id="" class="form-input" placeholder="Email">
+                                    <textarea name="" id="" cols="30" rows="10" class="form-textarea"
+                                        placeholder="Dodaj poruke"></textarea>
+                                    <div class="form-btn-row">
+                                        <button class="form-btn">Posalijte</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

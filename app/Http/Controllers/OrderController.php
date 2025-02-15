@@ -1,0 +1,485 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Bundle;
+use App\Currency;
+use App\Jobs\SendNewOrderAdminEmail;
+use App\Jobs\SendNewOrderUserEmail;
+use App\Mail\NewOrderAdminMailable;
+use App\Order;
+use App\OrderItem;
+use App\ShippingMethod;
+use App\PaymentMethod;
+use App\GiftCard;
+use App\OrderStatus;
+use App\Product;
+use App\Version;
+use Mail;
+use Auth;
+use App\Setting;
+use http\Env\Response;
+use Illuminate\Http\Request;
+use function MongoDB\BSON\toJSON;
+use Carbon\Carbon;
+
+class OrderController extends Controller
+{
+
+    public function __construct(){
+
+        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail']]);
+        $this->middleware('auth', ['only' => ['ordersHistory']]);
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('admin.order.index');
+    }
+
+    /**
+     * Send list of orders with JSON
+     */
+    public function indexData(Request $request)
+    {
+        $orders = new Order();
+
+        $per_page = $request->per_page ?? 20;
+
+        if(!empty($request->sort_key) && !empty($request->sort_order)){
+            $orders = $orders->orderBy($request->sort_key, $request->sort_order);
+        }
+
+        if(!empty($request->search)){
+            $orders = $orders->where('id', 'like', '%' . $request->search . '%')
+                ->orWhere('customer_name', 'like', '%' . $request->search . '%')
+                ->orWhere('customer_surname', 'like', '%' . $request->search . '%')
+                ->orWhere('customer_email', 'like', '%' . $request->search . '%');
+        }
+
+        $orders = $orders->with('paymentMethod', 'shippingMethod', 'status')->paginate($per_page);
+
+        $orders->getCollection()->transform(function ($order, $key) use ($request){
+            $order = convertPrices($request, null, $order);
+            return $order;
+        });
+
+        return response()->json($orders, 200);
+
+    }
+
+    /**
+     * Send list of orders for current user with JSON
+     */
+    public function publicIndexData(Request $request)
+    {
+        $user = Auth::user();
+
+        if(!empty($user)){
+
+            $per_page = $request->per_page ?? 20;
+
+            $orders = Order::where('user_id', $user->id)->with('items')->paginate($per_page);
+
+            return response()->json($orders, 200);
+        }
+    }
+
+    /**
+     * Get a single item data
+     */
+    public function getSingleItem(Request $request){
+
+        $order = Order::find($request->id);
+
+        $order->load('currency', 'user', 'paymentMethod', 'shippingMethod', 'status', 'items');
+
+        $order->items->load('product', 'vouchers');
+
+        if(!empty($order)){
+            return response()->json($order);
+        }
+    }
+
+    /**
+     * Get user orders history
+     */
+    public function ordersHistory(){
+
+        $user = Auth::User();
+
+        $orders = $user->orders();
+
+        return view('user.profile.orders-history', compact('orders'));
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('user.order.create');
+    }
+
+    /**
+     * Calculate price
+     */
+    public function calculate(Request $request){
+
+        $order = new Order($request->all());
+
+        if(!empty($request->giftcard_code)){
+
+            $giftcard = GiftCard::where('code', $request->giftcard_code)->first();
+
+            if(!empty($giftcard) && $giftcard->validate()){
+                $order->giftcard_code = $giftcard->code;
+            }
+
+        }
+
+        $orderItems = $request->order_items;
+
+        foreach($orderItems as $item){
+
+            $product = Product::find($item['product_id']);
+
+            $orderItem = new OrderItem($item);
+
+            $orderItem->product()->associate($product);
+
+            $orderItem->order()->associate($order);
+
+            $orderItem->product_price = $product->price;
+
+            //every order item can have multiple versions(color, material, size, etc..) which can affect price value.
+            if(!empty($item['versions'])){
+
+                foreach($item['versions'] as $v){
+
+                    $version = Version::find($v);
+
+                    $version->increase_price ?
+                        $orderItem->product_price += $version->price :
+                        $orderItem->product_price -= $version->price;
+
+                    $orderItem->versions->push($version);
+                }
+
+                $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
+            }
+            else{
+                $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
+            }
+
+            if($orderItem->box_count > 0){
+                $orderItem->box_total = $orderItem->box_count * 690;
+                $orderItem->product_total  += $orderItem->box_total;
+            }
+
+            $order->items->push($orderItem);
+        }
+
+        //Adds bundles to orders from array of bundle id's
+        if(!empty($request->bundles)){
+
+            foreach ($request->bundles as $b){
+                $bundle = Bundle::find($b);
+                $order->bundles->push($bundle);
+            }
+        }
+
+        $order = $order->countPrice($request, $check_price = true);
+
+        return $results = ["total" => $order['total'], "subtotal" => $order['subtotal'], "discount" => $order['discount']];
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $order = new Order($request->all());
+        $user = null;
+        //TODO add default currency for situation when request doesnt have one
+
+        if(Auth::check()){
+            $user = Auth::user();
+            $order->user()->associate($user);
+        }
+
+        if(!empty($request->currency_id)){
+            $currency = Currency::find($request->currency_id);
+            $order->currency()->associate($currency);
+        }
+
+        if(!empty($request->payment_method_id)){
+            $order->paymentMethod()->associate(PaymentMethod::find($request->payment_method_id));
+        }
+
+        if(!empty($request->shipping_method_id)){
+            $order->shippingMethod()->associate(ShippingMethod::find($request->shipping_method_id));
+        }
+
+        if(!empty($request->giftcard_code)){
+
+            $giftcard = GiftCard::where('code', $request->giftcard_code)->first();
+
+            if(!empty($giftcard) && $giftcard->validate()){
+                $order->giftcard_code = $giftcard->code;
+                $giftcard->activate();
+            }
+
+        }
+
+        if($order->save()){
+
+            $orderItems = $request->order_items;
+
+            foreach($orderItems as $item){
+
+                $product = Product::find($item['product_id']);
+
+                $orderItem = new OrderItem($item);
+
+                $orderItem->product()->associate($product);
+
+                $orderItem->order()->associate($order);
+
+                $orderItem->product_price = $product->price;
+
+                //every order item can have multiple versions(color, material, size, etc..) which can affect price value.
+                if(!empty($item['versions'])){
+
+                    foreach($item['versions'] as $v){
+
+                        $version = Version::find($v);
+
+                        $version->increase_price ?
+                            $orderItem->product_price += $version->price :
+                            $orderItem->product_price -= $version->price;
+                    }
+
+                    $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
+
+                    if($orderItem->box_count > 0){
+                        $orderItem->box_total = $orderItem->box_count * 690;
+                        $orderItem->product_total = $orderItem->product_total + $orderItem->box_total;
+                    }
+
+                    $orderItem->save();
+                    $orderItem->versions()->sync($item['versions']);
+                }
+                else{
+                    $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
+                    if($orderItem->box_count > 0){
+                        $orderItem->box_total = $orderItem->box_count * 690;
+                        $orderItem->product_total = $orderItem->product_total + $orderItem->box_total;
+                    }
+                    $orderItem->save();
+                }
+            }
+
+            //Adds bundles to orders from array of bundle id's
+            if(!empty($request->bundles)){
+                $order->bundles()->sync($request->bundles);
+            }
+
+            $order->countPrice();
+
+            //Get default status and call setStatus function, passing default
+            $default_status_setting = Setting::where('slug', 'default_order_status')->first();
+
+            if(!empty($default_status_setting)){
+                $status_id = (int) $default_status_setting->content;
+                $default_status = OrderStatus::find($status_id);
+            }
+            else{
+                $default_status = OrderStatus::where('title', 'New')->first();
+            }
+
+
+            //Send email to administrator about new order
+            SendNewOrderAdminEmail::dispatch($order)->delay(now()->addSeconds(2));
+
+            //Send email to administrator about new order
+            SendNewOrderUserEmail::dispatch($order)->delay(now()->addSeconds(3));
+
+            $order->setStatus($default_status);
+
+        }
+
+        //Prepare parameters for card payment if it is selected
+        if($order->paymentMethod->id === 3){
+            $payment_params = $order->getPaymentParams();
+            return  response()->json(['payment_params' => $payment_params], 200);
+        }
+        else{
+            return  response()->json('success', 200);
+        }
+
+    }
+
+    /**
+     * Successful payment page
+     */
+    public function paymentSuccess(Request $request){
+        if(isset($request->oid)){
+            $order = Order::find($request->oid);
+            $transaction_data = [
+                'order_id' => $request->oid,
+                'auth_code' => $request->AuthCode,
+                'trans_id' => $request->TransId,
+                'response' => $request->Response,
+                'proc_return_code' => $request->ProcReturnCode,
+                'md_status' => $request->mdStatus,
+                'extra_trxdate' => Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s')
+            ];
+            $order->transaction_data = json_encode($transaction_data);
+            //Set paid status
+            $status = OrderStatus::find(2);
+            $order->save();
+            if(isset($status)){
+                $order->setStatus($status);
+            }
+            $transaction_data = (object) $transaction_data;
+            $success = true;
+            //Generate and send eVouchers
+            if($order->shipping_method_id === 9){
+                if($order->generateVouchers()){
+                    if($order->sendCustomerEmail()){
+                        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+                    }
+                }
+            }
+            else{
+                return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+            }
+        }
+    }
+
+
+    /**
+     * Unsuccessful payment page
+     */
+    public function paymentFail(Request $request){
+        if(isset($request->oid)){
+            $order = Order::find($request->oid);
+            $transaction_data = [
+                'order_id' => $request->oid,
+                'auth_code' => $request->AuthCode,
+                'trans_id' => $request->TransId,
+                'response' => $request->Response,
+                'proc_return_code' => $request->ProcReturnCode,
+                'md_status' => $request->mdStatus,
+                'extra_trxdate' => Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s')
+            ];
+            $order->transaction_data = json_encode($transaction_data);
+            //Set failed status
+            $status = OrderStatus::find(4);
+            $order->save();
+            if(isset($status)){
+                $order->setStatus($status);
+            }
+            $transaction_data = (object) $transaction_data;
+            $success = false;
+            $payment_params = $order->getPaymentParams();
+            return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Order $order)
+    {
+        return view('admin.order.show');
+    }
+
+    /**
+     * Order success page
+     */
+    public function orderSuccess(){
+
+        return view('user.order.order-placed');
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Order $order)
+    {
+        if(!empty($request->currency_id)){
+            $currency = Currency::find($request->currency_id);
+            $order->currency()->associate($currency);
+        }
+
+        if(!empty($request->payment_method_id)){
+            $order->paymentMethod()->associate(PaymentMethod::find($request->payment_method_id));
+        }
+
+        if(!empty($request->shipping_method_id)){
+            $order->shippingMethod()->associate(ShippingMethod::find($request->shipping_method_id));
+        }
+
+        //Adds bundles to orders from array of bundle id's
+        if(!empty($request->bundles)){
+            $order->bundles()->sync($request->bundles);
+        }
+
+        $order->update($request->all());
+
+        $order->countPrice();
+
+        if((!empty($request->order_status_id)) && ($order->status->id != $request->order_status_id)){
+            $request->order_id = $order->id;
+            $this->updateOrderStatus($request);
+        }
+
+        return response()->json('success', 200);
+
+    }
+
+    public function updateOrderStatus(Request $request){
+
+        $order = Order::find($request->order_id);
+        $status = OrderStatus::find($request->order_status_id);
+
+        $message = $request->message;
+        $order->setStatus($status, $message);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Order $order)
+    {
+        if($order->delete())
+        {
+            return response()->json('success', 200);
+        }
+    }
+}

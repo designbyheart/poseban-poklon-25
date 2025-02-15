@@ -1,0 +1,321 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.is-open {
+    display: block;
+    animation: opacity-dropdown 400ms ease-in-out;
+}
+
+.is-none {
+    display: none;
+}
+
+.cat-sidebar {
+    padding: 22px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 20px 0 rgba(214, 214, 214, 0.5);
+    @include mq(768px, max) {
+        display: none;
+    }
+}
+.sidebar-list-parent {
+    padding: 10px 0;
+    position: relative;
+    cursor: pointer;
+    .parent-title {
+        width: 100%;
+    }
+    &.cat-sidebar-dropdown {
+        .parent-title {
+            &::after {
+                content: " ";
+                position: absolute;
+                top: 12px;
+                right: 0;
+                background: url("/images/icons/sidebar-arrow.svg");
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+                width: 16px;
+                height: 16px;
+            }
+            &.cat-bold {
+                &::after {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+}
+
+.cat-sidebar-list-child {
+    padding: 5px 0;
+    cursor: pointer;
+    &:first-child {
+        padding-top: 0;
+    }
+    &:last-child {
+        padding-bottom: 0;
+    }
+}
+
+.cat-sidebar-dropdown-list.is-open {
+    margin-left: 30px;
+}
+
+.cat-sidebar-list-child {
+    .cat-sidebar-dropdown-list {
+        padding: 5px 0 !important;
+    }
+}
+
+.cat-sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    .sidebar-buttons-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+}
+
+.cat-sidebar-buttons {
+    .sidebar-buttons-links {
+        margin: 7px auto;
+        padding: 10px 14px;
+        width: 100%;
+        // display: flex;
+        // justify-content: space-between;
+        // align-content: center;
+        // align-items: center;
+        text-decoration: none;
+        &.button-vip {
+            background: #150601;
+            border: 1px solid #e1c077;
+            border-radius: 4px;
+            color: #e1c077;
+            .button-container {
+                .button-vip-icon-col {
+                    .button-icon-white {
+                        display: block;
+                    }
+                    .button-icon-color {
+                        display: none;
+                    }
+                }
+                .button-vip-text-col {
+                    color: #e1c077;
+                }
+            }
+            &:hover {
+                background: #ffffff;
+                color: #e1c077;
+                .button-container {
+                    .button-vip-icon-col {
+                        .button-icon-white {
+                            display: none;
+                        }
+                        .button-icon-color {
+                            display: block;
+                        }
+                    }
+                    .button-vip-text-col {
+                        color: #e1c077;
+                    }
+                }
+            }
+        }
+        &.button-promotion {
+            border-radius: 4px;
+            border: 1px solid #ffffff;
+            background: $main-text-color-green;
+            color: #ffffff;
+            .button-container {
+                .button-promotion-icon-col {
+                    .button-icon-white {
+                        display: block;
+                    }
+                    .button-icon-color {
+                        display: none;
+                    }
+                }
+                .button-vip-text-col {
+                    color: #ffffff;
+                }
+            }
+            &:hover {
+                background: #ffffff;
+                border: 1px solid $main-text-color-green;
+                color: $main-text-color-green;
+                .button-container {
+                    .button-promotion-icon-col {
+                        .button-icon-white {
+                            display: none;
+                        }
+                        .button-icon-color {
+                            display: block;
+                        }
+                    }
+                    .button-vip-text-col {
+                        color: $main-text-color-green;
+                    }
+                }
+            }
+        }
+        &.button-new {
+            border-radius: 4px;
+            border: 1px solid #ffffff;
+            background: $main-text-color-yellow;
+            color: #ffffff;
+            .button-container {
+                .button-new-icon-col {
+                    .button-icon-white {
+                        display: block;
+                    }
+                    .button-icon-color {
+                        display: none;
+                    }
+                }
+                .button-vip-text-col {
+                    color: #ffffff;
+                }
+            }
+            &:hover {
+                background: #ffffff;
+                border: 1px solid $main-text-color-yellow;
+                color: $main-text-color-yellow;
+                .button-container {
+                    .button-new-icon-col {
+                        .button-icon-white {
+                            display: none;
+                        }
+                        .button-icon-color {
+                            display: block;
+                        }
+                    }
+                    .button-vip-text-col {
+                        color: $main-text-color-yellow;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    .button-vip-icon-col,
+    .button-promotion-icon-col,
+    .button-new-icon-col {
+        margin-right: 14px;
+        width: 20px;
+        .button-vip-icon,
+        .button-promotion-icon,
+        .button-new-icon {
+            max-width: 20px;
+        }
+    }
+    .button-vip-text-col,
+    .button-promotion-text-col,
+    .button-new-text-col {
+        // margin-right: auto;
+        margin: auto 0;
+        text-align: left;
+        font-size: 14px;
+        font-family: Rubik;
+    }
+}
+@keyframes opacity-dropdown {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.sidebar-list-parent {
+    font-family: Rubik;
+    font-size: 16px;
+    color: $main-text-color;
+    &:active,
+    &:focus,
+    &:visited,
+    &:link {
+        color: $main-text-color;
+    }
+    a {
+        &:active,
+        &:focus,
+        &:visited,
+        &:link {
+            color: $main-text-color;
+        }
+    }
+}
+.cat-sidebar-dropdown-list {
+    .cat-sidebar-list-child {
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+    }
+}
+// .cat-sidebar-dropdown-list {
+//   display: none;
+// }
+
+// Profile Page - Style for Sidebar
+.profile-sidebar {
+    margin-bottom: 20px;
+    padding: 22px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 20px 0 rgba(214, 214, 214, 0.5);
+    .sidebar-list-parent {
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+    }
+    .sidebar-list-parent.profile-list-active {
+        font-family: Rubik-bold;
+    }
+}
+
+// Information Page - Style for Sidebar
+.information-sidebar {
+    padding: 22px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 20px 0 rgba(214, 214, 214, 0.5);
+    .sidebar-list-parent {
+        font-family: Rubik;
+        font-size: 16px;
+        color: $main-text-color;
+    }
+    .sidebar-list-parent.information-list-active {
+        font-family: Rubik-bold;
+    }
+}
+a.parent-title:active {
+    font-family: Rubik-bold;
+}
+
+// Category Sidebar Title
+.cat-sidebar-title-row {
+    width: 100%;
+    .cat-sidebar-title {
+        padding: 0 10px 20px 10px;
+        font-family: Rubik-medium;
+        font-size: 30px;
+        color: $main-text-color;
+    }
+}

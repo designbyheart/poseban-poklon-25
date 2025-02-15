@@ -1,0 +1,39 @@
+<script>
+        function openTab(evt, name) {
+            var i, tabcontent, tablinks;
+            var tabcontent = document.getElementsByClassName("type-tabs-content");
+
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = 'none';
+            }
+
+            var tablinks = document.getElementsByClassName("type-tabs-item");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" tabs-active", "");
+            }
+            document.getElementById(name).style.display = "block";
+            evt.currentTarget.className += " tabs-active";
+
+        }
+        document.getElementById("defaultOpen").click();
+
+        // Function 2
+        function openTabPayment(evt, name) {
+            var i, tabcontentpayment, tablinkspayment;
+            var tabcontentpayment = document.getElementsByClassName("payment-tabs-content");
+
+            for (i = 0; i < tabcontentpayment.length; i++) {
+                tabcontentpayment[i].style.display = 'none';
+            }
+
+            var tablinkspayment = document.getElementsByClassName("payment-tabs-item");
+            for (i = 0; i < tablinkspayment.length; i++) {
+                tablinkspayment[i].className = tablinkspayment[i].className.replace(" tabs-active", "");
+            }
+            document.getElementById(name).style.display = "block";
+            evt.currentTarget.className += " tabs-active";
+
+        }
+        document.getElementById("defaultOpenPayment").click();
+        
+    </script>

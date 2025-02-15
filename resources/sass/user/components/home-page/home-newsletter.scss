@@ -1,0 +1,115 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.home-newsletter-container {
+    margin: 40px auto;
+    width: 100%;
+    background: $main-color;
+    .home-newsletter-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        @include mq(768px, min) {
+            padding: 45px 0;
+        }
+        @include mq(768px, max) {
+            padding: 25px 0;
+        }
+        .newsletter-col {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+            @include mq(768px, min) {
+                flex: 50%;
+            }
+            @include mq(768px, max) {
+                padding: 30px 10px;
+                flex: 100%;
+            }
+            .newsletter-text {
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+                text-align: center;
+                .newsletter-title {
+                    padding-bottom: 10px;
+                    font-family: Rubik-bold;
+                    font-size: 20px;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: $main-text-color-white;
+                }
+                .newsletter-desc {
+                    padding-bottom: 30px;
+                    max-width: 335px;
+                    font-family: Rubik;
+                    font-size: 16px;
+                    color: $main-text-color-white;
+                }
+            }
+            .newsletter-social {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-content: center;
+                align-items: center;
+            }
+        }
+    }
+}
+.newsletter-col-left {
+    justify-content: space-between;
+    .newsletter-social {
+        padding: 10.5px 0;
+        .social-item {
+            padding: 0 18px;
+            .social-links {
+                text-decoration: none;
+                .social-icon {
+                }
+            }
+        }
+    }
+}
+.newsletter-col-right {
+    justify-content: space-between;
+    .newsletter-form-container {
+        margin: auto;
+        position: relative;
+        max-width: 395px;
+        .newsletter-form {
+            width: 100%;
+            .newsletter-input {
+                padding: 16px 161px 16px 13px;
+                width: 100%;
+                border: 0;
+                border-radius: 4px;
+                background: #fff;
+                outline: none;
+            }
+            .newsletter-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                max-width: 160px;
+                height: 100%;
+                border: 0;
+                border-radius: 4px;
+                background: #000;
+                color: $main-text-color-white;
+                font-size: 16px;
+                font-family: Rubik;
+                letter-spacing: 1px;
+                outline: none;
+                cursor: pointer;
+            }
+        }
+    }
+}

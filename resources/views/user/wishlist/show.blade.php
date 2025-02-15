@@ -1,0 +1,1 @@
+<p>User wishlist show</p>

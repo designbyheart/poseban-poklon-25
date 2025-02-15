@@ -1,0 +1,25 @@
+{
+  "subtotal": "",
+  "total": "",
+  "discount": "",
+  "products": [
+    {
+      "id": "1",
+      "title": "Test product",
+      "image_url": "",
+      "price": "1000",
+      "quantity": "1",
+      "total": "1000",
+      "message": ""
+    },
+    {
+      "id": "2",
+      "title": "Test product2",
+      "image_url": "",
+      "price": "1000",
+      "quantity": "2",
+      "total": "1000",
+      "message": ""
+    }
+  ]
+}

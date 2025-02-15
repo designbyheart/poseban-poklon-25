@@ -1,0 +1,70 @@
+@import "../app/mixin.scss";
+@import "../app/default-style-values.scss";
+
+.filters-row {
+    padding: 0 10px 20px 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    .filters-item {
+        position: relative;
+        z-index: 1;
+        @include mq(768px, min) {
+            width: 25%;
+        }
+        @include mq(768px, max) {
+            margin: 10px auto;
+            width: 100%;
+        }
+        &::after {
+            content: " ";
+            position: absolute;
+            top: -6px;
+            right: -12px;
+            width: 40px;
+            height: 40px;
+            background: url("/images/icons/select_arrow_icon.svg");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+        .filter-select {
+            padding: 7px 0;
+            position: relative;
+            border-top: 0;
+            border-left: 0;
+            border-right: 0;
+            border-bottom: 1px solid rgba(7, 7, 7, 0.3);
+            border-radius: 0;
+            background: none;
+            font-family: Rubik;
+            font-size: 16px;
+            color: $main-text-color;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -o-appearance: none;
+            appearance: none;
+            outline: none;
+            z-index: 2;
+            @include mq(768px, min) {
+                width: 100%;
+                max-width: 450px;
+            }
+            @include mq(768px, max) {
+                width: 100%;
+                max-width: 100%;
+            }
+            .filter-option {
+                font-family: Rubik;
+                font-size: 16px;
+                color: $main-text-color;
+                opacity: 0.8;
+            }
+        }
+    }
+}

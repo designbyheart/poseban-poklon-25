@@ -1,0 +1,36 @@
+$main-color: #ed2025;
+$main-color-hover: #e33235;
+$main-text-color: #000;
+$main-text-color-white: #fff;
+$main-text-color-green: #58e223;
+$main-text-color-yellow: #ffd949;
+$main-title-color: #181818;
+$alert-background: blue;
+$white-icon-hover: blue;
+
+// WebPage Fonts
+
+@font-face {
+    font-family: Rubik;
+    src: url("https://posebanpoklon.rs/fonts/user/Rubik-Regular.ttf");
+}
+
+@font-face {
+    font-family: Rubik-light;
+    src: url("https://posebanpoklon.rs/fonts/user/Rubik-Light.ttf");
+}
+
+@font-face {
+    font-family: Rubik-bold;
+    src: url("https://posebanpoklon.rs/fonts/user/Rubik-Bold.ttf");
+}
+
+@font-face {
+    font-family: Rubik-medium;
+    src: url("https://posebanpoklon.rs/fonts/user/Rubik-Medium.ttf");
+}
+
+@font-face {
+    font-family: Atziluth;
+    src: url("https://posebanpoklon.rs/fonts/user/Atziluth-Script.ttf");
+}
