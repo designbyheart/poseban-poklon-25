@@ -22,6 +22,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use function MongoDB\BSON\toJSON;
 use Carbon\Carbon;
+use \Exception;
 
 class OrderController extends Controller
 {
@@ -338,6 +339,14 @@ class OrderController extends Controller
     public function paymentSuccess(Request $request){
         if(isset($request->oid)){
             $order = Order::find($request->oid);
+            try {
+                $payment_params = $request->payment_params;
+            } catch(Exception $e) {
+                // create debug error log with given error
+                Log::error($e);
+                $payment_params = null;
+            }
+
             $transaction_data = [
                 'order_id' => $request->oid,
                 'auth_code' => $request->AuthCode,

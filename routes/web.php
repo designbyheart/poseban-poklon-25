@@ -678,3 +678,6 @@ Route::get('/{page_slug}', [
     'uses' => 'PageController@show',
     'as' => 'page.show'
 ]);
+
+
+Route::post('/send-email', [EmailController::class, 'sendTransactionalEmail']);

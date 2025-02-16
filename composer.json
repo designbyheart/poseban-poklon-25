@@ -14,7 +14,8 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^5.8.0",
         "laravel/tinker": "^1.0",
-        "simplesoftwareio/simple-qrcode": "^2.0"
+        "simplesoftwareio/simple-qrcode": "^2.0",
+        "getbrevo/brevo-php": "^1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -27,7 +28,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.1.33"
+        }
     },
     "extra": {
         "laravel": {

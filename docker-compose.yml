@@ -1,0 +1,72 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./vendor:/var/www/vendor
+    networks:
+      - laravel
+    depends_on:
+      - db
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+
+  nginx:
+    image: nginx:alpine
+    container_name: laravel_nginx
+    restart: unless-stopped
+    ports:
+      - "8050:80"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - laravel
+
+  db:
+    container_name: laravel_db
+    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./dbData:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - laravel
+
+    # db:
+    #   image: mysql:8.0
+    #   container_name: laravel_db
+    #   restart: unless-stopped
+    #   environment:
+    #     MYSQL_DATABASE: ${DB_DATABASE}
+    #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    #     MYSQL_PASSWORD: ${DB_PASSWORD}
+    #     MYSQL_USER: ${DB_USERNAME}
+    #   volumes:
+    #     - dbdata:/var/lib/mysql
+    #   networks:
+    #     - laravel
+    #   command:
+    #     - --default-authentication-plugin=mysql_native_password
+    #     - --character-set-server=utf8mb4
+    #     - --collation-server=utf8mb4_unicode_ci
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
