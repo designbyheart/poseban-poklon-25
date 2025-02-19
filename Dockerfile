@@ -1,5 +1,9 @@
 # Use the PHP 7.1 FPM image
-FROM php:7.4-fpm
+FROM php:7.4-cli
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+CMD [ "php", "./index.php" ]
+
 
 # Add Composer to the PATH
 ENV PATH="$PATH:/usr/local/bin"
@@ -41,8 +45,16 @@ COPY resources ./resources
 COPY routes ./routes
 COPY storage ./storage
 COPY tests ./tests
+COPY vendor ./vendor
 COPY artisan .
 COPY package.json .
+COPY ./.env .
+COPY .editorconfig .
+COPY artisan .
+COPY composer.json .
+COPY package.json .
+COPY package-lock.json .
+
 
 # # Copy only composer files for dependency caching
 COPY composer.json ./

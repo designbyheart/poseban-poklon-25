@@ -5,6 +5,7 @@ namespace App;
 use App\Coupon;
 use App\Jobs\SendOrderStatusChangedEmail;
 use App\Jobs\SendVoucherEmail;
+use App\Services\EmailService;
 use Auth;
 use App\Product;
 use Illuminate\Support\Facades\Mail;
@@ -64,36 +65,40 @@ class Order extends Model
         return $this->belongsToMany('App\Bundle', 'bundles_orders')->withTimestamps();
     }
 
-    public function vouchers(){
+    public function vouchers()
+    {
         return $this->hasMany('App\Voucher', 'order_id');
     }
 
     //Set order status function and send status email
-    public function setStatus($status, $message = null){
+    public function setStatus($status, $message = null)
+    {
         $this->status()->associate($status);
 
-        if($this->update()){
+        if ($this->update()) {
             $this->sendStatusEmail($status, $message);
             return response()->json('success', 200);
         }
     }
 
     //Send status email info
-    public function sendStatusEmail($status, $message = null){
-        if(empty($message)){
+    public function sendStatusEmail($status, $message = null)
+    {
+        if (empty($message)) {
             $message = $status->message;
         }
 
         $email = $this->customer_email;
 
-        $order= $this->load('shippingMethod', 'paymentMethod', 'giftCard', 'coupon', 'currency', 'status', 'items.product', 'user');
+        $order = $this->load('shippingMethod', 'paymentMethod', 'giftCard', 'coupon', 'currency', 'status', 'items.product', 'user');
 
-        if(!empty($message)) {
+        if (!empty($message)) {
             SendOrderStatusChangedEmail::dispatch($email, $message, $order)->delay(now()->addSeconds(10));
         }
     }
 
-    public function countPrice($request = null, $check_price = false){
+    public function countPrice($request = null, $check_price = false)
+    {
 
         $discount = 0;
         $this->coupon_discount = 0;
@@ -102,10 +107,10 @@ class Order extends Model
         $this->subtotal = $this->items->sum('product_total');
 
         //Add all bundles price to order subtotal
-        if(!empty($this->bundles)){
+        if (!empty($this->bundles)) {
             $bundle_price = 0;
 
-            foreach($this->bundles as $bundle){
+            foreach ($this->bundles as $bundle) {
                 $bundle_price += $bundle->items()->sum('price');
             }
 
@@ -119,19 +124,18 @@ class Order extends Model
         $discount += $promotion_discount;
 
         //Validate coupon and calculate discount for order
-        if(!empty($this->coupon_code)){
+        if (!empty($this->coupon_code)) {
 
             $coupon = Coupon::where('coupon_code', $this->coupon_code)->first();
 
-            if(!empty($coupon) && $coupon->validate()){
+            if (!empty($coupon) && $coupon->validate()) {
 
                 $discount += $this->coupon_discount = $coupon->process($this->items, $request);
-
             }
         }
 
         //Add giftcard price to discount
-        if(!empty($this->giftcard_code)){
+        if (!empty($this->giftcard_code)) {
 
             $giftCard = GiftCard::where('code', $this->giftcard_code)->first();
             $this->giftcard_discount = $giftCard->value;
@@ -139,23 +143,22 @@ class Order extends Model
 
             $discount_per_item = $this->giftcard_discount / count($this->items);
 
-            foreach ($this->items as $item){
+            foreach ($this->items as $item) {
                 $item->gift_card_discount = $discount_per_item;
                 $item->update();
             }
-
         }
 
         $this->discount = $discount;
         $this->total -= $discount;
 
         //Add shipping price to order cost
-        if(!empty($this->shippingMethod)){
+        if (!empty($this->shippingMethod)) {
             $this->total += $this->shippingMethod->cost;
             $this->subtotal += $this->shippingMethod->cost;
         }
 
-        if ($this->total < 0){
+        if ($this->total < 0) {
             $this->total = 0;
         }
 
@@ -165,7 +168,8 @@ class Order extends Model
     }
 
     //Prepare parameters for payment system
-    public function getPaymentParams(){
+    public function getPaymentParams()
+    {
         $orgClientId = env('NESTPAY_ID');
         $orgOid = $this->id;
         $orgAmount = number_format((float)$this->total, 2, '.', '');
@@ -192,7 +196,7 @@ class Order extends Model
         $lang = "sr";
         return (object) [
             'clientid' => $orgClientId,
-            'description' => 'Porudžbina '.$orgOid,
+            'description' => 'Porudžbina ' . $orgOid,
             'amount' => $orgAmount,
             'oid' => $orgOid,
             'rnd' => $orgRnd,
@@ -213,7 +217,7 @@ class Order extends Model
     public function generateVouchers()
     {
 
-        try{
+        try {
             $order = $this;
 
             $order_items = $order->items->load('product');
@@ -234,7 +238,7 @@ class Order extends Model
 
                 $personal_messages = json_decode($item->personal_message);
 
-                if($vouchers_count > 0){
+                if ($vouchers_count > 0) {
 
                     for ($i = 0; $i < $vouchers_count; $i++) {
 
@@ -255,15 +259,12 @@ class Order extends Model
                             $voucher->title = $product->title;
                             $voucher->description = $product->voucher_description;
 
-                            if($already_generated > 0){
+                            if ($already_generated > 0) {
 
                                 $voucher->personal_message = $personal_messages[$already_generated]->text;
-
-                            }
-                            else{
+                            } else {
 
                                 $voucher->personal_message = $personal_messages[$i]->text;
-
                             }
 
                             //Voucher properties
@@ -272,32 +273,24 @@ class Order extends Model
                             $voucher->location = $product_properties->location;
                             $voucher->visitors = $product_properties->visitors;
                             $voucher->dress_code = $product_properties->dress_code;
-                            if(!empty($product_properties->za_gledaoce)){
+                            if (!empty($product_properties->za_gledaoce)) {
 
                                 $voucher->za_gledaoce = $product_properties->za_gledaoce;
-
                             }
                             $voucher->additional_info = $product_properties->additional_info;
 
                             if ($voucher->save() && $order->customer_email !== 'abramusagency@gmail.com') {
 
                                 $voucher->sendCompanyEmail();
-
                             }
-
                         }
-
                     }
-
                 }
-
             }
             return true;
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
-
     }
 
     /**
@@ -306,15 +299,14 @@ class Order extends Model
      * @param $email
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendCustomerEmail($paper_size = 'a4'){
-
-        try{
-
+    public function sendCustomerEmail($paper_size = 'a4')
+    {
+        try {
             $order = $this;
-            if(isset($order) && isset($order->customer_email)){
-
+            if (isset($order) && isset($order->customer_email)) {
                 $vouchers = $order->vouchers;
                 $customer_email = isset($order->rec_email) ? $order->rec_email : $order->customer_email;
+
 
                 //Without queue
                 /*Mail::send('emails.voucher.customer_email', ['order' => $order], function ($message) use ($customer_email, $order, $vouchers, $paper_size){
@@ -337,21 +329,18 @@ class Order extends Model
                 });*/
 
                 //Use queue
-                SendVoucherEmail::dispatch($customer_email, $order, $vouchers, $paper_size)->delay(now()->addSeconds(5));
+
+                $emailService = new EmailService();
+                $emailService->sendVoucher($this->id);
+                //                SendVoucherEmail::dispatch($customer_email, $order, $vouchers, $paper_size)->delay(now()->addSeconds(5));
 
                 return true;
-
             }
-            else{
-                return false;
-            }
-
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e);
             return false;
         }
 
+        return false;
     }
-
 }

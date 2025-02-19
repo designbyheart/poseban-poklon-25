@@ -379,7 +379,6 @@ class OrderController extends Controller
         }
     }
 
-
     /**
      * Unsuccessful payment page
      */

@@ -9,14 +9,14 @@ use PDF;
 
 class Voucher extends Model
 {
-    protected $fillable = ['end_date', 'voucher_code', 'activation_code', 'type', 'activated', 'title', 'description', 'additional_info', 'location', 'duration', 'weather', 'visitors', 'dress_code', 'personal_message', 'is_sent'];
+    protected $fillable = ['order_id', 'end_date', 'voucher_code', 'activation_code', 'type', 'activated', 'title', 'description', 'additional_info', 'location', 'duration', 'weather', 'visitors', 'dress_code', 'personal_message', 'is_sent'];
 
     public function order(){
-        return $this->belongsTo('App\Order', 'order_id');
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
     public function orderItem(){
-        return $this->belongsTo('App\OrderItem', 'order_item_id');
+        return $this->belongsTo(OrderItem::class, 'order_item_id');
     }
 
     public function activate(){

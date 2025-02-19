@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Order;
+use App\Services\EmailService;
+use App\Utilities\VoucherUtility;
+use App\Voucher;
+use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
+use PDF;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Configuration;
 use SendinBlue\Client\Model\SendSmtpEmail;
-use GuzzleHttp\Client;
-use Exception;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Log;
 
 class EmailController extends Controller
 {
@@ -63,5 +67,11 @@ class EmailController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function sendVoucher(string $orderId)
+    {
+        $emailService = new EmailService();
+        $emailService->sendVoucher($orderId);
     }
 }

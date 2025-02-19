@@ -20,3 +20,5 @@ sftp.txt
 public/mix-manifest.json
 /.idea
 .idea/misc.xml
+
+dbData/
