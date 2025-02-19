@@ -14,6 +14,11 @@ class EmailService
 {
     protected $apiInstance;
 
+    private $sender = [
+        'name' => 'Poseban Poklon',
+        'email' => 'kontakt@posebanpoklon.rs'
+    ];
+
     public function __construct()
     {
         // Configure API key authorization
@@ -56,10 +61,7 @@ class EmailService
                         'name' => $order->customer_name ?? 'Customer'
                     ]
                 ],
-                'sender' => [
-                    'name' => 'Poseban Poklon',
-                    'email' => 'kontakt@posebanpoklon.rs'
-                ],
+                'sender' => $this->sender,
                 // 'templateId' => config('services.brevo.voucher_template_id'), // Make sure to set this in your config
                 'htmlContent' => view('emails.voucher.VoucherMailable', ['order' => $order])->render(),
 
@@ -71,11 +73,38 @@ class EmailService
             ]);
 
             $result = $this->apiInstance->sendTransacEmail($sendSmtpEmail);
+            \Log::info($result);
 
             return response()->json('Email was sent successfully!');
         } catch (\Exception $exception) {
-            dd('error sending voucher', $exception->getMessage());
-            exit();
+            print_r('error sending voucher', $exception->getMessage());
         }
+    }
+
+    public function sendEMail(string $template, array $dataParams, array $to, string $subject, array $attachments = [])
+    {
+        try {
+            $emailParams = [
+                'to' => $to,
+                'sender' => $this->sender,
+                // 'templateId' => config('services.brevo.voucher_template_id'), // Make sure to set this in your config
+                'htmlContent' => view($template, $dataParams)->render(),
+                'params' => $dataParams,
+                'subject' => $subject,
+            ];
+            if (count($attachments) > 0) {
+                $emailParams['attachment'] = $attachments;
+            }
+
+            $sendSmtpEmail = new SendSmtpEmail($emailParams);
+
+            $result = $this->apiInstance->sendTransacEmail($sendSmtpEmail);
+            \Log::info($result);
+
+            return response()->json('Email was sent successfully!');
+        } catch (\Exception $exception) {
+            print_r('error sending voucher', $exception->getMessage());
+        }
+
     }
 }
