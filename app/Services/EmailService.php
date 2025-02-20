@@ -32,7 +32,12 @@ class EmailService
         );
     }
 
-    public function sendVoucher(string $orderId)
+    /**
+     * @param string $orderId
+     * @return \Illuminate\Http\JsonResponse|void
+     * @throws \Throwable
+     */
+    public function sendVoucher($orderId)
     {
         try {
             $order = Order::where('id', '=', $orderId)->first();
@@ -81,7 +86,16 @@ class EmailService
         }
     }
 
-    public function sendEMail(string $template, array $dataParams, array $to, string $subject, array $attachments = [])
+    /**
+     * @param string $template
+     * @param array $dataParams
+     * @param array $to
+     * @param string $subject
+     * @param array $attachments
+     * @return \Illuminate\Http\JsonResponse|void
+     * @throws \Throwable
+     */
+    public function sendEmail($template, $dataParams, $to, $subject, $attachments = [])
     {
         try {
             $emailParams = [
@@ -105,6 +119,5 @@ class EmailService
         } catch (\Exception $exception) {
             print_r('error sending voucher', $exception->getMessage());
         }
-
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\OrderItem;
+use App\Services\EmailService;
 use App\Voucher;
 use Carbon\Carbon;
 use function foo\func;
@@ -14,11 +15,16 @@ use PDF;
 
 class VoucherController extends Controller
 {
+    /**
+     * @var EmailService
+     */
+    private $emailService;
 
-    public function __construct(){
+    public function __construct()
+    {
 
         $this->middleware('check_role:admin,editor', ['except' => 'printVoucher']);
-
+        $this->emailService = new EmailService();
     }
 
     /**
@@ -37,8 +43,8 @@ class VoucherController extends Controller
 
         $order = Order::find($request->order_id);
 
-        if(isset($order)){
-            if($order->generateVouchers()){
+        if (isset($order)) {
+            if ($order->generateVouchers()) {
                 return response()->json('success');
             }
         }
@@ -135,13 +141,13 @@ class VoucherController extends Controller
 
         $per_page = $request->per_page ?? 20;
 
-        if(!empty($request->search)){
+        if (!empty($request->search)) {
             $vouchers = $vouchers->where('voucher_code', 'like', '%' . $request->search . '%')
-                    ->orWhere('title', 'like', '%' . $request->search . '%')
-                    ->orWhere('activation_code', 'like', '%' . $request->search . '%');
+                ->orWhere('title', 'like', '%' . $request->search . '%')
+                ->orWhere('activation_code', 'like', '%' . $request->search . '%');
         }
 
-        if(!empty($request->sort_key) && !empty($request->sort_order)){
+        if (!empty($request->sort_key) && !empty($request->sort_order)) {
             $vouchers = $vouchers->orderBy($request->sort_key, $request->sort_order);
         }
 
@@ -154,7 +160,8 @@ class VoucherController extends Controller
     /**
      * Get a single pvoucher
      */
-    public function getSingleItem(Request $request){
+    public function getSingleItem(Request $request)
+    {
 
         $voucher = Voucher::find($request->id);
 
@@ -179,7 +186,7 @@ class VoucherController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Voucher $voucher
+     * @param \App\Voucher $voucher
      * @return \Illuminate\Http\Response
      */
     public function show(Voucher $voucher)
@@ -192,7 +199,7 @@ class VoucherController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Voucher $voucher
+     * @param \App\Voucher $voucher
      * @return \Illuminate\Http\Response
      */
     public function edit(Voucher $voucher)
@@ -203,13 +210,13 @@ class VoucherController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Voucher  $voucher
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Voucher $voucher
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Voucher $voucher)
     {
-        if($voucher->update($request->all())){
+        if ($voucher->update($request->all())) {
 
             return response()->json('success', 200);
 
@@ -219,12 +226,12 @@ class VoucherController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Voucher  $voucher
+     * @param \App\Voucher $voucher
      * @return \Illuminate\Http\Response
      */
     public function destroy(Voucher $voucher)
     {
-        if($voucher->delete()){
+        if ($voucher->delete()) {
             return response()->json('success', 200);
         }
     }
@@ -235,18 +242,19 @@ class VoucherController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function activateVoucher(Request $request){
+    public function activateVoucher(Request $request)
+    {
 
         $voucher = Voucher::where('activation_code', $request->activation_code)->firstOrFail();
 
-        if(!empty($voucher)){
+        if (!empty($voucher)) {
 
             $current_date = Carbon::now()->format('Y-m-d');
             // return response()->json($voucher->end_date);
 
-            if($current_date <= $voucher->end_date){
+            if ($current_date <= $voucher->end_date) {
 
-                if($voucher->activate()) {
+                if ($voucher->activate()) {
 
                     return response()->json('success', 200);
 
@@ -263,13 +271,14 @@ class VoucherController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deactivateVoucher(Request $request){
+    public function deactivateVoucher(Request $request)
+    {
 
         $voucher = Voucher::where('id', $request->id)->firstOrFail();
 
-        if(!empty($voucher)){
+        if (!empty($voucher)) {
 
-            if($voucher->deactivate()) {
+            if ($voucher->deactivate()) {
 
                 return response()->json('success', 200);
 
@@ -281,18 +290,27 @@ class VoucherController extends Controller
 
 
     //Send an email with code to the provider company
-    public function sendCompanyEmail($voucher_id){
+    public function sendCompanyEmail($voucher_id)
+    {
 
         $voucher = Voucher::find($voucher_id);
         $order_item = $voucher->orderItem->load('product');
         $company = $order_item->product->producent;
 
-        Mail::send('emails.voucher.company_email', ['product_title' => $order_item->product->title, 'voucher_code' => $voucher->voucher_code, 'voucher_date' => $voucher->end_date], function ($message) use ($company, $order_item){
-
-            $message->to($company->email, $company->title)->subject('New voucher for product: '.$order_item->product->title);
-
-        });
-
+        $this->emailService->sendEmail('emails.voucher.company_email', [
+            'product_title' => $order_item->product->title,
+            'voucher_code' => $voucher->voucher_code,
+            'voucher_date' => $voucher->end_date
+        ],
+            [
+                'email' => $company->email,
+                'name' => $company->title
+            ],
+            'New voucher for product: ' . $order_item->product->title
+        );
+//        Mail::send('emails.voucher.company_email', ['product_title' => $order_item->product->title, 'voucher_code' => $voucher->voucher_code, 'voucher_date' => $voucher->end_date], function ($message) use ($company, $order_item){
+//            $message->to($company->email, $company->title)->subject('New voucher for product: '.$order_item->product->title);
+//        });
     }
 
     /**
@@ -301,58 +319,82 @@ class VoucherController extends Controller
      * @param $email
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendCustomerEmail(Request $request){
+    public function sendCustomerEmail(Request $request)
+    {
+        try {
+            $order = Order::find($request->order_id)->first();
+            $vouchers = $order->vouchers;
+            $customer_email = $request->rec_email;
+            $paper_size = $request->paper;
 
-        $order = Order::find($request->order_id)->first();
-        $vouchers = $order->vouchers;
-        $customer_email = $request->rec_email;
-        $paper_size = $request->paper;
+            $emailVouchers = [];
 
-        Mail::send('emails.voucher.customer_email', [], function ($message) use ($customer_email, $order, $vouchers, $paper_size){
-
-            $message->to($customer_email)->subject('Vaš e-vaučer posebnog poklona - po porudzbini br. '. $order->id);
-
-            foreach ($vouchers as $voucher){
-
+            foreach ($vouchers as $voucher) {
                 $pdf = $this->generatePDF($voucher, $paper_size);
-
-                $message->attachData($pdf->output(),'voucher_'.$voucher->voucher_code.'.pdf');
-
+                $emailVouchers[] = $pdf->output();
             }
 
-        });
+            $this->emailService->sendEmail('emails.voucher.customer_email', [], [
+                'email' => $customer_email, 'name' => 'Customer Email'
+            ], 'Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id, $emailVouchers);
 
-        return response()->json('Email was sent sucessfully!');
+//        Mail::send('emails.voucher.customer_email', [], function ($message) use ($customer_email, $order, $vouchers, $paper_size) {
+//            $message->to($customer_email)->subject('Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id);
+//            foreach ($vouchers as $voucher) {
+//                $pdf = $this->generatePDF($voucher, $paper_size);
+//                $message->attachData($pdf->output(), 'voucher_' . $voucher->voucher_code . '.pdf');
+//            }
+//        });
 
+            return response()->json('Email was sent sucessfully!');
+        } catch (\Exception $e) {
+            print_r('Error', $e->getMessage());
+        }
     }
 
     //Resend a voucher
-    public function resendVoucher(Request $request){
-
+    public function resendVoucher(Request $request)
+    {
         $voucher = Voucher::find($request->voucher_id);
         $customer_email = $request->customer_email;
         $paper_size = $request->paper;
         $order = $voucher->order;
 
-        if(!empty($paper_size)){
+        $pdf = $this->generatePDF($voucher, $paper_size);
 
-            Mail::send('emails.voucher.customer_email', ['order' => $order], function($message) use ($voucher, $customer_email, $paper_size, $order){
+        if ($paper_size === 'a4') {
+            $eVoucher = $pdf->setPaper($paper_size, 'portrait')->stream('voucher_' . $voucher->voucher_code . '.pdf');
+        } elseif ($paper_size === 'a5') {
+            $eVoucher = $pdf->setPaper($paper_size, 'landscape')->stream('voucher_' . $voucher->voucher_code . '.pdf');
+        } else {
+            $eVoucher = $pdf->stream('voucher_' . $voucher->voucher_code . '.pdf');
+        }
 
-                $message->to($customer_email)->subject('Vaš poseban poklon - priznanica porudžbine br. '. $order->id);
+        if (!empty($paper_size)) {
+            $this->emailService->sendEmail(
+                'emails.voucher.customer_email',
+                ['order' => $order],
+                [
+                    'email' => $customer_email
+                ], 'Vaš poseban poklon - priznanica porudžbine br. ' . $order->id,
+                [$eVoucher]
+            );
 
-                $pdf = $this->generatePDF($voucher, $paper_size);
-
-                // $message->attachData($pdf->output(), 'voucher_'.$voucher->voucher_code.'.pdf');
-                // $message->attachData($pdf->setPaper($paper_size, 'portrait')->stream(), 'voucher_'.$voucher->voucher_code.'.pdf');
-                // $message->attachData($pdf->stream('vaucer_' . $voucher->voucher_code . '.pdf'));
-                if($paper_size === 'a4'){
-                    $message->attachData($pdf->setPaper($paper_size, 'portrait')->stream(), 'voucher_'.$voucher->voucher_code.'.pdf');
-                }
-                elseif($paper_size === 'a5'){
-                    $message->attachData($pdf->setPaper($paper_size, 'landscape')->stream(), 'voucher_'.$voucher->voucher_code.'.pdf');
-                }
-
-            });
+//            Mail::send('emails.voucher.customer_email', ['order' => $order], function ($message) use ($voucher, $customer_email, $paper_size, $order) {
+//
+//                $message->to($customer_email)->subject('Vaš poseban poklon - priznanica porudžbine br. ' . $order->id);
+//
+//                $pdf = $this->generatePDF($voucher, $paper_size);
+//
+//                // $message->attachData($pdf->output(), 'voucher_'.$voucher->voucher_code.'.pdf');
+//                // $message->attachData($pdf->setPaper($paper_size, 'portrait')->stream(), 'voucher_'.$voucher->voucher_code.'.pdf');
+//                // $message->attachData($pdf->stream('vaucer_' . $voucher->voucher_code . '.pdf'));
+//                if ($paper_size === 'a4') {
+//                    $message->attachData($pdf->setPaper($paper_size, 'portrait')->stream(), 'voucher_' . $voucher->voucher_code . '.pdf');
+//                } elseif ($paper_size === 'a5') {
+//                    $message->attachData($pdf->setPaper($paper_size, 'landscape')->stream(), 'voucher_' . $voucher->voucher_code . '.pdf');
+//                }
+//            });
 
             return response()->json('success');
 
@@ -361,20 +403,20 @@ class VoucherController extends Controller
     }
 
     //Print a voucher
-    public function printVoucher(Request $request, Voucher $voucher){
+    public function printVoucher(Request $request, Voucher $voucher)
+    {
 
         $paper_size = $request->paper_size;
 
-        if(!empty($paper_size)){
+        if (!empty($paper_size)) {
 
-            if($paper_size === 'a4'){
+            if ($paper_size === 'a4') {
 
                 $pdf = $this->generatePDF($voucher, $paper_size);
 
                 $pdf = $pdf->setPaper($paper_size, 'portrait')->stream('vaucer_' . $voucher->voucher_code . '.pdf');
 
-            }
-            elseif($paper_size === 'a5'){
+            } elseif ($paper_size === 'a5') {
 
                 $pdf = $this->generatePDF($voucher, $paper_size);
 
@@ -382,8 +424,7 @@ class VoucherController extends Controller
 
             }
 
-        }
-        else{
+        } else {
 
             $pdf = $this->generatePDF($voucher, 'a4');
 
@@ -396,13 +437,14 @@ class VoucherController extends Controller
     }
 
     //Generate a pdf voucher
-    public function generatePDF(Voucher $voucher, $paper_size){
+    public function generatePDF(Voucher $voucher, $paper_size)
+    {
 
         $order_item = $voucher->orderItem->load('product');
         $company = $order_item->product->producent;
 
         $data = [
-            'title' => 'Voucher '.$voucher->voucher_code,
+            'title' => 'Voucher ' . $voucher->voucher_code,
             'product_title' => $voucher->title,
             'images' => $order_item->product->images,
             'voucher_code' => $voucher->voucher_code,
@@ -422,9 +464,9 @@ class VoucherController extends Controller
             'qr_code' => $order_item->product->qr_code
         ];
 
-        if(!empty($paper_size)){
+        if (!empty($paper_size)) {
 
-            $pdf = PDF::loadView('admin.voucher.'.$paper_size, $data);
+            $pdf = PDF::loadView('admin.voucher.' . $paper_size, $data);
 
             return $pdf;
 

@@ -34,6 +34,13 @@ class SendNewOrderUserEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::send(new NewOrderUserMailable($this->order));
+//        Mail::send(new NewOrderUserMailable($this->order));
+        $emailService = new EmailService();
+        $emailService->sendEmail(
+            'emails.order.new-order-user',
+            ['order' => $this->order, 'transaction_data' => isset($this->order->transaction_data) ? json_decode($this->order->transaction_data) : null],
+            ['email' => $this->order->email],
+            'Vaš poseban poklon - priznanica porudžbine br. ' . $this->order->id
+        );
     }
 }

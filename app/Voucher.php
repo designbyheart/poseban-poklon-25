@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Services\EmailService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
@@ -88,15 +89,29 @@ class Voucher extends Model
         $order_item = $voucher->orderItem->load('product');
         $company = $order_item->product->producent;
 
-        Mail::send('emails.voucher.company_email', [
-            'product_title' => $order_item->product->title,
-            'voucher_code' => $voucher->voucher_code,
-            'voucher_date' => $voucher->end_date
-        ], function ($message) use ($company, $order_item) {
-            $message
-                ->to($company->email, $company->title)
-                ->subject('New voucher for product: ' . $order_item->product->title);
-        });
+        $emailService = new EmailService();
+        $emailService->sendEmail(
+            'emails.voucher.company_email',
+            [
+                'product_title' => $order_item->product->title,
+                'voucher_code' => $voucher->voucher_code,
+                'voucher_date' => $voucher->end_date
+            ], [
+            'email' => $company->email,
+            'name' => $company->title
+            ],
+                'New voucher for product: ' . $order_item->product->title
+        );
+
+//        Mail::send('emails.voucher.company_email', [
+//            'product_title' => $order_item->product->title,
+//            'voucher_code' => $voucher->voucher_code,
+//            'voucher_date' => $voucher->end_date
+//        ], function ($message) use ($company, $order_item) {
+//            $message
+//                ->to($company->email, $company->title)
+//                ->subject('New voucher for product: ' . $order_item->product->title);
+//        });
     }
 
     //Generate a pdf voucher

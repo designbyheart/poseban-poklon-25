@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Mail\NewOrderUserMailable;
 //use Mail;
 use App\Mail\VoucherMailable;
+use App\Services\EmailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -46,6 +47,11 @@ class SendVoucherEmail implements ShouldQueue
         $order = $this->order;
         $vouchers = $this->vouchers;
         $paper_size = $this->paper_size;
-        Mail::send(new VoucherMailable($customer_email, $order, $vouchers, $paper_size));
+//        Mail::send(new VoucherMailable($customer_email, $order, $vouchers, $paper_size));
+
+        $emailService = new EmailService();
+        $emailService->sendEmail('emails.voucher.customer_email', ['order' => $order], [
+            'to' => $customer_email
+        ], 'Voucher', $vouchers);
     }
 }

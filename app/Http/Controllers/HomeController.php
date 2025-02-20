@@ -27,9 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
         $page = BuilderLayout::where('slug', 'home')->first();
-
         $page_layout = json_decode($page->content);
 
         $seo_title = Setting::where('slug', 'home_seo_title')->firstOrFail()->content;

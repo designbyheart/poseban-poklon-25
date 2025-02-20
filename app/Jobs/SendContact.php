@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\NewContactForm;
+use App\Services\EmailService;
 use Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -33,6 +33,13 @@ class SendContact implements ShouldQueue
      */
     public function handle()
     {
-        Mail::send(new NewContactForm($this->request));
+        $emailService = new EmailService();
+        $emailService->sendEmail(
+            'emails.contact',
+            ['mail' => $this->request],
+            ['email' => 'kontakt@posebanpoklon.rs'],
+            'New question'
+        );
+//        Mail::send(new NewContactForm($this->request));
     }
 }

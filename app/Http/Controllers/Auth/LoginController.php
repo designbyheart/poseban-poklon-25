@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\EmailService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Auth;
@@ -70,20 +71,23 @@ class LoginController extends Controller
 
                 Auth::logout();
 
+                $emailService = new EmailService();
+                $emailService->sendEmail('emails.outdated', ['user' => $user], ['email' => $email], 'Your account is outdated');
+
                 // Send info email about outdated account.
-                Mail::send('emails.outdated', ['user' => $user], function($message) use ($email)
-                {
-                    $message->from('no-reply@poliszdesign.com', "Poliszdesign");
-                    $message->subject("Your account is outdated");
-                    $message->to($email);
-                });
+//                Mail::send('emails.outdated', ['user' => $user], function($message) use ($email)
+//                {
+//                    $message->from('no-reply@poliszdesign.com', "Poliszdesign");
+//                    $message->subject("Your account is outdated");
+//                    $message->to($email);
+//                });
 
                 return redirect('/login');
             }
             elseif($user->status == 0){
 
                 Auth::logout();
-                
+
             }
 
             return $this->sendLoginResponse($request);

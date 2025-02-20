@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\NewOrderAdminMailable;
+use App\Services\EmailService;
 use Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -33,6 +34,16 @@ class SendNewOrderAdminEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::send(new NewOrderAdminMailable($this->order));
+//        Mail::send(new NewOrderAdminMailable($this->order));
+        $emailService = new EmailService();
+        $emailService->sendEmail(
+            'emails.order.new-order-admin',
+            [
+                'order' => $this->order,
+                'transaction_data' => isset($this->order->transaction_data) ? json_decode($this->order->transaction_data) : null
+            ],
+            ['email' => 'kontakt@posebanpoklon.rs'],
+            'New order #' . $this->order->id
+        );
     }
 }
