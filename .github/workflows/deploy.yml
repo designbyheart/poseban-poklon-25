@@ -20,35 +20,46 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
 
-      - name: Deploy to Server
-        env:
-          # Use different secrets based on environment
-          SERVER_HOST: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_HOST || secrets.STAGING_SERVER_HOST }}
-          SERVER_USER: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_USER || secrets.STAGING_SERVER_USER }}
-          SERVER_PASS: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_PASS || secrets.STAGING_SERVER_PASS }}
-          DEPLOY_PATH: ${{ github.ref == 'refs/heads/main' && secrets.PROD_DEPLOY_PATH || secrets.STAGING_DEPLOY_PATH }}
-          BRANCH_NAME: ${{ github.ref == 'refs/heads/main' && 'main' || 'staging' }}
-        run: |
-          # Create a temporary script file with commands
-          echo "cd $DEPLOY_PATH && \
-          git checkout $BRANCH_NAME && \
-          git pull origin $BRANCH_NAME && \
-          composer install --no-interaction --prefer-dist --optimize-autoloader && \
-          php artisan optimize:clear && \
-          php artisan config:clear && \
-          php artisan cache:clear && \
-          php artisan migrate --force" > deploy_commands.sh
+      - name: Deploy with Password
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.5
+        with:
+          username: ${{ secrets.PROD_SERVER_USER }}
+          server: ${{ secrets.PROD_SERVER_HOST }}
+          port: ${{ secrets.PROD_SERVER_PORT }}
+          local_path: "./static/*"
+          remote_path: ${{ secrets.PROD_DEPLOY_PATH }}
+          sftp_only: true
+          password: ${{ secrets.PROD_SERVER_PASS }}
 
-          # Make the script executable
-          chmod +x deploy_commands.sh
+      # - name: Deploy to Server
+      #   env:
+      #     # Use different secrets based on environment
+      #     SERVER_HOST: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_HOST || secrets.STAGING_SERVER_HOST }}
+      #     SERVER_USER: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_USER || secrets.STAGING_SERVER_USER }}
+      #     SERVER_PASS: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_PASS || secrets.STAGING_SERVER_PASS }}
+      #     DEPLOY_PATH: ${{ github.ref == 'refs/heads/main' && secrets.PROD_DEPLOY_PATH || secrets.STAGING_DEPLOY_PATH }}
+      #     BRANCH_NAME: ${{ github.ref == 'refs/heads/main' && 'main' || 'staging' }}
+      #   run: |
+      #     # Create a temporary script file with commands
+      #     echo "cd $DEPLOY_PATH && \
+      #     git checkout $BRANCH_NAME && \
+      #     git pull origin $BRANCH_NAME && \
+      #     composer install --no-interaction --prefer-dist --optimize-autoloader && \
+      #     php artisan optimize:clear && \
+      #     php artisan config:clear && \
+      #     php artisan cache:clear && \
+      #     php artisan migrate --force" > deploy_commands.sh
 
-          # Use SFTP to upload the script
-          sshpass -p "$SERVER_PASS" sftp -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
-          put deploy_commands.sh /tmp/deploy_commands.sh
-          EOF
+      #     # Make the script executable
+      #     chmod +x deploy_commands.sh
 
-          # Execute the uploaded script via SFTP
-          sshpass -p "$SERVER_PASS" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "bash /tmp/deploy_commands.sh && rm /tmp/deploy_commands.sh"
+      #     # Use SFTP to upload the script
+      #     sshpass -p "$SERVER_PASS" sftp -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << EOF
+      #     put deploy_commands.sh /tmp/deploy_commands.sh
+      #     EOF
 
-          # Clean up local script
-          rm deploy_commands.sh
+      #     # Execute the uploaded script via SFTP
+      #     sshpass -p "$SERVER_PASS" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "bash /tmp/deploy_commands.sh && rm /tmp/deploy_commands.sh"
+
+      #     # Clean up local script
+      #     rm deploy_commands.sh
