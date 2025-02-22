@@ -33,6 +33,25 @@ jobs:
 
       # - name: Deploy to Server
       #   env:
+      #     SERVER_HOST: ${{ secrets.PROD_SERVER_HOST }} #${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_HOST || secrets.STAGING_SERVER_HOST }}
+      #     SERVER_USER: ${{ secrets.PROD_SERVER_USER }} #${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_USER || secrets.STAGING_SERVER_USER }}
+      #     SERVER_PASS: ${{ secrets.PROD_SERVER_PASS }} # ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_PASS || secrets.STAGING_SERVER_PASS }}
+      #     DEPLOY_PATH: ${{ secrets.PROD_DEPLOY_PATH }} #${{ github.ref == 'refs/heads/main' && secrets.PROD_DEPLOY_PATH || secrets.STAGING_DEPLOY_PATH }}
+      #     BRANCH_NAME: ${{ github.ref == 'refs/heads/main' && 'main' || 'staging' }}
+      #   run: |
+      #     echo "Deploying to $SERVER_HOST as $SERVER_USER"
+      #     export SSHPASS=$SERVER_PASS
+      #     sshpass -e ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "cd $DEPLOY_PATH && \
+      #     git checkout $BRANCH_NAME && \
+      #     git pull origin $BRANCH_NAME && \
+      #     composer install --no-interaction --prefer-dist --optimize-autoloader && \
+      #     php artisan optimize:clear && \
+      #     php artisan config:clear && \
+      #     php artisan cache:clear && \
+      #     php artisan migrate --force"
+
+      # - name: Deploy to Server
+      #   env:
       #     # Use different secrets based on environment
       #     SERVER_HOST: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_HOST || secrets.STAGING_SERVER_HOST }}
       #     SERVER_USER: ${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_USER || secrets.STAGING_SERVER_USER }}
