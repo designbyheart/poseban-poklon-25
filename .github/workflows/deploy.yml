@@ -15,21 +15,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-
-      - name: Deploy with Password
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.5
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          username: ${{ secrets.PROD_SERVER_USER }}
           server: ${{ secrets.PROD_SERVER_HOST }}
-          port: ${{ secrets.PROD_SERVER_PORT }}
-          local_path: "./static/*"
-          remote_path: ${{ secrets.PROD_DEPLOY_PATH }}
-          sftp_only: true
+          username: ${{ secrets.PROD_SERVER_USER }}
           password: ${{ secrets.PROD_SERVER_PASS }}
+          server-dir: ${{ secrets.PROD_DEPLOY_PATH }}
 
       # - name: Deploy to Server
       #   env:
