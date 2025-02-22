@@ -79,7 +79,7 @@
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
             </td>
             <td width="508">
-                <span style="font-family: Rubik; font-size: 20px;">Hvala vam što ste sa nama</span>
+                <span style="font-family: Rubik; font-size: 20px;">Imate novu poruku sa sajta!</span>
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
@@ -112,6 +112,7 @@
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
             </td>
             <td width="508">
+                <p>Poruka: </p>
                 <span style="font-family: Rubik; font-size: 20px;">{{$mail['message']}}</span>
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">

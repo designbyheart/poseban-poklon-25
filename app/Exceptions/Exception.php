@@ -1,6 +1,9 @@
 <?php
 
-class CustomException extends \Exception
+namespace App\Exceptions;
+use Exception as DefaultException;
+
+class Exception extends DefaultException
 {
     public function report(Exception $exception)
     {
