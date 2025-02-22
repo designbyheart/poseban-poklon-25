@@ -17,18 +17,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: ssh-action-deploy
-        uses: appleboy/ssh-action@v1.0.3
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
           key: ${{ secrets.PROD_SERVER_KEY }}
           passphrase: ${{ secrets.PROD_SERVER_KEY_PASS }}
           port: 22
-          script: |
-            cd ${{ secrets.PROD_DEPLOY_PATH }}
-            ls -la
-            echo "Deployed successfully"
+          script: whoami
+          
+      # - name: ssh-action-deploy
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.PROD_SERVER_HOST }}
+      #     username: ${{ secrets.PROD_SERVER_USER }}
+      #     key: ${{ secrets.PROD_SERVER_KEY }}
+      #     passphrase: ${{ secrets.PROD_SERVER_KEY_PASS }}
+      #     port: 22
+      #     script: |
+      #       cd ${{ secrets.PROD_DEPLOY_PATH }}
+      #       ls -la
+      #       echo "Deployed successfully"
 #            pip install -r requirements.txt
 #            sudo systemctl daemon-reload
 #            sudo systemctl stop orbyjets-ai
