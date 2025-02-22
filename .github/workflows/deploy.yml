@@ -26,7 +26,7 @@ jobs:
           passphrase: ${{ secrets.PROD_SERVER_KEY_PASS }}
           port: 22
           source: "./"
-          target: "${{ secrets.PROD_DEPLOY_PATH }}/test"
+          target: "${{ secrets.PROD_DEPLOY_PATH }}"
 
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.2.1
@@ -38,8 +38,9 @@ jobs:
           port: 22
           script: |
             cd ${{ secrets.PROD_DEPLOY_PATH }}
-            mkdir test
+            cp ../.env .
             echo "Deployed successfully"
+
 
       # - name: ssh-action-deploy
       #   uses: appleboy/ssh-action@v1.0.3
