@@ -17,18 +17,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run remote commands over SSHÅ
-        uses: appleboy/ssh-action@master
+      - name: ssh-action-deploy
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
-          key: ${{ secrets.SSH_KEY }}
           password: ${{ secrets.PROD_SERVER_PASS }}
+          port: 22
           script: |
             cd ${{ secrets.PROD_DEPLOY_PATH }}
-            # Optional: additional commands, e.g., restart a service
             ls -la
-            echo "Connected"
+            echo "Deployed successfully"
+#            pip install -r requirements.txt
+#            sudo systemctl daemon-reload
+#            sudo systemctl stop orbyjets-ai
+#            sudo systemctl restart orbyjets-ai
+#            sudo systemctl status orbyjets-ai
+
+#      - name: Run remote commands over SSHÅ
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.PROD_SERVER_HOST }}
+#          username: ${{ secrets.PROD_SERVER_USER }}
+#          key: ${{ secrets.SSH_KEY }}
+#          password: ${{ secrets.PROD_SERVER_PASS }}
+#          script: |
+#            cd ${{ secrets.PROD_DEPLOY_PATH }}
+#            # Optional: additional commands, e.g., restart a service
+#            ls -la
+#            echo "Connected"
 
 #      - name: Deploy to Server
 #        env:
