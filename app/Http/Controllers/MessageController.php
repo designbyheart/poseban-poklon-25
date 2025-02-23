@@ -8,7 +8,6 @@ use Auth;
 use App\Dialog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class MessageController extends Controller
 {
