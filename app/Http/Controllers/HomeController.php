@@ -36,6 +36,7 @@ class HomeController extends Controller
 
         $locationAttributes = Filter::where('slug', 'location')->with('attributes')->first()->attributes;
         $visitorsAttributes = Filter::where('slug', 'visitors')->with('attributes')->first()->attributes;
+        $recommended_products = [];
 
         return view('home', compact( 'page_layout', 'locationAttributes', 'visitorsAttributes', 'recommended_products', 'seo_title', 'seo_description', 'seo_keywords'));
 

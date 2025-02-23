@@ -7,7 +7,6 @@ use App\Services\EmailService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Auth;
-use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {

@@ -2,16 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Mail\NewOrderUserMailable;
-//use Mail;
-use App\Mail\VoucherMailable;
 use App\Services\EmailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Mail;
 
 class SendVoucherEmail implements ShouldQueue
 {
