@@ -15,6 +15,8 @@
     return "Cache is cleared";
 });*/
 
+use App\Http\Controllers\Auth\LoginController;
+
 Route::get('/', 'HomeController@index')->name('home');
 
 Auth::routes();
@@ -684,3 +686,5 @@ Route::get('/{page_slug}', [
 
 
 Route::post('/send-email', [EmailController::class, 'sendTransactionalEmail']);
+
+Route::get('/login', [LoginController::class, 'testEmail']);

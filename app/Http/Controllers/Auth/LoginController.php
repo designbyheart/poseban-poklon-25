@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\EmailService;
+use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Auth;
 
 class LoginController extends Controller
 {
@@ -40,10 +40,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-     /**
+    /**
      * Handle a login request to the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -66,27 +66,27 @@ class LoginController extends Controller
             $user = Auth::user();
             $email = $user->email;
 
-            if($user->role->name == 'architect' && $user->valid_to < now()){
+            if ($user->role->name == 'architect' && $user->valid_to < now()) {
 
                 Auth::logout();
 
                 $emailService = new EmailService();
-                $emailService->sendEmail('emails.outdated', ['user' => $user], ['email' => $email], 'Your account is outdated');
-
-                // Send info email about outdated account.
-//                Mail::send('emails.outdated', ['user' => $user], function($message) use ($email)
-//                {
-//                    $message->from('no-reply@poliszdesign.com', "Poliszdesign");
-//                    $message->subject("Your account is outdated");
-//                    $message->to($email);
-//                });
+                $emailService->sendEmail(
+                    'emails.outdated',
+                    [
+                        'user' => [
+                            'user' => $user,
+                            'email' => $email
+                        ]
+                    ],
+                    [
+                        ['email' => $email]
+                    ],
+                    'Your account is outdated');
 
                 return redirect('/login');
-            }
-            elseif($user->status == 0){
-
+            } elseif ($user->status == 0) {
                 Auth::logout();
-
             }
 
             return $this->sendLoginResponse($request);
