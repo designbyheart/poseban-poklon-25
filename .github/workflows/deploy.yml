@@ -39,6 +39,7 @@ jobs:
           script: |
             cd ${{ secrets.PROD_DEPLOY_PATH }}
             cp ../.env .
+            composer install --no-interaction
             echo "Deployed successfully"
 
 
