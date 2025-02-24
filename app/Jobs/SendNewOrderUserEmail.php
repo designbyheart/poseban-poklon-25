@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\NewOrderUserMailable;
-use Mail;
+use App\Services\EmailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
