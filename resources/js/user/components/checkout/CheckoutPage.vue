@@ -567,7 +567,7 @@
                                         <input type="hidden" name="lang" :value="paymentParams.lang">
                                         <input type="hidden" name="encoding" :value="paymentParams.encoding" />
                                     </form>
-                                    <button class="tabs-payment-btn" @click="validateForm" v-show="!paymentParams">Poruči</button>
+<!--                                    <button class="tabs-payment-btn" @click="validateForm" v-show="!paymentParams">Poruči</button>-->
                                 </div>
                                 <div class="tabs-payment-btn-row">
                                     <button class="tabs-payment-btn" @click="validateForm">Poruči</button>
@@ -703,7 +703,7 @@
             padding-bottom: 0;
         }
     }
-    
+
     @media only screen and (max-width: 767px) {
         .product-message-label{
             margin-left: 0px;
