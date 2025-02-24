@@ -26,7 +26,7 @@ class InvoiceItem
     public function __construct(Order $order)
     {
         $this->dateAndTimeOfIssue = Carbon::now();
-        $this->invoiceType = InvoiceType::NORMAL;
+        $this->invoiceType = InvoiceType::TRAINING;
         $this->transactionType = TransactionType::SALE;
         $this->payment = [
             [
@@ -36,8 +36,8 @@ class InvoiceItem
         ];
         $this->cashier = 'Poseban Poklon - Web App';
         $this->buyerId = $order->user_id;
-        $this->referentDocumentNumber = $order->id;
-        $this->referentDocumentDT = Carbon::now();
+//        $this->referentDocumentNumber = $order->id;
+//        $this->referentDocumentDT = Carbon::now();
         $this->options = [
             'nazivKupca' => $order->customer_name . ' ' . $order->customer_surname,
             'emailToBuyer' => 1,
@@ -47,7 +47,7 @@ class InvoiceItem
 
         foreach ($order->items as $item) {
             $this->items[] = [
-                'gtin' => $item->product->id,
+//                'gtin' => $item->product->id,
                 'name' => $item->product->title,
                 'unitLabel' => 'kom',
                 'quantity' => $item->product_quantity,
