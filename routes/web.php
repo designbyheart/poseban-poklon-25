@@ -16,6 +16,10 @@
 });*/
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\EmailController;
+
+//Route::get('/email-test', [EmailController::class, 'testVoucher']);
+//Route::post('/vouchers/send', 'VoucherController@sendCustomerEmail');
 
 Route::get('/', 'HomeController@index')->name('home');
 
@@ -687,4 +691,4 @@ Route::get('/{page_slug}', [
 
 Route::post('/send-email', [EmailController::class, 'sendTransactionalEmail']);
 
-Route::get('/login', [LoginController::class, 'testEmail']);
+Route::get('/login', [LoginController::class, 'login'])->name('login');

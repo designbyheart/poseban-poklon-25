@@ -47,7 +47,7 @@ class MessageController extends Controller
 
             // dd($emails);
             $emailService = new EmailService();
-            $emailService->sendEmail('emails.dialog.message', ['content' => $message->content], $to, 'Dialog message');
+            $emailService->sendEmail('emails.dialog.message', ['content' => $message->content], [$to], 'Dialog message');
 //            Mail::send('emails.dialog.message', ['content' => $message->content], function($m) use ($emails)
 //            {
 //                $m->to($emails)->subject('Dialog message');

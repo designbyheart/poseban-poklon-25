@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Order;
-use App\OrderItem;
 use App\Services\EmailService;
 use App\Voucher;
 use Carbon\Carbon;
-use function foo\func;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class VoucherController extends Controller
@@ -292,7 +288,7 @@ class VoucherController extends Controller
     //Send an email with code to the provider company
     public function sendCompanyEmail($voucher_id)
     {
-
+        dd($voucher_id);
         $voucher = Voucher::find($voucher_id);
         $order_item = $voucher->orderItem->load('product');
         $company = $order_item->product->producent;
@@ -302,10 +298,10 @@ class VoucherController extends Controller
             'voucher_code' => $voucher->voucher_code,
             'voucher_date' => $voucher->end_date
         ],
-            [
-                'email' => $company->email,
+            [[
+                'email' => 'designbyheart@gmail.com', //  $company->email,
                 'name' => $company->title
-            ],
+            ]],
             'New voucher for product: ' . $order_item->product->title
         );
 //        Mail::send('emails.voucher.company_email', ['product_title' => $order_item->product->title, 'voucher_code' => $voucher->voucher_code, 'voucher_date' => $voucher->end_date], function ($message) use ($company, $order_item){
@@ -334,9 +330,17 @@ class VoucherController extends Controller
                 $emailVouchers[] = $pdf->output();
             }
 
-            $this->emailService->sendEmail('emails.voucher.customer_email', [], [
-                'email' => $customer_email, 'name' => 'Customer Email'
-            ], 'Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id, $emailVouchers);
+            $this->emailService->sendEmail(
+                'emails.voucher.customer_email',
+                [],
+                [
+                    [
+                        'email' => $customer_email, 'name' => 'Customer Email'
+                    ]
+                ],
+                'Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id,
+                $emailVouchers
+            );
 
 //        Mail::send('emails.voucher.customer_email', [], function ($message) use ($customer_email, $order, $vouchers, $paper_size) {
 //            $message->to($customer_email)->subject('Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id);
@@ -375,7 +379,9 @@ class VoucherController extends Controller
                 'emails.voucher.customer_email',
                 ['order' => $order],
                 [
-                    'email' => $customer_email
+                    [
+                        'email' => $customer_email
+                    ]
                 ], 'Vaš poseban poklon - priznanica porudžbine br. ' . $order->id,
                 [$eVoucher]
             );

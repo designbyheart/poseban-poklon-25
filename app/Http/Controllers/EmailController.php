@@ -74,4 +74,11 @@ class EmailController extends Controller
         $emailService = new EmailService();
         $emailService->sendVoucher($orderId);
     }
+
+    public function testVoucher() {
+        $voucherId = 1670;
+
+        $voucher = Voucher::where('id', '=', $voucherId)->first();
+        $voucher->sendCompanyEmail();
+    }
 }

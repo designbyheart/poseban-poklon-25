@@ -88,30 +88,22 @@ class Voucher extends Model
         $voucher = $this;
         $order_item = $voucher->orderItem->load('product');
         $company = $order_item->product->producent;
-
         $emailService = new EmailService();
+
+        $dataAttributes =  [
+            'product_title' => $order_item->product->title,
+            'voucher_code' => $voucher->voucher_code,
+            'voucher_date' => $voucher->end_date
+        ];
+
         $emailService->sendEmail(
             'emails.voucher.company_email',
-            [
-                'product_title' => $order_item->product->title,
-                'voucher_code' => $voucher->voucher_code,
-                'voucher_date' => $voucher->end_date
-            ], [
+           $dataAttributes, [[
             'email' => $company->email,
             'name' => $company->title
-            ],
+            ]],
                 'New voucher for product: ' . $order_item->product->title
         );
-
-//        Mail::send('emails.voucher.company_email', [
-//            'product_title' => $order_item->product->title,
-//            'voucher_code' => $voucher->voucher_code,
-//            'voucher_date' => $voucher->end_date
-//        ], function ($message) use ($company, $order_item) {
-//            $message
-//                ->to($company->email, $company->title)
-//                ->subject('New voucher for product: ' . $order_item->product->title);
-//        });
     }
 
     //Generate a pdf voucher

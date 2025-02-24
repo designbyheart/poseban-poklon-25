@@ -2,14 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Mail\OrderStatusChangedMailable;
 use App\Services\EmailService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Mail;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Mail;
 
 class SendOrderStatusChangedEmail implements ShouldQueue
 {
@@ -44,7 +43,7 @@ class SendOrderStatusChangedEmail implements ShouldQueue
         $emailService = new EmailService();
         $data = $this->configureData();
 
-        $emailService->sendEmail($data['template'], $data['data'], ['email' => $this->email], $data['subject']);
+        $emailService->sendEmail($data['template'], $data['data'], [['email' => $this->email]], $data['subject']);
     }
 
     private function configureData()

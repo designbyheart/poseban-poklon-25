@@ -4,10 +4,10 @@ namespace App\Jobs;
 
 use App\Services\EmailService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class SendVoucherEmail implements ShouldQueue
 {
@@ -47,7 +47,9 @@ class SendVoucherEmail implements ShouldQueue
 
         $emailService = new EmailService();
         $emailService->sendEmail('emails.voucher.customer_email', ['order' => $order], [
-            'to' => $customer_email
+            [
+                'email' => $customer_email
+            ]
         ], 'Voucher', $vouchers);
     }
 }

@@ -42,7 +42,7 @@ class SendNewOrderAdminEmail implements ShouldQueue
                 'order' => $this->order,
                 'transaction_data' => isset($this->order->transaction_data) ? json_decode($this->order->transaction_data) : null
             ],
-            ['email' => 'kontakt@posebanpoklon.rs'],
+            [['email' => 'kontakt@posebanpoklon.rs']],
             'New order #' . $this->order->id
         );
     }

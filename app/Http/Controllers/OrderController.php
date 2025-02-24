@@ -4,34 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Bundle;
 use App\Currency;
+use App\GiftCard;
 use App\Jobs\SendNewOrderAdminEmail;
 use App\Jobs\SendNewOrderUserEmail;
-use App\Mail\NewOrderAdminMailable;
 use App\Order;
 use App\OrderItem;
-use App\ShippingMethod;
-use App\PaymentMethod;
-use App\GiftCard;
 use App\OrderStatus;
+use App\PaymentMethod;
 use App\Product;
-use App\Version;
-use Mail;
-use Auth;
+use App\Services\FiscalCashRegister;
 use App\Setting;
-use http\Env\Response;
-use Illuminate\Http\Request;
-use function MongoDB\BSON\toJSON;
+use App\ShippingMethod;
+use App\Version;
+use Auth;
 use Carbon\Carbon;
-use \Exception;
+use Exception;
+use Illuminate\Http\Request;
+use Mail;
+use Log;
 
 class OrderController extends Controller
 {
 
-    public function __construct(){
+    public function __construct()
+    {
 
         $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail']]);
         $this->middleware('auth', ['only' => ['ordersHistory']]);
-
     }
 
     /**
@@ -53,11 +52,11 @@ class OrderController extends Controller
 
         $per_page = $request->per_page ?? 20;
 
-        if(!empty($request->sort_key) && !empty($request->sort_order)){
+        if (!empty($request->sort_key) && !empty($request->sort_order)) {
             $orders = $orders->orderBy($request->sort_key, $request->sort_order);
         }
 
-        if(!empty($request->search)){
+        if (!empty($request->search)) {
             $orders = $orders->where('id', 'like', '%' . $request->search . '%')
                 ->orWhere('customer_name', 'like', '%' . $request->search . '%')
                 ->orWhere('customer_surname', 'like', '%' . $request->search . '%')
@@ -66,13 +65,12 @@ class OrderController extends Controller
 
         $orders = $orders->with('paymentMethod', 'shippingMethod', 'status')->paginate($per_page);
 
-        $orders->getCollection()->transform(function ($order, $key) use ($request){
+        $orders->getCollection()->transform(function ($order, $key) use ($request) {
             $order = convertPrices($request, null, $order);
             return $order;
         });
 
         return response()->json($orders, 200);
-
     }
 
     /**
@@ -82,7 +80,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
 
-        if(!empty($user)){
+        if (!empty($user)) {
 
             $per_page = $request->per_page ?? 20;
 
@@ -95,7 +93,8 @@ class OrderController extends Controller
     /**
      * Get a single item data
      */
-    public function getSingleItem(Request $request){
+    public function getSingleItem(Request $request)
+    {
 
         $order = Order::find($request->id);
 
@@ -103,7 +102,7 @@ class OrderController extends Controller
 
         $order->items->load('product', 'vouchers');
 
-        if(!empty($order)){
+        if (!empty($order)) {
             return response()->json($order);
         }
     }
@@ -111,14 +110,14 @@ class OrderController extends Controller
     /**
      * Get user orders history
      */
-    public function ordersHistory(){
+    public function ordersHistory()
+    {
 
         $user = Auth::User();
 
         $orders = $user->orders();
 
         return view('user.profile.orders-history', compact('orders'));
-
     }
 
     /**
@@ -134,23 +133,23 @@ class OrderController extends Controller
     /**
      * Calculate price
      */
-    public function calculate(Request $request){
+    public function calculate(Request $request)
+    {
 
         $order = new Order($request->all());
 
-        if(!empty($request->giftcard_code)){
+        if (!empty($request->giftcard_code)) {
 
             $giftcard = GiftCard::where('code', $request->giftcard_code)->first();
 
-            if(!empty($giftcard) && $giftcard->validate()){
+            if (!empty($giftcard) && $giftcard->validate()) {
                 $order->giftcard_code = $giftcard->code;
             }
-
         }
 
         $orderItems = $request->order_items;
 
-        foreach($orderItems as $item){
+        foreach ($orderItems as $item) {
 
             $product = Product::find($item['product_id']);
 
@@ -163,9 +162,9 @@ class OrderController extends Controller
             $orderItem->product_price = $product->price;
 
             //every order item can have multiple versions(color, material, size, etc..) which can affect price value.
-            if(!empty($item['versions'])){
+            if (!empty($item['versions'])) {
 
-                foreach($item['versions'] as $v){
+                foreach ($item['versions'] as $v) {
 
                     $version = Version::find($v);
 
@@ -177,23 +176,22 @@ class OrderController extends Controller
                 }
 
                 $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
-            }
-            else{
+            } else {
                 $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
             }
 
-            if($orderItem->box_count > 0){
+            if ($orderItem->box_count > 0) {
                 $orderItem->box_total = $orderItem->box_count * 690;
-                $orderItem->product_total  += $orderItem->box_total;
+                $orderItem->product_total += $orderItem->box_total;
             }
 
             $order->items->push($orderItem);
         }
 
         //Adds bundles to orders from array of bundle id's
-        if(!empty($request->bundles)){
+        if (!empty($request->bundles)) {
 
-            foreach ($request->bundles as $b){
+            foreach ($request->bundles as $b) {
                 $bundle = Bundle::find($b);
                 $order->bundles->push($bundle);
             }
@@ -207,7 +205,7 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -216,40 +214,39 @@ class OrderController extends Controller
         $user = null;
         //TODO add default currency for situation when request doesnt have one
 
-        if(Auth::check()){
+        if (Auth::check()) {
             $user = Auth::user();
             $order->user()->associate($user);
         }
 
-        if(!empty($request->currency_id)){
+        if (!empty($request->currency_id)) {
             $currency = Currency::find($request->currency_id);
             $order->currency()->associate($currency);
         }
 
-        if(!empty($request->payment_method_id)){
+        if (!empty($request->payment_method_id)) {
             $order->paymentMethod()->associate(PaymentMethod::find($request->payment_method_id));
         }
 
-        if(!empty($request->shipping_method_id)){
+        if (!empty($request->shipping_method_id)) {
             $order->shippingMethod()->associate(ShippingMethod::find($request->shipping_method_id));
         }
 
-        if(!empty($request->giftcard_code)){
+        if (!empty($request->giftcard_code)) {
 
             $giftcard = GiftCard::where('code', $request->giftcard_code)->first();
 
-            if(!empty($giftcard) && $giftcard->validate()){
+            if (!empty($giftcard) && $giftcard->validate()) {
                 $order->giftcard_code = $giftcard->code;
                 $giftcard->activate();
             }
-
         }
 
-        if($order->save()){
+        if ($order->save()) {
 
             $orderItems = $request->order_items;
 
-            foreach($orderItems as $item){
+            foreach ($orderItems as $item) {
 
                 $product = Product::find($item['product_id']);
 
@@ -262,9 +259,9 @@ class OrderController extends Controller
                 $orderItem->product_price = $product->price;
 
                 //every order item can have multiple versions(color, material, size, etc..) which can affect price value.
-                if(!empty($item['versions'])){
+                if (!empty($item['versions'])) {
 
-                    foreach($item['versions'] as $v){
+                    foreach ($item['versions'] as $v) {
 
                         $version = Version::find($v);
 
@@ -275,17 +272,16 @@ class OrderController extends Controller
 
                     $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
 
-                    if($orderItem->box_count > 0){
+                    if ($orderItem->box_count > 0) {
                         $orderItem->box_total = $orderItem->box_count * 690;
                         $orderItem->product_total = $orderItem->product_total + $orderItem->box_total;
                     }
 
                     $orderItem->save();
                     $orderItem->versions()->sync($item['versions']);
-                }
-                else{
+                } else {
                     $orderItem->product_total = $orderItem->product_price * $item['product_quantity'];
-                    if($orderItem->box_count > 0){
+                    if ($orderItem->box_count > 0) {
                         $orderItem->box_total = $orderItem->box_count * 690;
                         $orderItem->product_total = $orderItem->product_total + $orderItem->box_total;
                     }
@@ -294,7 +290,7 @@ class OrderController extends Controller
             }
 
             //Adds bundles to orders from array of bundle id's
-            if(!empty($request->bundles)){
+            if (!empty($request->bundles)) {
                 $order->bundles()->sync($request->bundles);
             }
 
@@ -303,11 +299,10 @@ class OrderController extends Controller
             //Get default status and call setStatus function, passing default
             $default_status_setting = Setting::where('slug', 'default_order_status')->first();
 
-            if(!empty($default_status_setting)){
-                $status_id = (int) $default_status_setting->content;
+            if (!empty($default_status_setting)) {
+                $status_id = (int)$default_status_setting->content;
                 $default_status = OrderStatus::find($status_id);
-            }
-            else{
+            } else {
                 $default_status = OrderStatus::where('title', 'New')->first();
             }
 
@@ -319,29 +314,28 @@ class OrderController extends Controller
             SendNewOrderUserEmail::dispatch($order)->delay(now()->addSeconds(3));
 
             $order->setStatus($default_status);
-
         }
 
         //Prepare parameters for card payment if it is selected
-        if($order->paymentMethod->id === 3){
+        if ($order->paymentMethod->id === 3) {
             $payment_params = $order->getPaymentParams();
-            return  response()->json(['payment_params' => $payment_params], 200);
+            return response()->json(['payment_params' => $payment_params], 200);
+        } else {
+            return response()->json('success', 200);
         }
-        else{
-            return  response()->json('success', 200);
-        }
-
     }
 
     /**
      * Successful payment page
      */
-    public function paymentSuccess(Request $request){
-        if(isset($request->oid)){
+    public function paymentSuccess(Request $request)
+    {
+        if (isset($request->oid)) {
             $order = Order::find($request->oid);
+
             try {
                 $payment_params = $request->payment_params;
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 // create debug error log with given error
                 Log::error($e);
                 $payment_params = null;
@@ -359,21 +353,25 @@ class OrderController extends Controller
             $order->transaction_data = json_encode($transaction_data);
             //Set paid status
             $status = OrderStatus::find(2);
+
+            $cashRegister = new FiscalCashRegister();
+            $cashRegister->sendInvoice($order);
+
             $order->save();
-            if(isset($status)){
+
+            if (isset($status)) {
                 $order->setStatus($status);
             }
-            $transaction_data = (object) $transaction_data;
+            $transaction_data = (object)$transaction_data;
             $success = true;
             //Generate and send eVouchers
-            if($order->shipping_method_id === 9){
-                if($order->generateVouchers()){
-                    if($order->sendCustomerEmail()){
+            if ($order->shipping_method_id === 9) {
+                if ($order->generateVouchers()) {
+                    if ($order->sendCustomerEmail()) {
                         return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
                     }
                 }
-            }
-            else{
+            } else {
                 return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
             }
         }
@@ -382,8 +380,9 @@ class OrderController extends Controller
     /**
      * Unsuccessful payment page
      */
-    public function paymentFail(Request $request){
-        if(isset($request->oid)){
+    public function paymentFail(Request $request)
+    {
+        if (isset($request->oid)) {
             $order = Order::find($request->oid);
             $transaction_data = [
                 'order_id' => $request->oid,
@@ -398,10 +397,10 @@ class OrderController extends Controller
             //Set failed status
             $status = OrderStatus::find(4);
             $order->save();
-            if(isset($status)){
+            if (isset($status)) {
                 $order->setStatus($status);
             }
-            $transaction_data = (object) $transaction_data;
+            $transaction_data = (object)$transaction_data;
             $success = false;
             $payment_params = $order->getPaymentParams();
             return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
@@ -411,7 +410,7 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Order  $order
+     * @param \App\Order $order
      * @return \Illuminate\Http\Response
      */
     public function show(Order $order)
@@ -422,36 +421,36 @@ class OrderController extends Controller
     /**
      * Order success page
      */
-    public function orderSuccess(){
+    public function orderSuccess()
+    {
 
         return view('user.order.order-placed');
-
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Order  $order
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Order $order
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Order $order)
     {
-        if(!empty($request->currency_id)){
+        if (!empty($request->currency_id)) {
             $currency = Currency::find($request->currency_id);
             $order->currency()->associate($currency);
         }
 
-        if(!empty($request->payment_method_id)){
+        if (!empty($request->payment_method_id)) {
             $order->paymentMethod()->associate(PaymentMethod::find($request->payment_method_id));
         }
 
-        if(!empty($request->shipping_method_id)){
+        if (!empty($request->shipping_method_id)) {
             $order->shippingMethod()->associate(ShippingMethod::find($request->shipping_method_id));
         }
 
         //Adds bundles to orders from array of bundle id's
-        if(!empty($request->bundles)){
+        if (!empty($request->bundles)) {
             $order->bundles()->sync($request->bundles);
         }
 
@@ -459,16 +458,16 @@ class OrderController extends Controller
 
         $order->countPrice();
 
-        if((!empty($request->order_status_id)) && ($order->status->id != $request->order_status_id)){
+        if ((!empty($request->order_status_id)) && ($order->status->id != $request->order_status_id)) {
             $request->order_id = $order->id;
             $this->updateOrderStatus($request);
         }
 
         return response()->json('success', 200);
-
     }
 
-    public function updateOrderStatus(Request $request){
+    public function updateOrderStatus(Request $request)
+    {
 
         $order = Order::find($request->order_id);
         $status = OrderStatus::find($request->order_status_id);
@@ -480,13 +479,12 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Order  $order
+     * @param \App\Order $order
      * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)
     {
-        if($order->delete())
-        {
+        if ($order->delete()) {
             return response()->json('success', 200);
         }
     }

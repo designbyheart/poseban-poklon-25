@@ -62,10 +62,8 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-
             $user = Auth::user();
             $email = $user->email;
-
             if ($user->role->name == 'architect' && $user->valid_to < now()) {
 
                 Auth::logout();

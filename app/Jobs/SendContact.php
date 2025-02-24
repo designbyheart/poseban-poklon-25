@@ -36,7 +36,7 @@ class SendContact implements ShouldQueue
         $emailService->sendEmail(
             'emails.contact',
             ['mail' => $this->request],
-            ['email' => 'kontakt@posebanpoklon.rs'],
+            [['email' => 'kontakt@posebanpoklon.rs']],
             'New question'
         );
     }
