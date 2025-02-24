@@ -26,7 +26,7 @@ class InvoiceItem
     public function __construct(Order $order)
     {
         $this->dateAndTimeOfIssue = Carbon::now();
-        $this->invoiceType = InvoiceType::TRAINING;
+        $this->invoiceType = InvoiceType::NORMAL;
         $this->transactionType = TransactionType::SALE;
         $this->payment = [
             [
@@ -36,8 +36,9 @@ class InvoiceItem
         ];
         $this->cashier = 'Poseban Poklon - Web App';
         $this->buyerId = $order->user_id;
-//        $this->referentDocumentNumber = $order->id;
-//        $this->referentDocumentDT = Carbon::now();
+        // Note: These fields are reserved for refund
+        // $this->referentDocumentNumber = $order->id;
+        // $this->referentDocumentDT = Carbon::now();
         $this->options = [
             'nazivKupca' => $order->customer_name . ' ' . $order->customer_surname,
             'emailToBuyer' => 1,
