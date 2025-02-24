@@ -23,6 +23,8 @@ use App\Http\Controllers\EmailController;
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('fiscal/{id}', 'EmailController@fiscal');
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');

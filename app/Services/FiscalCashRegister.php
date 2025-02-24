@@ -39,6 +39,8 @@ class FiscalCashRegister
             $invoice->email = $invoiceItem->options['buyerEmailAddress'];
             $invoice->order_id = $order->id;
             $invoice->user_id = $order->user_id;
+
+            dd($invoiceItem);
             $invoice->save();
 
             // https://elefakt.rs/apiDoc/#/Invoice/get_invoice__requestId_

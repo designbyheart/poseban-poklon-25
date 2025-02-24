@@ -26,7 +26,7 @@ class InvoiceItem
     public function __construct(Order $order)
     {
         $this->dateAndTimeOfIssue = Carbon::now();
-        $this->invoiceType = InvoiceType::NORMAL;
+        $this->invoiceType = InvoiceType::TRAINING;
         $this->transactionType = TransactionType::SALE;
         $this->payment = [
             [

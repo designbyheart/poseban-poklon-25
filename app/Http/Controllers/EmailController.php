@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Order;
 use App\Services\EmailService;
+use App\Services\FiscalCashRegister;
 use App\Utilities\VoucherUtility;
 use App\Voucher;
 use Exception;
@@ -80,5 +81,11 @@ class EmailController extends Controller
 
         $voucher = Voucher::where('id', '=', $voucherId)->first();
         $voucher->sendCompanyEmail();
+    }
+
+    public function fiscal($id){
+        $order = Order::where('id', $id)->first();
+        $cashRegister = new FiscalCashRegister();
+        $cashRegister->sendInvoice($order);
     }
 }
