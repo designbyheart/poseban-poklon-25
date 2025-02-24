@@ -40,7 +40,6 @@ class FiscalCashRegister
             $invoice->order_id = $order->id;
             $invoice->user_id = $order->user_id;
 
-            dd($invoiceItem);
             $invoice->save();
 
             // https://elefakt.rs/apiDoc/#/Invoice/get_invoice__requestId_
@@ -53,7 +52,6 @@ class FiscalCashRegister
             if($res->getStatusCode() != 200) {
                 throw new \Exception('Problem u kreiranju fiskalnog računa.');
             }
-            dd($res);
         } catch (\Exception $e) {
             print_r('error: ' . $e->getMessage());
 
