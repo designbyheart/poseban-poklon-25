@@ -569,9 +569,9 @@
                                     </form>
 <!--                                    <button class="tabs-payment-btn" @click="validateForm" v-show="!paymentParams">Poruči</button>-->
                                 </div>
-                                <div class="tabs-payment-btn-row">
-                                    <button class="tabs-payment-btn" @click="validateForm">Poruči</button>
-                                </div>
+<!--                                <div class="tabs-payment-btn-row">-->
+<!--                                    <button class="tabs-payment-btn" @click="validateForm">Poruči</button>-->
+<!--                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -1169,22 +1169,22 @@
 
                 if(this.paymentMethod.id === 1) {
 
-                    if(this.shippingMethod.id === 1 || this.shippingMethod.id === 10){
-
-                        let shippingMethod = this.shippingMethods.find((item) => {
-
-                            return item.id === 2;
-
-                        });
-
-                        if(shippingMethod !== undefined){
-
-                            this.shippingMethod = Object.assign({}, shippingMethod);
-
-                        }
-
-
-                    }
+                    // if(this.shippingMethod.id === 1 || this.shippingMethod.id === 10){
+                    //
+                    //     let shippingMethod = this.shippingMethods.find((item) => {
+                    //
+                    //         return item.id === 2;
+                    //
+                    //     });
+                    //
+                    //     if(shippingMethod !== undefined){
+                    //
+                    //         this.shippingMethod = Object.assign({}, shippingMethod);
+                    //
+                    //     }
+                    //
+                    //
+                    // }
 
                 }
                 else if(this.paymentMethod.id === 2 || this.paymentMethod.id === 3) {
@@ -1225,25 +1225,26 @@
             },
             selectShippingMethod(method){
 
-                if(this.paymentMethod.id === 1){
 
-                    if(method.id !== 1 || method.id !== 10){
-
-                        let paymentMethod = this.paymentMethods.find(function(item){
-
-                            return item.id === 2;
-
-                        });
-
+                // if(this.paymentMethod.id === 1){
+                //
+                //     if(method.id !== 1 || method.id !== 10){
+                //
+                //         let paymentMethod = this.paymentMethods.find(function(item){
+                //
+                //             return item.id === 2;
+                //
+                //         });
+                //
                         if(paymentMethod !== undefined){
 
                             this.selectPaymentMethod(paymentMethod);
 
                         }
-
-                    }
-
-                }
+                //
+                //     }
+                //
+                // }
 
                 this.shippingMethod = Object.assign({}, method);
 
