@@ -197,6 +197,7 @@
                                     v-for="method, index in shippingMethods"
                                     v-bind:class="{ 'tabs-active': shippingMethod.id === method.id }"
                                     v-if="showShippingMethod(method)"
+                                    style="display: none"
                             >
                                 <img :src="method.image.url" alt="PosebanPoklon" class="type-tabs-icon" v-if="method.image !== null">
                                 <div class="type-tabs-btn">

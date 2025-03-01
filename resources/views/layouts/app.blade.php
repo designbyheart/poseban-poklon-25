@@ -28,9 +28,9 @@
     @else
         <meta property="og:image" content="{{ $applicationParams->siteLogo }}">
     @endif
-    
+
     <meta property="og:image:type" content="image/png">
-    
+
     <meta property="og:image:width" content="600">
 
     <meta property="og:image:height" content="600">
@@ -48,19 +48,29 @@
     <meta property="product:retailer_item_id" content="@yield('item_id')">
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css" integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.0/css/all.css"
+          integrity="sha384-Mmxa0mLqhmOeaE8vgOSbKacftZcsNYDjQzuCOm6D02luYSzBG8vpaOykv9lFQ51Y"
+          crossorigin="anonymous">
 
     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-P6923Q2');</script>
-<!-- End Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-P6923Q2');</script>
+    <!-- End Google Tag Manager -->
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/user/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/updated-styles.css') }}">
 
     <!-- Bootstrap grid -->
     <link rel="stylesheet" href="{{ asset('css/user/components/app/bootstrap-grid.css') }}">
@@ -77,47 +87,49 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         @yield('styles')
         {!! $settings->custom_css !!}
     </style>
- 
+
 </head>
 
 <body class="has-background-light">
 
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6923Q2"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P6923Q2"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-    <div id="app">
-        <common-header></common-header>
-        @yield('content')
-        <common-footer></common-footer>
-    </div>
+<div id="app">
+    <common-header></common-header>
+    @yield('content')
+    <common-footer></common-footer>
+</div>
 
-    <script>
+<script>
 
-        //Set global application parameters
-        window.applicationParams = Object.assign({}, {!! json_encode($applicationParams) !!});
+    //Set global application parameters
+    window.applicationParams = Object.assign({}, {!! json_encode($applicationParams) !!});
 
-        if(window.applicationParams.user !== null){
+    if (window.applicationParams.user !== null) {
 
-            localStorage.setItem('userRole', window.applicationParams.user.role.name);
+        localStorage.setItem('userRole', window.applicationParams.user.role.name);
 
-        }
+    }
 
-    </script>
+</script>
 
-    <script src="{{ asset('js/user.js') }}"></script>
-    <script src="{{ asset('js/user/helpers.js') }}" type="module"></script>
-    <script src="{{ asset('js/user/hamburger.js') }}"></script>
-    <script src="{{ asset('js/common/header.js') }}"></script>
+<script src="{{ asset('js/user.js') }}"></script>
+<script src="{{ asset('js/user/helpers.js') }}" type="module"></script>
+<script src="{{ asset('js/user/hamburger.js') }}"></script>
+<script src="{{ asset('js/common/header.js') }}"></script>
 
-    <!--Google Analytics-->
-    {!! $google_analytics !!}
+<!--Google Analytics-->
+{!! $google_analytics !!}
 
-    <!--Custom JS-->
-    {!! $settings->custom_js !!}
+<!--Custom JS-->
+{!! $settings->custom_js !!}
 
-    @yield('scripts')
+@yield('scripts')
 
 </body>
 

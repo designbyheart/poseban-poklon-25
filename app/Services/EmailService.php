@@ -6,6 +6,7 @@ use App\Order;
 use App\Utilities\VoucherUtility;
 use App\Voucher;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 use SendinBlue\Client\Api\TransactionalEmailsApi;
 use SendinBlue\Client\Configuration;
 use SendinBlue\Client\Model\SendSmtpEmail;
@@ -43,6 +44,7 @@ class EmailService
             $order = Order::where('id', '=', $orderId)->first();
             $vouchers = Voucher::where('order_id', '=', $orderId)->get();
             $customer_email = $order->customer_email;
+
             if (isset($order->rec_email)) {
                 $customer_email = $order->rec_email;
             }
@@ -59,7 +61,7 @@ class EmailService
                 }
             }
 
-            $sendSmtpEmail = new SendSmtpEmail([
+            $emailData = [
                 'to' => [
                     [
                         'email' => $customer_email,
@@ -68,21 +70,28 @@ class EmailService
                 ],
                 'sender' => $this->sender,
                 // 'templateId' => config('services.brevo.voucher_template_id'), // Make sure to set this in your config
-                'htmlContent' => view('emails.voucher.VoucherMailable', ['order' => $order])->render(),
+                'htmlContent' => view('emails.voucher.customer_email', ['order' => $order])->render(),
 
                 'params' => [
                     'order_id' => $order->id,
                 ],
                 'subject' => 'Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id,
-                'attachment' => $attachments
-            ]);
+            ];
 
+            if (count($attachments) > 0) {
+                $emailData['attachment'] = $attachments;
+            } else {
+                Log::error('NO vouchers found, order id: ' . $orderId);
+            }
+
+            $sendSmtpEmail = new SendSmtpEmail($emailData);
             $result = $this->apiInstance->sendTransacEmail($sendSmtpEmail);
-            \Log::info($result);
+
+            Log::info('Email sent', (array)$result);
 
             return response()->json('Email was sent successfully!');
         } catch (\Exception $exception) {
-            print_r('error sending voucher', $exception->getMessage());
+            Log::error('error sending voucher' . $exception->getMessage());
         }
     }
 

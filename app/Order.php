@@ -297,15 +297,15 @@ class Order extends Model
      * Send email with vouchers
      * @param $vouchers
      * @param $email
-     * @return \Illuminate\Http\JsonResponse
+     * @return false
      */
     public function sendCustomerEmail($paper_size = 'a4')
     {
         try {
             $order = $this;
             if (isset($order) && isset($order->customer_email)) {
-                $vouchers = $order->vouchers;
-                $customer_email = isset($order->rec_email) ? $order->rec_email : $order->customer_email;
+//                $vouchers = $order->vouchers;
+//                $customer_email = isset($order->rec_email) ? $order->rec_email : $order->customer_email;
 
 
                 //Without queue
@@ -336,9 +336,9 @@ class Order extends Model
 
                 return true;
             }
+
         } catch (\Exception $e) {
             Log::error($e);
-            return false;
         }
 
         return false;

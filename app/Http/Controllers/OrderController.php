@@ -7,11 +7,13 @@ use App\Currency;
 use App\GiftCard;
 use App\Jobs\SendNewOrderAdminEmail;
 use App\Jobs\SendNewOrderUserEmail;
+use App\Jobs\SendVoucherEmailJob;
 use App\Order;
 use App\OrderItem;
 use App\OrderStatus;
 use App\PaymentMethod;
 use App\Product;
+use App\Services\EmailService;
 use App\Services\FiscalCashRegister;
 use App\Setting;
 use App\ShippingMethod;
@@ -355,8 +357,18 @@ class OrderController extends Controller
             //Set paid status
             $status = OrderStatus::find(2);
 
-            $cashRegister = new FiscalCashRegister();
-            $cashRegister->sendInvoice($order);
+//            $order->sendCustomerEmail();
+            $emailService = new EmailService();
+            $emailService->sendVoucher($order->id);
+//            dispatch(new SendVoucherEmailJob($order->id));
+//            dd($order);
+
+            try {
+                $cashRegister = new FiscalCashRegister();
+                $cashRegister->sendInvoice($order);
+            } catch (\Exception $e) {
+                Log::error($e);
+            }
 
             $order->save();
 
@@ -365,15 +377,20 @@ class OrderController extends Controller
             }
             $transaction_data = (object)$transaction_data;
             $success = true;
-            //Generate and send eVouchers
-            if ($order->shipping_method_id === 9) {
-                if ($order->generateVouchers()) {
-                    if ($order->sendCustomerEmail()) {
+
+            try {
+                //Generate and send eVouchers
+                if ($order->shipping_method_id === 9) {
+                    Log::debug("Generate vouchers");
+                    if ($order->generateVouchers() && $order->sendCustomerEmail()) {
                         return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
                     }
+                } else {
+                    Log::debug('Skip generating vouchers');
+                    return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
                 }
-            } else {
-                return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+            } catch (Exception $e) {
+                Log::error($e);
             }
         }
     }
