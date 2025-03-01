@@ -7,7 +7,6 @@ use App\Currency;
 use App\GiftCard;
 use App\Jobs\SendNewOrderAdminEmail;
 use App\Jobs\SendNewOrderUserEmail;
-use App\Jobs\SendVoucherEmailJob;
 use App\Order;
 use App\OrderItem;
 use App\OrderStatus;
@@ -23,7 +22,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Mail;
 
 class OrderController extends Controller
@@ -357,18 +356,18 @@ class OrderController extends Controller
             //Set paid status
             $status = OrderStatus::find(2);
 
-//            $order->sendCustomerEmail();
-            $emailService = new EmailService();
-            $emailService->sendVoucher($order->id);
-//            dispatch(new SendVoucherEmailJob($order->id));
-//            dd($order);
-
             try {
                 $cashRegister = new FiscalCashRegister();
                 $cashRegister->sendInvoice($order);
             } catch (\Exception $e) {
                 Log::error($e);
             }
+
+            //            $order->sendCustomerEmail();
+            $emailService = new EmailService();
+            $emailService->sendVoucher($order->id);
+//            dispatch(new SendVoucherEmailJob($order->id));
+//            dd($order);
 
             $order->save();
 

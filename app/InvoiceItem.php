@@ -9,33 +9,41 @@ use App\Enums\TransactionType;
 use Carbon\Carbon;
 
 
+// Info: https://elefakt.rs/apiDoc/
 class InvoiceItem
 {
     private $dateAndTimeOfIssue;
     public $invoiceType;
     public $transactionType;
     public $payment;
-    public $buyerId;
+//    public $buyerId;
     public $cashier;
-    public $referentDocumentDT;
+    public $payableAmount;
+//    public $referentDocumentDT;
     public $items;
 
-    public $referentDocumentNumber;
+//    public $referentDocumentNumber;
     public $options;
 
     public function __construct(Order $order)
     {
         $this->dateAndTimeOfIssue = Carbon::now();
-        $this->invoiceType = InvoiceType::NORMAL;
+        $this->invoiceType = InvoiceType::TRAINING;
         $this->transactionType = TransactionType::SALE;
+        $this->payableAmount = $order->total;
+
         $this->payment = [
             [
                 'amount' => $order->total,
                 'paymentType' => PaymentType::CARD,
             ]
         ];
-        $this->cashier = 'Poseban Poklon - Web App';
-        $this->buyerId = $order->user_id;
+        $this->cashier = 'Poseban Poklon';
+
+        if($order->user_id){
+            $this->buyerId = $order->user_id;
+        }
+
         // Note: These fields are reserved for refund
         // $this->referentDocumentNumber = $order->id;
         // $this->referentDocumentDT = Carbon::now();
@@ -68,7 +76,7 @@ class InvoiceItem
         $array = get_object_vars($this);
         return array_map(function ($value) {
             if ($value instanceof Carbon) {
-                return $value->format('Y-m-d\TH:i:s.uP');
+                return $value->format('Y-m-d\TH:i:s');
             }
             return $value;
         }, $array);

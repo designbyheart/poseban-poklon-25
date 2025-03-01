@@ -6,6 +6,8 @@ use App\Invoice;
 use App\InvoiceItem;
 use App\Order;
 use GuzzleHttp\Client;
+use App\Exceptions\Exception;
+use Illuminate\Support\Facades\Log;
 
 class FiscalCashRegister
 {
@@ -49,12 +51,13 @@ class FiscalCashRegister
                     'requestId' => $invoice->id,
                 ], 'json' => $invoiceItem->toArray()
             ]);
-            if($res->getStatusCode() != 200) {
-                throw new \Exception('Problem u kreiranju fiskalnog računa.');
-            }
-        } catch (\Exception $e) {
-            print_r('error: ' . $e->getMessage());
 
+            if ($res->getStatusCode() != 200) {
+                Log::error($message = 'error with fiscal invoice: ' . $res->getBody()->getContents());
+                throw new Exception('Problem u kreiranju fiskalnog računa.');
+            }
+        } catch (Exception $e) {
+            Log::error('error with fiscal invoice: ' . $e->getMessage());
             exit;
         }
     }
