@@ -4,6 +4,7 @@ namespace App\Enums;
 
 class TaxType
 {
-    const NO_VAT = 'A';
+    const TEST_NO_VAT = 'A';
+    const PROD_NO_VAT = 'А';
     const VAT = 'Ђ';
 }

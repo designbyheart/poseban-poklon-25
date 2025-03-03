@@ -42,8 +42,6 @@ class FiscalCashRegister
             $invoice->order_id = $order->id;
             $invoice->user_id = $order->user_id;
 
-            $invoice->save();
-
             // https://elefakt.rs/apiDoc/#/Invoice/get_invoice__requestId_
             $res = $this->client->request('POST', $this->url . '/invoice', [
                 'headers' => [
@@ -56,6 +54,8 @@ class FiscalCashRegister
                 Log::error($message = 'error with fiscal invoice: ' . $res->getBody()->getContents());
                 throw new Exception('Problem u kreiranju fiskalnog računa.');
             }
+
+            $invoice->save();
         } catch (Exception $e) {
             Log::error('error with fiscal invoice: ' . $e->getMessage());
             exit;
