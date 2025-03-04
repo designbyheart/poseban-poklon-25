@@ -16,10 +16,10 @@ mix.webpackConfig({
         alias: {
             "@": path.resolve(__dirname, "resources/js/dashboard"),
             "@assets": path.resolve(__dirname, "resources/assets"),
-            "@sass": path.resolve(__dirname, "resources/sass")
-        }
+            "@sass": path.resolve(__dirname, "resources/sass"),
+        },
     },
-    devtool: "source-map"
+    devtool: "source-map",
 })
     // .sass("resources/sass/vuesax/app.scss", "public/css/dashboard")
     // .options({
@@ -40,70 +40,73 @@ mix.webpackConfig({
     //.copy('node_modules/prismjs/themes/prism-tomorrow.css', 'public/css/dashboard/prism-tomorrow.css')
     .sass(
         "resources/sass/custom/custom.scss",
-        "public/css/dashboard/custom.css"
+        "public/css/dashboard/custom.css",
     )
     .js("resources/js/user/app.js", "public/js/user.js")
     //Store public styles
     .sass(
         "resources/sass/user/components/app/default-style-values.scss",
-        "public/css/user/components/app/default-style-values.css"
+        "public/css/user/components/app/default-style-values.css",
     )
     //.sass("resources/sass/user/components/app/mixin.scss", "public/css/user/components/app/mixin.css")
     .sass(
         "resources/sass/user/components/common/header.scss",
-        "public/css/user/components/common/header.css"
+        "public/css/user/components/common/header.css",
     )
     // .sass("resources/sass/user/components/common/modal.scss", "public/css/user/components/common/modal.css")
-    .sass("resources/sass/user/components/common/footer.scss", "public/css/user/components/common/footer.css")
+    .sass(
+        "resources/sass/user/components/common/footer.scss",
+        "public/css/user/components/common/footer.css",
+    )
     //.copy("resources/sass/user/components/app/bootstrap-grid.css", "public/css/user/components/app/bootstrap-grid.css")
     //Home page styles
     //.sass("resources/sass/user/components/home-page/home-grid.scss", "public/css/user/components/home-page/home-grid.css")
     .sass(
         "resources/sass/user/components/home-page/home-info.scss",
-        "public/css/user/components/home-page/home-info.css"
+        "public/css/user/components/home-page/home-info.css",
     )
     //.sass("resources/sass/user/components/home-page/home-information.scss", "public/css/user/components/home-page/home-information.css")
     //.sass("resources/sass/user/components/home-page/home-newsletter.scss", "public/css/user/components/home-page/home-newsletter.css")
     // .sass("resources/sass/user/components/home-page/slider-select.scss", "public/css/user/components/home-page/slider-select.css")
     .sass(
         "resources/sass/user/components/home-page/masonry.scss",
-        "public/css/user/components/home-page/masonry.css"
+        "public/css/user/components/home-page/masonry.css",
     )
     //User profile
     .sass(
         "resources/sass/user/components/common/sidebar.scss",
-        "public/css/user/components/common/sidebar.css"
+        "public/css/user/components/common/sidebar.css",
     )
     .sass(
         "resources/sass/user/components/profile/profile-content.scss",
-        "public/css/user/components/profile/profile-content.css"
+        "public/css/user/components/profile/profile-content.css",
     )
     //Product page
     .sass(
         "resources/sass/user/components/product/carousel.scss",
-        "public/css/user/components/product/carousel.css"
+        "public/css/user/components/product/carousel.css",
     )
     .sass(
         "resources/sass/user/components/product/product-carousel.scss",
-        "public/css/user/components/product/product-carousel.css"
+        "public/css/user/components/product/product-carousel.css",
     )
     //PDF
     .sass(
         "resources/sass/user/components/pdf/pdf.scss",
-        "public/css/user/components/pdf/pdf.css"
+        "public/css/user/components/pdf/pdf.css",
     )
     .sass(
         "resources/sass/user/components/pdf/pdf-a5.scss",
-        "public/css/user/components/pdf/pdf-a5.css"
+        "public/css/user/components/pdf/pdf-a5.css",
     )
     //Product
     .sass(
         "resources/sass/user/components/product/product-grid.scss",
-        "public/css/user/components/product/product-grid.css"
+        "public/css/user/components/product/product-grid.css",
     )
     .sass(
         "resources/sass/user/components/product/product-content.scss",
-        "public/css/user/components/product/product-content.css"
+        "public/css/user/components/product/product-content.css",
     )
     // .sass(
     //     "resources/sass/user/components/common/breadcrumb.scss",
@@ -111,22 +114,22 @@ mix.webpackConfig({
     // )
     .sass(
         "resources/sass/user/components/common/filters.scss",
-        "public/css/user/components/common/filters.css"
+        "public/css/user/components/common/filters.css",
     )
     // Category Page
     .sass(
         "resources/sass/user/components/category-page/category-main.scss",
-        "public/css/user/components/category-page/category-main.css"
+        "public/css/user/components/category-page/category-main.css",
     )
     // Cart Page
     .sass(
         "resources/sass/user/components/cart-page/cart-content.scss",
-        "public/css/user/components/cart-page/cart-content.css"
+        "public/css/user/components/cart-page/cart-content.css",
     )
     // Information Page
     .sass(
         "resources/sass/user/components/information-page/information-page.scss",
-        "public/css/user/components/information-page/information-page.css"
+        "public/css/user/components/information-page/information-page.css",
     )
     //User fonts
     // .copyDirectory("resources/assets/fonts/user", "public/fonts/user")

@@ -1,2 +1,525 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[22],{"/u9t":function(t,e,s){"use strict";var n=s("dNjG"),o=s("vDqi"),i=s.n(o),a={props:{},data:function(){return{instance:"",items:[],per_page:20,pagination:{currentPage:1,nextPageUrl:"",totalPages:1},search:"",sortKey:"",sortOrder:"",API:n.a}},watch:{"pagination.currentPage":function(t,e){this.getItems()},search:function(){this.getItems()}},methods:{setInstance:function(t){this.instance=t},getItems:function(t){var e=this,s=this.instance,n={params:{per_page:this.per_page,sort_key:"created_at",sort_order:"desc"}};void 0!==t&&(n.params=t),""!==this.search&&(n.params.search=this.search,this.pagination.currentPage=1);var o=this.API[s].list,a=this.pagination.currentPage;""!==this.pagination.nextPageUrl&&""===this.search&&(o=o+"?page="+a),i.a.get(o,n).then(function(t){e.items=t.data.data,e.pagination.nextPageUrl=t.data.next_page_url,e.pagination.totalPages=t.data.last_page})},handleSort:function(t,e){var s={sort_key:t,sort_order:e?"desc":"asc"};this.getItems(s)},deleteItem:function(t){var e=this,s=this.instance;i.a.delete(this.API[s].delete+"/"+t).then(function(t){"success"===t.data&&(e.showNotification("success","request.deletedSuccess","success"),e.getItems())}).catch(function(t){e.showNotification("error","request.error","danger")})},getTableTitle:function(){return this.$t("tables."+this.instance+".title")},getColumnTitle:function(t){return this.$t("models."+this.instance+".properties."+t)},getPropertyTitle:function(t){return this.$t("models."+this.instance+".properties."+t)},convertDate:function(t){var e=new Date(t),s=e.getDate(),n=e.getMonth()+1;return s<10&&(s="0"+s),n<10&&(n="0"+n),s+"."+n+"."+e.getFullYear()},showNotification:function(t,e,s,n,o){var i="",a=1;o&&(a=2),i=n?this.$tc("models."+n+".title",a):this.$tc("models."+this.instance+".title",a);var r=this.$t("messages."+t),c=this.$tc("messages."+e,a,{instance:i});this.$vs.notify({title:r,text:c,color:s})},showDeleteAlert:function(t){var e=this.deleteItem.bind(null,t),s=this.$tc("models."+this.instance+".title",1),n=this.$t("messages.confirmation.delete",{instance:s});this.$vs.dialog({color:"primary",title:"Confirm",text:n,accept:e})}},mounted:function(){}};e.a=a},DvXq:function(t,e,s){"use strict";s.r(e);var n=s("vDqi"),o=s.n(n),i=s("/u9t"),a={components:{Datepicker:s("+jP+").a},mixins:[i.a],data:function(){return{instance:"newsletterSubscription",instanceSlug:"subscriptions",downloadSubscriptionsPopup:{active:!1,from:new Date,to:new Date}}},methods:{showSubscriptionsPopup:function(){this.downloadSubscriptionsPopup.active=!0},downloadSubscriptions:function(){var t={from:this.convertDate(this.downloadSubscriptionsPopup.from),to:this.convertDate(this.downloadSubscriptionsPopup.to)};o()({method:"post",url:"/dashboard/subscriptions/download",responseType:"blob"},t).then(function(t){var e=window.URL.createObjectURL(new Blob([t.data])),s=document.createElement("a");s.href=e,s.setAttribute("download","newsletter_subscriptions.csv"),document.body.appendChild(s),s.click()})}},created:function(){this.setInstance(this.instance)},mounted:function(){this.getItems()}},r=(s("u/6D"),s("KHd+")),c=Object(r.a)(a,function(){var t=this,e=t.$createElement,s=t._self._c||e;return s("div",[s("vs-table",{attrs:{"max-items":t.per_page,sst:!0,data:t.items,noDataText:t.$t("messages.notFound")},on:{sort:t.handleSort},scopedSlots:t._u([{key:"default",fn:function(e){var n=e.data;return t._l(n,function(e,n){return s("vs-tr",{key:n},[s("vs-td",[s("span",{staticClass:"text-sm"},[t._v(t._s(e.email))])]),t._v(" "),s("vs-td",[s("vs-button",{attrs:{color:"danger",icon:"delete"},on:{click:function(s){return t.showDeleteAlert(e.id)}}})],1)],1)})}}])},[s("template",{slot:"header"},[s("div",{staticClass:"vx-row w-full pb-3 m-0"},[s("div",{staticClass:"vx-col flex items-center w-1/2 p-0"},[s("h3",{staticClass:"mb-0 mr-3"},[t._v("\n                        "+t._s(t.getTableTitle())+"\n                    ")]),t._v(" "),s("vs-button",{on:{click:t.showSubscriptionsPopup}},[t._v(t._s(t.$t("actions.export")))])],1),t._v(" "),s("div",{staticClass:"vx-col flex items-center justify-end w-1/2 p-0"},[s("vs-input",{staticClass:"w-full",attrs:{icon:"search",placeholder:t.$t("actions.search")},model:{value:t.search,callback:function(e){t.search=e},expression:"search"}})],1)])]),t._v(" "),s("template",{slot:"thead"},[s("vs-th",{attrs:{"sort-key":"email"}},[t._v("\n                "+t._s(t.getColumnTitle("email"))+"\n            ")]),t._v(" "),s("vs-th",[t._v("\n                "+t._s(t.getColumnTitle("actions"))+"\n            ")])],1)],2),t._v(" "),s("div",{staticClass:"vx-row"},[s("div",{staticClass:"vx-col flex justify-end items-center w-full p-3"},[s("vs-pagination",{attrs:{total:t.pagination.totalPages},model:{value:t.pagination.currentPage,callback:function(e){t.$set(t.pagination,"currentPage",e)},expression:"pagination.currentPage"}})],1)]),t._v(" "),s("vs-popup",{attrs:{title:t.$t("modals.downloadSubscriptions.title"),active:t.downloadSubscriptionsPopup.active},on:{"update:active":function(e){return t.$set(t.downloadSubscriptionsPopup,"active",e)}}},[s("div",{staticClass:"vx-row"},[s("div",{staticClass:"vx-col w-1/2 mb-3 overflow-visible"},[s("p",{staticClass:"text-sm font-bold mb-2"},[t._v(t._s(t.$t("modals.downloadSubscriptions.properties.from")))]),t._v(" "),s("datepicker",{attrs:{format:"dd.MM.yy"},model:{value:t.downloadSubscriptionsPopup.from,callback:function(e){t.$set(t.downloadSubscriptionsPopup,"from",e)},expression:"downloadSubscriptionsPopup.from"}})],1),t._v(" "),s("div",{staticClass:"vx-col w-1/2 mb-3 overflow-visible"},[s("p",{staticClass:"text-sm font-bold mb-2"},[t._v(t._s(t.$t("modals.downloadSubscriptions.properties.to")))]),t._v(" "),s("datepicker",{attrs:{format:"dd.MM.yy"},model:{value:t.downloadSubscriptionsPopup.to,callback:function(e){t.$set(t.downloadSubscriptionsPopup,"to",e)},expression:"downloadSubscriptionsPopup.to"}})],1),t._v(" "),s("div",{staticClass:"vx-col w-full"},[s("vs-button",{on:{click:t.downloadSubscriptions}},[t._v(t._s(t.$t("actions.download")))])],1)])])],1)},[],!1,null,null,null);e.default=c.exports},IicL:function(t,e,s){var n=s("T/On");"string"==typeof n&&(n=[[t.i,n,""]]);var o={hmr:!0,transform:void 0,insertInto:void 0};s("aET+")(n,o);n.locals&&(t.exports=n.locals)},"T/On":function(t,e,s){(t.exports=s("I1BE")(!1)).push([t.i,"\n.vs-popup--content{\n\n    overflow: visible;\n}\n\n",""])},"u/6D":function(t,e,s){"use strict";var n=s("IicL");s.n(n).a}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[22],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=script&lang=js":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=script&lang=js ***!
+  \*************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixins_tables_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/tables/helper */ "./resources/js/dashboard/mixins/tables/helper.js");
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//Library for sending requests
+
+
+//Table helper functions
+
+
+//Datepicker component
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  mixins: [_mixins_tables_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  data: function data() {
+    return {
+      instance: 'newsletterSubscription',
+      instanceSlug: 'subscriptions',
+      downloadSubscriptionsPopup: {
+        active: false,
+        from: new Date(),
+        to: new Date()
+      }
+    };
+  },
+  methods: {
+    showSubscriptionsPopup: function showSubscriptionsPopup() {
+      this.downloadSubscriptionsPopup.active = true;
+    },
+    downloadSubscriptions: function downloadSubscriptions() {
+      var requestUrl = '/dashboard/subscriptions/download';
+      var requestParams = {
+        from: this.convertDate(this.downloadSubscriptionsPopup.from),
+        to: this.convertDate(this.downloadSubscriptionsPopup.to)
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'post',
+        url: requestUrl,
+        responseType: 'blob'
+      }, requestParams).then(function (response) {
+        var url = window.URL.createObjectURL(new Blob([response.data]));
+        var link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'newsletter_subscriptions.csv'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      });
+    }
+  },
+  created: function created() {
+    //Set the instance
+    this.setInstance(this.instance);
+  },
+  mounted: function mounted() {
+    //Load items
+    this.getItems();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=template&id=5ed645be":
+/*!***********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=template&id=5ed645be ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [_c("vs-table", {
+    attrs: {
+      "max-items": _vm.per_page,
+      sst: true,
+      data: _vm.items,
+      noDataText: _vm.$t("messages.notFound")
+    },
+    on: {
+      sort: _vm.handleSort
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(_ref) {
+        var data = _ref.data;
+        return _vm._l(data, function (subscription, indexItem) {
+          return _c("vs-tr", {
+            key: indexItem
+          }, [_c("vs-td", [_c("span", {
+            staticClass: "text-sm"
+          }, [_vm._v(_vm._s(subscription.email))])]), _vm._v(" "), _c("vs-td", [_c("vs-button", {
+            attrs: {
+              color: "danger",
+              icon: "delete"
+            },
+            on: {
+              click: function click($event) {
+                return _vm.showDeleteAlert(subscription.id);
+              }
+            }
+          })], 1)], 1);
+        });
+      }
+    }])
+  }, [_c("template", {
+    slot: "header"
+  }, [_c("div", {
+    staticClass: "vx-row w-full pb-3 m-0"
+  }, [_c("div", {
+    staticClass: "vx-col flex items-center w-1/2 p-0"
+  }, [_c("h3", {
+    staticClass: "mb-0 mr-3"
+  }, [_vm._v("\n                        " + _vm._s(_vm.getTableTitle()) + "\n                    ")]), _vm._v(" "), _c("vs-button", {
+    on: {
+      click: _vm.showSubscriptionsPopup
+    }
+  }, [_vm._v(_vm._s(_vm.$t("actions.export")))])], 1), _vm._v(" "), _c("div", {
+    staticClass: "vx-col flex items-center justify-end w-1/2 p-0"
+  }, [_c("vs-input", {
+    staticClass: "w-full",
+    attrs: {
+      icon: "search",
+      placeholder: _vm.$t("actions.search")
+    },
+    model: {
+      value: _vm.search,
+      callback: function callback($$v) {
+        _vm.search = $$v;
+      },
+      expression: "search"
+    }
+  })], 1)])]), _vm._v(" "), _c("template", {
+    slot: "thead"
+  }, [_c("vs-th", {
+    attrs: {
+      "sort-key": "email"
+    }
+  }, [_vm._v("\n                " + _vm._s(_vm.getColumnTitle("email")) + "\n            ")]), _vm._v(" "), _c("vs-th", [_vm._v("\n                " + _vm._s(_vm.getColumnTitle("actions")) + "\n            ")])], 1)], 2), _vm._v(" "), _c("div", {
+    staticClass: "vx-row"
+  }, [_c("div", {
+    staticClass: "vx-col flex justify-end items-center w-full p-3"
+  }, [_c("vs-pagination", {
+    attrs: {
+      total: _vm.pagination.totalPages
+    },
+    model: {
+      value: _vm.pagination.currentPage,
+      callback: function callback($$v) {
+        _vm.$set(_vm.pagination, "currentPage", $$v);
+      },
+      expression: "pagination.currentPage"
+    }
+  })], 1)]), _vm._v(" "), _c("vs-popup", {
+    attrs: {
+      title: _vm.$t("modals.downloadSubscriptions.title"),
+      active: _vm.downloadSubscriptionsPopup.active
+    },
+    on: {
+      "update:active": function updateActive($event) {
+        return _vm.$set(_vm.downloadSubscriptionsPopup, "active", $event);
+      }
+    }
+  }, [_c("div", {
+    staticClass: "vx-row"
+  }, [_c("div", {
+    staticClass: "vx-col w-1/2 mb-3 overflow-visible"
+  }, [_c("p", {
+    staticClass: "text-sm font-bold mb-2"
+  }, [_vm._v(_vm._s(_vm.$t("modals.downloadSubscriptions.properties.from")))]), _vm._v(" "), _c("datepicker", {
+    attrs: {
+      format: "dd.MM.yy"
+    },
+    model: {
+      value: _vm.downloadSubscriptionsPopup.from,
+      callback: function callback($$v) {
+        _vm.$set(_vm.downloadSubscriptionsPopup, "from", $$v);
+      },
+      expression: "downloadSubscriptionsPopup.from"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "vx-col w-1/2 mb-3 overflow-visible"
+  }, [_c("p", {
+    staticClass: "text-sm font-bold mb-2"
+  }, [_vm._v(_vm._s(_vm.$t("modals.downloadSubscriptions.properties.to")))]), _vm._v(" "), _c("datepicker", {
+    attrs: {
+      format: "dd.MM.yy"
+    },
+    model: {
+      value: _vm.downloadSubscriptionsPopup.to,
+      callback: function callback($$v) {
+        _vm.$set(_vm.downloadSubscriptionsPopup, "to", $$v);
+      },
+      expression: "downloadSubscriptionsPopup.to"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "vx-col w-full"
+  }, [_c("vs-button", {
+    on: {
+      click: _vm.downloadSubscriptions
+    }
+  }, [_vm._v(_vm._s(_vm.$t("actions.download")))])], 1)])])], 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--23-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--23-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.vs-popup--content{\n\n    overflow: visible;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--23-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--23-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--23-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--23-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/mixins/tables/helper.js":
+/*!********************************************************!*\
+  !*** ./resources/js/dashboard/mixins/tables/helper.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mixins_api_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/mixins/api/api */ "./resources/js/dashboard/mixins/api/api.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+//Application routes
+
+
+//Library for working with requests
+
+var tableHelper = {
+  props: {},
+  data: function data() {
+    return {
+      instance: '',
+      items: [],
+      per_page: 20,
+      pagination: {
+        currentPage: 1,
+        nextPageUrl: '',
+        totalPages: 1
+      },
+      search: '',
+      sortKey: '',
+      sortOrder: '',
+      API: _mixins_api_api__WEBPACK_IMPORTED_MODULE_0__["API"]
+    };
+  },
+  watch: {
+    'pagination.currentPage': function paginationCurrentPage(value, oldValue) {
+      this.getItems();
+    },
+    'search': function search() {
+      this.getItems();
+    }
+  },
+  methods: {
+    setInstance: function setInstance(instance) {
+      this.instance = instance;
+    },
+    getItems: function getItems(params) {
+      var _this = this;
+      var instance = this.instance;
+      var requestParams = {
+        params: {
+          per_page: this.per_page,
+          sort_key: 'created_at',
+          sort_order: 'desc'
+        }
+      };
+      if (params !== undefined) {
+        requestParams.params = params;
+      }
+      if (this.search !== '') {
+        requestParams.params.search = this.search;
+        this.pagination.currentPage = 1;
+      }
+      var requestUrl = this.API[instance].list;
+      var selectedPage = this.pagination.currentPage;
+      if (this.pagination.nextPageUrl !== '' && this.search === '') {
+        requestUrl = requestUrl + '?page=' + selectedPage;
+      }
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(requestUrl, requestParams).then(function (response) {
+        _this.items = response.data.data;
+        _this.pagination.nextPageUrl = response.data.next_page_url;
+        _this.pagination.totalPages = response.data.last_page;
+      });
+    },
+    handleSort: function handleSort(key, active) {
+      var sort_order = active ? 'desc' : 'asc';
+      var params = {
+        sort_key: key,
+        sort_order: sort_order
+      };
+      this.getItems(params);
+    },
+    deleteItem: function deleteItem(id) {
+      var _this2 = this;
+      var instance = this.instance;
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"](this.API[instance]["delete"] + '/' + id).then(function (response) {
+        if (response.data === 'success') {
+          _this2.showNotification('success', 'request.deletedSuccess', 'success');
+
+          //Update the items list
+          _this2.getItems();
+        }
+      })["catch"](function (error) {
+        _this2.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    getTableTitle: function getTableTitle() {
+      return this.$t('tables.' + this.instance + '.title');
+    },
+    getColumnTitle: function getColumnTitle(model) {
+      return this.$t('models.' + this.instance + '.properties.' + model);
+    },
+    getPropertyTitle: function getPropertyTitle(property) {
+      return this.$t('models.' + this.instance + '.properties.' + property);
+    },
+    convertDate: function convertDate(date) {
+      var selectedDate = new Date(date);
+      var dateDay = selectedDate.getDate();
+      var dateMonth = selectedDate.getMonth() + 1;
+      var dateYear = selectedDate.getFullYear();
+      if (dateDay < 10) {
+        dateDay = '0' + dateDay;
+      }
+      if (dateMonth < 10) {
+        dateMonth = '0' + dateMonth;
+      }
+      var convertedDate = dateDay + '.' + dateMonth + '.' + dateYear;
+      return convertedDate;
+    },
+    showNotification: function showNotification(type, message, color, customInstance, isPlural) {
+      var instance = '';
+      var count = 1;
+      if (isPlural) {
+        count = 2;
+      }
+      if (customInstance) {
+        instance = this.$tc('models.' + customInstance + '.title', count);
+      } else {
+        instance = this.$tc('models.' + this.instance + '.title', count);
+      }
+      var title = this.$t('messages.' + type);
+      var text = this.$tc('messages.' + message, count, {
+        instance: instance
+      });
+      this.$vs.notify({
+        title: title,
+        text: text,
+        color: color
+      });
+    },
+    showDeleteAlert: function showDeleteAlert(id) {
+      var deleteItemFunction = this.deleteItem.bind(null, id);
+      var instance = this.$tc('models.' + this.instance + '.title', 1);
+      var text = this.$t('messages.confirmation.delete', {
+        instance: instance
+      });
+      this.$vs.dialog({
+        color: 'primary',
+        title: 'Confirm',
+        text: text,
+        accept: deleteItemFunction
+      });
+    }
+  },
+  mounted: function mounted() {}
+};
+/* harmony default export */ __webpack_exports__["default"] = (tableHelper);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _NewsletterSubscriptions_vue_vue_type_template_id_5ed645be__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewsletterSubscriptions.vue?vue&type=template&id=5ed645be */ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=template&id=5ed645be");
+/* harmony import */ var _NewsletterSubscriptions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewsletterSubscriptions.vue?vue&type=script&lang=js */ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport *//* harmony import */ var _NewsletterSubscriptions_vue_vue_type_style_index_0_id_5ed645be_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css */ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _NewsletterSubscriptions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NewsletterSubscriptions_vue_vue_type_template_id_5ed645be__WEBPACK_IMPORTED_MODULE_0__["render"],
+  _NewsletterSubscriptions_vue_vue_type_template_id_5ed645be__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=script&lang=js":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=script&lang=js ***!
+  \*****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./NewsletterSubscriptions.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css":
+/*!*************************************************************************************************************************!*\
+  !*** ./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css ***!
+  \*************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_23_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_23_2_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_style_index_0_id_5ed645be_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader??ref--23-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--23-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=style&index=0&id=5ed645be&lang=css");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_23_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_23_2_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_style_index_0_id_5ed645be_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_23_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_23_2_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_style_index_0_id_5ed645be_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_23_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_23_2_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_style_index_0_id_5ed645be_lang_css__WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_23_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_23_2_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_style_index_0_id_5ed645be_lang_css__WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=template&id=5ed645be":
+/*!***********************************************************************************************************!*\
+  !*** ./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=template&id=5ed645be ***!
+  \***********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_template_id_5ed645be__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./NewsletterSubscriptions.vue?vue&type=template&id=5ed645be */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/newsletter/NewsletterSubscriptions.vue?vue&type=template&id=5ed645be");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_template_id_5ed645be__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_NewsletterSubscriptions_vue_vue_type_template_id_5ed645be__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
 //# sourceMappingURL=22.js.map
