@@ -73,7 +73,7 @@
         "popmotion": "^8.6.10",
         "quill-image-uploader": "^1.0.2",
         "sweetalert2": "^9.17.1",
-        "swiper": "^5.2.0",
+        "swiper": "^5.4.5",
         "v-runtime-template": "^1.6.2",
         "vee-validate": "^3.4.5",
         "vue-acl": "^4.0.7",

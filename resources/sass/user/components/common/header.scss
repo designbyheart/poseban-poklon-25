@@ -1329,7 +1329,7 @@
 }
 
 //Add to cart alert buttons
-.add-cart-alert-buttons{
+.add-cart-alert-buttons {
     width: 100%;
     .table-buttons-container {
         padding: 10px 20px 20px 20px;
@@ -1398,10 +1398,10 @@
         display: block;
     }
 
-    .add-cart-alert-buttons{
-        .table-buttons-container{
+    .add-cart-alert-buttons {
+        .table-buttons-container {
             flex-direction: column;
-            .table-buttons-shopping{
+            .table-buttons-shopping {
                 margin-bottom: 30px;
             }
         }
@@ -1457,12 +1457,12 @@
 }
 
 @include mq(1000px, min) {
-    &.only-mobile-link {
+    .only-mobile-link {
         display: none;
     }
 }
 @include mq(1000px, max) {
-    &.only-mobile-link {
+    .only-mobile-link {
         display: block;
     }
 }
