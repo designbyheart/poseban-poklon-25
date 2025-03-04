@@ -75,7 +75,7 @@
         "sweetalert2": "^9.17.1",
         "swiper": "^5.4.5",
         "v-runtime-template": "^1.6.2",
-        "vee-validate": "^3.4.5",
+        "vee-validate": "^2.2.15",
         "vue-acl": "^4.0.7",
         "vue-async-computed": "^3.6.1",
         "vue-backtotop": "^1.6.0",
