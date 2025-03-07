@@ -180,7 +180,7 @@ class ProductController extends Controller
 
             }
 
-            //$product->discount_price = $product->getDiscountPrice();
+            $product->discount_price = $product->getDiscountPrice();
 
             $product->location = $product->getLocation();
 
@@ -329,7 +329,8 @@ class ProductController extends Controller
 
             $product_rating = $product->calculateRating();
 
-            //$product['discount_price'] = $product->getDiscountPrice();
+            $product['discount_price'] = $product->getDiscountPrice();
+            $discount_price = $product->getDiscountPrice();
 
             $location = $product->getLocation();
 

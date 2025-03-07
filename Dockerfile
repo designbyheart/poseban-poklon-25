@@ -1,9 +1,5 @@
-# Use the PHP 7.1 FPM image
-FROM php:7.4-cli
-COPY . /usr/src/myapp
-WORKDIR /usr/src/myapp
-CMD [ "php", "./index.php" ]
-
+# Use the PHP 7.4 FPM image
+FROM php:7.4-fpm
 
 # Add Composer to the PATH
 ENV PATH="$PATH:/usr/local/bin"
@@ -27,15 +23,19 @@ RUN docker-php-ext-configure zip \
 # Install Composer v1 (compatible with PHP 7.1)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --1
 
-# Set working directory
-WORKDIR /var/www
-
 # Increase PHP memory limit
 RUN echo "memory_limit=-1" > /usr/local/etc/php/conf.d/memory-limit.ini
 
-# Copy the rest of the application
-# Copy application files in smaller chunks to avoid space issues
+# Set working directory
+WORKDIR /var/www
+
+# Copy composer files first for better caching
 COPY composer.json composer.lock ./
+
+# Configure Composer to avoid timeout issues
+RUN composer config --global process-timeout 2000
+
+# Copy the rest of the application
 COPY app ./app
 COPY bootstrap ./bootstrap
 COPY config ./config
@@ -50,36 +50,18 @@ COPY artisan .
 COPY package.json .
 COPY ./.env .
 COPY .editorconfig .
-COPY artisan .
-COPY composer.json .
-COPY package.json .
 COPY package-lock.json .
-
-
-# # Copy only composer files for dependency caching
-COPY composer.json ./
-
-# Configure Composer to avoid timeout issues
-RUN composer config --global process-timeout 2000
 
 RUN ls database/seeds
 
-# Install PHP dependencies (you can temporarily add --no-scripts for debugging)
-#RUN #composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --verbose
-# Alternatively, if debugging the post scripts, try:
-# RUN #composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts --verbose
-RUN #composer install --no-interaction --optimize-autoloader --no-scripts --verbose
-# # Regenerate autoloader (if needed)
+# Install PHP dependencies
+# Uncomment one of these lines when ready to run composer install
+# RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --verbose
+# RUN composer install --no-interaction --optimize-autoloader --no-scripts --verbose
 RUN composer dump-autoload --verbose
 
-# Set file permissions for the web server
-# Clean up any temporary files before changing ownership to free up space
-# RUN find /var/www -type f -name "*.log" -delete && \
-#     find /var/www -type d -name "node_modules" -exec rm -rf {} + && \
-#     find /var/www -type d -name "vendor" -exec rm -rf {} + && \
-#     chown -R www-data:www-data /var/www
-
-# RUN npm install && npm run build
+# Set proper permissions if needed
+# RUN chown -R www-data:www-data /var/www
 
 # Expose PHP-FPM port
 EXPOSE 9000
