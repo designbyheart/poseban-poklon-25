@@ -79,7 +79,7 @@
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
             </td>
             <td width="508">
-                <span style="font-family: Rubik; font-size: 20px;">Imate novu poruku sa sajta!</span>
+                <span style="font-family: Rubik, sans-serif; font-size: 20px;">Imate novu poruku sa sajta!</span>
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
@@ -90,7 +90,7 @@
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
             </td>
             <td width="508">
-                <span style="font-family: Rubik; font-size: 20px;">Ime i prezime * {{$mail['name']}}</span>
+                <span style="font-family: Rubik, sans-serif; font-size: 20px;">Ime i prezime * {{$mail['name']}}</span>
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
@@ -101,7 +101,7 @@
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
             </td>
             <td width="508">
-                <span style="font-family: Rubik; font-size: 20px;">Email * {{$mail['email']}}</span>
+                <span style="font-family: Rubik, sans-serif; font-size: 20px;">Email * {{$mail['email']}}</span>
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
@@ -113,7 +113,7 @@
             </td>
             <td width="508">
                 <p>Poruka: </p>
-                <span style="font-family: Rubik; font-size: 20px;">{{$mail['message']}}</span>
+                <span style="font-family: Rubik, sans-serif; font-size: 20px;">{{$mail['message']}}</span>
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">
                 <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >

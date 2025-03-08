@@ -14,12 +14,12 @@
         }
 
         @font-face {
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             src: url("https://posebanpoklon.rs/fonts/user/Rubik-Regular.ttf");
         }
 
         @font-face {
-            font-family: Rubik-light;
+            font-family: Rubik-Light, sans-serif;
             src: url("https://posebanpoklon.rs/fonts/user/Rubik-Light.ttf");
         }
 
@@ -113,7 +113,7 @@
 
         .pdf-a4-col-left .pdf-a4-row-4 .pdf-a4-desc {
             max-height: 44.5mm;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 13px;
             color: #000;
             text-align: center;
@@ -234,7 +234,7 @@
 
         .pdf-a4-col-left .pdf-a4-row-6 tr .pdf-a4-information-col .pdf-a4-information-item tr td .pdf-a4-information-desc .pdf-a4-information-text {
             margin-top: 0.5mm;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 12px;
             color: #000;
         }
@@ -298,7 +298,7 @@
 
         .pdf-a4-col-left .pdf-a4-full-width .pdf-a4-information-item tr td .pdf-a4-information-desc .pdf-a4-information-text {
             margin-top: 0.5mm;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 12px;
             color: #000;
         }
@@ -314,7 +314,7 @@
 
         .pdf-a4-col-left .pdf-a4-row-7 .pdf-a4-row-7-col .pdf-a4-footer-text {
             font-size: 12px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             color: #000;
         }
 
@@ -369,7 +369,7 @@
             margin: auto;
             vertical-align: text-top;
             margin-left: 1mm;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 11px;
             color: #000;
         }
@@ -398,7 +398,7 @@
             width: 375px;
             height: 255px;
             text-align: center;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: #fff;
             transform: rotate(270deg);

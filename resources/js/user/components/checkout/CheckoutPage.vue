@@ -1650,13 +1650,13 @@
                                             :value="paymentParams.encoding"
                                         />
                                     </form>
-                                    <button
+                                    <!-- <button
                                         class="tabs-payment-btn"
                                         @click="validateForm"
                                         v-show="!paymentParams"
                                     >
-                                        Poruči
-                                    </button>
+                                        Poruči1
+                                    </button> -->
                                 </div>
                                 <div class="tabs-payment-btn-row">
                                     <button
@@ -1775,7 +1775,7 @@
 
     span {
         flex: 1;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 14px;
         color: #000;
         overflow: hidden;

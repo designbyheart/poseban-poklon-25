@@ -79,7 +79,7 @@
         .product-star-number {
             margin-top: 3px;
             margin-left: 10px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: $main-text-color-yellow;
         }
@@ -100,7 +100,7 @@
             .product-location-city,
             .product-person-number {
                 padding-left: 10px;
-                font-family: Rubik;
+                font-family: Rubik, sans-serif;
                 color: $main-text-color;
                 opacity: 0.5;
             }
@@ -108,7 +108,7 @@
     }
     .product-desc-text {
         padding: 5px 0;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         opacity: 0.8;
@@ -122,7 +122,7 @@
             width: 100%;
             border: 1px solid rgba(0, 0, 0, 0.09);
             border-radius: 4px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
@@ -192,7 +192,7 @@
     .product-offer-title {
         padding: 10px 0;
         width: 100%;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         opacity: 0.5;
@@ -224,7 +224,7 @@
                         font-size: 16px;
                     }
                     .product-offer-text-desc {
-                        font-family: Rubik;
+                        font-family: Rubik, sans-serif;
                         font-size: 14px;
                     }
                 }
@@ -385,7 +385,7 @@
         opacity: 0.8;
     }
     .product-info-text {
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         color: $main-text-color;
         opacity: 0.8;
     }
@@ -438,7 +438,7 @@
                     opacity: 0.8;
                 }
                 .table-item-subtitle {
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                     font-size: 14px;
                     color: $main-color;
                 }

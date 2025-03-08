@@ -65,7 +65,7 @@
         width: 100%;
         .pdf-a4-desc {
             max-height: 44.5mm;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 13px;
             color: $main-text-color;
             text-align: center;
@@ -166,7 +166,7 @@
                             }
                             .pdf-a4-information-text {
                                 margin-top: 0.5mm;
-                                font-family: Rubik;
+                                font-family: Rubik, sans-serif;
                                 font-size: 12px;
                                 color: $main-text-color;
                             }
@@ -229,7 +229,7 @@
                         }
                         .pdf-a4-information-text {
                             margin-top: 0.5mm;
-                            font-family: Rubik;
+                            font-family: Rubik, sans-serif;
                             font-size: 12px;
                             color: $main-text-color;
                         }
@@ -249,7 +249,7 @@
         .pdf-a4-row-7-col {
             .pdf-a4-footer-text {
                 font-size: 12px;
-                font-family: Rubik;
+                font-family: Rubik, sans-serif;
                 color: $main-text-color;
                 .a4-footer-text-color {
                     color: $main-color;
@@ -295,7 +295,7 @@
                 margin: auto;
                 vertical-align: text-top;
                 margin-left: 1mm;
-                font-family: Rubik;
+                font-family: Rubik, sans-serif;
                 font-size: 11px;
                 color: $main-text-color;
             }
@@ -323,7 +323,7 @@
                     width: 375px;
                     height: 255px;
                     text-align: center;
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                     font-size: 16px;
                     color: $main-text-color-white;
                     transform: rotate(270deg);
