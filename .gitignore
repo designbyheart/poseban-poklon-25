@@ -22,4 +22,5 @@ public/mix-manifest.json
 .idea/misc.xml
 
 dbData/
+/storage/*
 /storage/
