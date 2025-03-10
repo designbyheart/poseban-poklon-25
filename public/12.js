@@ -10,7 +10,6 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
 /* harmony import */ var _static_producent_producent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/static/producent/producent */ "./resources/js/dashboard/static/producent/producent.js");
 //Library for working with requests
@@ -40,7 +39,7 @@ __webpack_require__.r(__webpack_exports__);
     create: function create() {
       var _this = this;
       var requestParams = this.model;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.API.producent.create, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(this.API.producent.create, requestParams).then(function (response) {
         if (response.data === 'success') {
           _this.showNotification('success', 'request.createdSuccess', 'success');
           _this.afterCreateCallback();
@@ -53,7 +52,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
       var requestParams = this.model;
       var id = this.model.id;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.API[this.instance].update + '/' + id, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(this.API[this.instance].update + '/' + id, requestParams).then(function (response) {
         if (response.data === 'success') {
           _this2.showNotification('success', 'request.updatedSuccess', 'success');
         }
@@ -79,7 +78,7 @@ __webpack_require__.r(__webpack_exports__);
           id: id
         }
       };
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.producent.single, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.producent.single, requestParams).then(function (response) {
         _this3.model = response.data;
       });
     },
@@ -287,7 +286,6 @@ var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/dashboard/EventBus.js");
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 //Library for working with requests
@@ -359,37 +357,37 @@ var formHelper = {
     },
     getProducts: function getProducts(params) {
       var _this = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.product.list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.product.list, params).then(function (response) {
         _this.products = response.data.data;
       });
     },
     getProducents: function getProducents(params) {
       var _this2 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.producent.list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.producent.list, params).then(function (response) {
         _this2.producents = response.data.data;
       });
     },
     getCategories: function getCategories(params) {
       var _this3 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.category.list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.category.list, params).then(function (response) {
         _this3.categories = response.data.data;
       });
     },
     getBanners: function getBanners(params) {
       var _this4 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.banner.list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.banner.list, params).then(function (response) {
         _this4.banners = response.data.data;
       });
     },
     getFilters: function getFilters(params) {
       var _this5 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.filter.list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.filter.list, params).then(function (response) {
         _this5.filters = response.data.data;
       });
     },
     getAttributes: function getAttributes(params) {
       var _this6 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API.attribute.list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.attribute.list, params).then(function (response) {
         _this6.attributes = response.data.data;
       });
     },
@@ -397,7 +395,7 @@ var formHelper = {
       var _this7 = this;
       var requestUrl = this.API.shippingMethod.list;
       var requestParams = this.defaultSortParams();
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(requestUrl, {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl, {
         params: requestParams
       }).then(function (response) {
         _this7.shippingMethods = response.data.data;
@@ -407,7 +405,7 @@ var formHelper = {
       var _this8 = this;
       var requestUrl = this.API.paymentMethod.list;
       var requestParams = this.defaultSortParams();
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(requestUrl, {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl, {
         params: requestParams
       }).then(function (response) {
         _this8.paymentMethods = response.data.data;
@@ -416,7 +414,7 @@ var formHelper = {
     getOrderStatuses: function getOrderStatuses() {
       var _this9 = this;
       var requestUrl = this.API.orderStatus.list;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(requestUrl).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl).then(function (response) {
         _this9.orderStatuses = response.data.data;
       });
     },

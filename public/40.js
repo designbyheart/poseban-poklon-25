@@ -10,7 +10,6 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _components_images_ImageUpload__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/images/ImageUpload */ "./resources/js/dashboard/components/images/ImageUpload.vue");
@@ -61,7 +60,7 @@ __webpack_require__.r(__webpack_exports__);
     getData: function getData(instance, params) {
       var _this = this;
       var items = [];
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API[instance].list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API[instance].list, params).then(function (response) {
         items = response.data.data;
         var container = _this.options.find(function (item) {
           return item.instance === instance;
@@ -73,7 +72,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getSettings: function getSettings(params) {
       var _this2 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.API[this.instance].list, params).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API[this.instance].list, params).then(function (response) {
         _this2.settings = response.data.data;
 
         //Set values for settings
@@ -111,7 +110,7 @@ __webpack_require__.r(__webpack_exports__);
           requestParams.settings.push(settingObject);
         }
       });
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(requestUrl, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
         if (response.data === 'success') {
           _this3.showNotification('success', 'request.updatedSuccess', 'success', undefined, true);
         }

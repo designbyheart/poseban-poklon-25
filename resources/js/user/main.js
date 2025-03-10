@@ -18,12 +18,12 @@ import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
 
 //i18n
-//import i18n from '../dashboard/translation/i18n';
+import i18n from '../dashboard/translation/i18n';
 
 import VueAwesomeSwiper from "vue-awesome-swiper";
 
-// require styles
-// import 'swiper/dist/css/swiper.css'
+// require styles - update these imports to ensure all required Swiper CSS files are loaded
+import 'swiper/css/swiper.css'
 
 Vue.use(VueAwesomeSwiper /* { default global options } */);
 

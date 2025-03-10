@@ -10,7 +10,6 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_tables_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/tables/helper */ "./resources/js/dashboard/mixins/tables/helper.js");
 /* harmony import */ var vue_star_rating__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-star-rating */ "./node_modules/vue-star-rating/dist/VueStarRating.common.js");
 /* harmony import */ var vue_star_rating__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_star_rating__WEBPACK_IMPORTED_MODULE_2__);
@@ -44,7 +43,7 @@ __webpack_require__.r(__webpack_exports__);
       var requestParams = {
         id: id
       };
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(requestUrl, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
         if (response.data === 'success') {
           _this.showNotification('success', 'request.approvedSuccess', 'success');
 
@@ -293,7 +292,6 @@ render._withStripped = true;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_api_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/mixins/api/api */ "./resources/js/dashboard/mixins/api/api.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 //Application routes
 
 
@@ -351,7 +349,7 @@ var tableHelper = {
       if (this.pagination.nextPageUrl !== '' && this.search === '') {
         requestUrl = requestUrl + '?page=' + selectedPage;
       }
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(requestUrl, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(requestUrl, requestParams).then(function (response) {
         _this.items = response.data.data;
         _this.pagination.nextPageUrl = response.data.next_page_url;
         _this.pagination.totalPages = response.data.last_page;
@@ -368,7 +366,7 @@ var tableHelper = {
     deleteItem: function deleteItem(id) {
       var _this2 = this;
       var instance = this.instance;
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"](this.API[instance]["delete"] + '/' + id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](this.API[instance]["delete"] + '/' + id).then(function (response) {
         if (response.data === 'success') {
           _this2.showNotification('success', 'request.deletedSuccess', 'success');
 

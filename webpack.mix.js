@@ -131,6 +131,11 @@ mix.webpackConfig({
         "resources/sass/user/components/information-page/information-page.scss",
         "public/css/user/components/information-page/information-page.css",
     )
+    // Updated styles
+    .sass(
+        "resources/assets/css/updated-styles.scss",
+        "public/css/user/updated-styles.css",
+    )
     //User fonts
     // .copyDirectory("resources/assets/fonts/user", "public/fonts/user")
     .sourceMaps()

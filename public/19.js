@@ -51,7 +51,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_api_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/api/api */ "./resources/js/dashboard/mixins/api/api.js");
 /* harmony import */ var vue_feather_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-feather-icons */ "./node_modules/vue-feather-icons/dist/vue-feather-icons.es.js");
 /* harmony import */ var _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/vx-card/VxCard */ "./resources/js/dashboard/components/vx-card/VxCard.vue");
@@ -184,7 +183,7 @@ __webpack_require__.r(__webpack_exports__);
       if (type.slug === 'product') {
         requestParams.params.product_id = this.filter.productSearch;
       }
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/dashboard/statistic/get', requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/dashboard/statistic/get', requestParams).then(function (response) {
         if (response.data.statistic) {
           component.setStatisticValues(response.data.statistic);
         }
@@ -204,7 +203,7 @@ __webpack_require__.r(__webpack_exports__);
         requestParams.producent_id = this.filter.producentSearch;
       }
       var requestUrl = '/dashboard/order-items/download';
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(requestUrl, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
         var url = window.URL.createObjectURL(new Blob([response.data]));
         var link = document.createElement('a');
         link.href = url;

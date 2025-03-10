@@ -10,7 +10,6 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mixins_api_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/api/api.js */ "./resources/js/dashboard/mixins/api/api.js");
 /* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-filepond */ "./node_modules/vue-filepond/dist/vue-filepond.js");
 /* harmony import */ var vue_filepond__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_filepond__WEBPACK_IMPORTED_MODULE_2__);
@@ -123,7 +122,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()(filepond_plug
       //Clear the loaded images list
       this.images = [];
       this.loadedImages = [];
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(request_url, {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(request_url, {
         params: this.requestParams
       }).then(function (response) {
         _this.images = response.data.data;
@@ -173,7 +172,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()(filepond_plug
     },
     updateImage: function updateImage(image) {
       var _this2 = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.API.image.update + '/' + image.id, image).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(this.API.image.update + '/' + image.id, image).then(function (response) {
         if (response.data === 'success') {
           _this2.showNotification('success', 'request.updatedSuccess', 'success');
         } else {
@@ -201,7 +200,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_2___default()(filepond_plug
       var existingImage = images.find(function (item) {
         return item.id === image.id;
       });
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.API.image["delete"] + '/' + image.id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](this.API.image["delete"] + '/' + image.id).then(function (response) {
         if (response.data === 'success') {
           _this3.showNotification('success', 'request.deletedSuccess', 'success');
           if (existingImage !== undefined) {

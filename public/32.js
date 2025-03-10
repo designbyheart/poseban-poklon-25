@@ -176,7 +176,6 @@ render._withStripped = true;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mixins_api_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/mixins/api/api */ "./resources/js/dashboard/mixins/api/api.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 //Application routes
 
 
@@ -234,7 +233,7 @@ var tableHelper = {
       if (this.pagination.nextPageUrl !== '' && this.search === '') {
         requestUrl = requestUrl + '?page=' + selectedPage;
       }
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(requestUrl, requestParams).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].get(requestUrl, requestParams).then(function (response) {
         _this.items = response.data.data;
         _this.pagination.nextPageUrl = response.data.next_page_url;
         _this.pagination.totalPages = response.data.last_page;
@@ -251,7 +250,7 @@ var tableHelper = {
     deleteItem: function deleteItem(id) {
       var _this2 = this;
       var instance = this.instance;
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a["delete"](this.API[instance]["delete"] + '/' + id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"]["delete"](this.API[instance]["delete"] + '/' + id).then(function (response) {
         if (response.data === 'success') {
           _this2.showNotification('success', 'request.deletedSuccess', 'success');
 

@@ -104,7 +104,7 @@ class ComposerServiceProvider extends ServiceProvider
             //Facebook pixel
             $fb_pixel = Setting::where('slug', 'pixel_code')->firstOrFail()->content;
 
-            //Google analytics
+            // Google analytics
             $google_analytics = Setting::where('slug', 'analytics_code')->firstOrFail()->content;
 
             $view->with(['applicationParams' => $applicationParams, 'fb_pixel' => $fb_pixel, 'google_analytics' => $google_analytics, 'settings' => $applicationSettings]);
