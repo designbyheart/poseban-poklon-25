@@ -69,7 +69,7 @@
                                 <p
                                     class="carousel-product-price-regular"
                                     v-bind:class="[product.discount_price > 0 ? 'sale' : '']"
-                                >{{ product.price + ' ' + applicationParams.currency }}</p>
+                                >{{ product.price + ' ' + applicationParams.currency ?? "RSD" }}</p>
                             </div>
                         </a>
                     </div>
