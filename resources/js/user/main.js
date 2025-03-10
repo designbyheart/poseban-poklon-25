@@ -22,7 +22,7 @@ import i18n from '../dashboard/translation/i18n';
 
 import VueAwesomeSwiper from "vue-awesome-swiper";
 
-// require styles - update these imports to ensure all required Swiper CSS files are loaded
+// require styles
 import 'swiper/css/swiper.css'
 
 Vue.use(VueAwesomeSwiper /* { default global options } */);

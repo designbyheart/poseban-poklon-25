@@ -73,10 +73,10 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/user/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/updated-styles.css') }}">
 
     <!-- Bootstrap grid -->
     <link rel="stylesheet" href="{{ asset('css/user/components/app/bootstrap-grid.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/user/updated-styles.css') }}">
 
     <!--Facebook Pixel-->
     {!! $fb_pixel !!}
@@ -110,11 +110,10 @@
     </div>
 
     <script>
-        // Set global application parameters
-        // window.applicationParams = Object.assign({}, {
-        //     !!json_encode($applicationParams) !!
-        // });
-        window.applicationParams = JSON.parse('{{ json_encode($applicationParams) }}') ?? {};
+        //Set global application parameters
+        window.applicationParams = Object.assign({}, {
+            !!json_encode($applicationParams) !!
+        });
 
         if (window.applicationParams.user !== null) {
 
@@ -127,10 +126,6 @@
     <script src="{{ asset('js/user/helpers.js') }}" type="module"></script>
     <script src="{{ asset('js/user/hamburger.js') }}"></script>
     <script src="{{ asset('js/common/header.js') }}"></script>
-
-     Explicitly include Swiper CSS to fix slider issues
-    <link rel="stylesheet" href="https://unpkg.com/swiper@5.4.5/css/swiper.min.css">
-    <script src="https://unpkg.com/swiper@5.4.5/js/swiper.min.js"></script>
 
     <!--Google Analytics-->
     {!! $google_analytics !!}

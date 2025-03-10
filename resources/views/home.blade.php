@@ -82,7 +82,7 @@
             <div class="home-masonry-col-top row">
                 <div class="col-md-8 top-left left-col">
                     <a class="home-masonry-item" href="{{ $page_layout->categories->items[0]->link }}"
-                        style="background-image: url('{{ $page_layout->categories->items[0]->image[0]->url }}');">
+                        style="background-image: url({{ $page_layout->categories->items[0]->image[0]->url }});">
                         <div class="home-masonry-item-hover">
                             <h4 class="masonry-title">
                                 {{ $page_layout->categories->items[0]->title }}
