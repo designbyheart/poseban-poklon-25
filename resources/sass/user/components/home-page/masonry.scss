@@ -38,6 +38,7 @@ a {
 .home-slider-container {
     .swiper-container {
         .swiper-button-prev {
+            background: transparent;
             background-image: url("/images/icons/slider_arrow_left.png") !important;
             outline: none;
             @include mq(768, max) {
@@ -66,7 +67,7 @@ a {
 
 .section-title {
     padding: 35px 15px;
-    font-family: Rubik-medium;
+    font-family: Rubik-medium, sans-serif;
     font-size: 28px;
     text-align: center;
     text-transform: uppercase;
@@ -195,7 +196,7 @@ a {
             pointer-events: none;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             max-height: 25px;
             font-size: 16px;
             color: $main-text-color-white;
@@ -280,7 +281,7 @@ a {
             pointer-events: none;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             max-height: 25px;
             font-size: 16px;
             color: $main-text-color-white;

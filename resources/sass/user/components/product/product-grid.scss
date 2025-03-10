@@ -112,7 +112,7 @@
             .prodcut-carousel-star-number {
                 padding-left: 30px;
                 span {
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                     font-size: 14px;
                     color: $main-text-color-yellow;
                 }
@@ -131,7 +131,7 @@
         width: 100%;
         .product-grid-title {
             max-height: 55px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 14px;
             color: $main-text-color;
             line-height: 18px;
@@ -139,7 +139,7 @@
         }
         .product-grid-city {
             padding: 8px 0;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 14px;
             color: $main-text-color;
             opacity: 0.3;

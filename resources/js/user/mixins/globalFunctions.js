@@ -103,7 +103,7 @@ const globalFunctions = {
 
             let instance = this;
 
-            this.applicationParams = window.applicationParams;
+            this.applicationParams = window.applicationParams ?? {};
 
             /*window.addEventListener('load', function () {
 

@@ -21,7 +21,8 @@
 
                 <div class="vx-col w-full" v-show="!forms.slider.active">
 
-                    <div class="abr-editor-block bg-primary flex justify-center items-center cursor-pointer" @click="toggleForm('slider')">
+                    <div class="abr-editor-block bg-primary flex justify-center items-center cursor-pointer"
+                         @click="toggleForm('slider')">
 
                         <h3 class="text-white">{{ getLabel('slider.sectionTitle') }}</h3>
 
@@ -37,13 +38,15 @@
 
                             <h3>{{ getLabel('slider.edit') }}</h3>
 
-                            <vs-button icon="check" color="success" type="border" @click="toggleForm('slider')"></vs-button>
+                            <vs-button icon="check" color="success" type="border"
+                                       @click="toggleForm('slider')"></vs-button>
 
                         </div>
 
                     </div>
 
-                    <div class="vx-row bg-white mb-3 mx-0 p-3" :key="index" v-for="slide,index in pageStructure.slider.slides">
+                    <div class="vx-row bg-white mb-3 mx-0 p-3" :key="index"
+                         v-for="slide,index in pageStructure.slider.slides">
 
                         <div class="vx-col w-full flex justify-between mb-3">
 
@@ -57,33 +60,33 @@
 
                             <p class="mb-2">{{ getLabel('slider.title') }}</p>
                             <vs-input
-                                    type="text"
-                                    v-model="slide.title"
-                                    class="w-full mb-3"
+                                type="text"
+                                v-model="slide.title"
+                                class="w-full mb-3"
                             >
                             </vs-input>
 
                             <p class="mb-2">{{ getLabel('slider.subtitle') }}</p>
                             <vs-input
-                                    type="text"
-                                    v-model="slide.subtitle"
-                                    class="w-full mb-3"
+                                type="text"
+                                v-model="slide.subtitle"
+                                class="w-full mb-3"
                             >
                             </vs-input>
 
                             <p class="mb-2">{{ getLabel('slider.buttonText') }}</p>
                             <vs-input
-                                    type="text"
-                                    v-model="slide.buttonText"
-                                    class="w-full mb-3"
+                                type="text"
+                                v-model="slide.buttonText"
+                                class="w-full mb-3"
                             >
                             </vs-input>
 
                             <p class="mb-2">{{ getLabel('slider.link') }}</p>
                             <vs-input
-                                    type="url"
-                                    v-model="slide.link"
-                                    class="w-full mb-3"
+                                type="url"
+                                v-model="slide.link"
+                                class="w-full mb-3"
                             >
                             </vs-input>
 
@@ -121,16 +124,18 @@
                         <h2 class="mr-3">
                             {{ pageStructure.sectionTitles.category.value }}
                         </h2>
-                        <vs-button icon="edit" size="small" type="border" @click="editSectionTitle('category')"></vs-button>
+                        <vs-button icon="edit" size="small" type="border"
+                                   @click="editSectionTitle('category')"></vs-button>
                     </div>
                     <div class="flex justify-center items-center" v-if="pageStructure.sectionTitles.category.edit">
                         <vs-input
-                                type="text"
-                                v-model="pageStructure.sectionTitles.category.value"
-                                class="w-1/2 mr-3"
+                            type="text"
+                            v-model="pageStructure.sectionTitles.category.value"
+                            class="w-1/2 mr-3"
                         >
                         </vs-input>
-                        <vs-button icon="check" size="small" type="border" @click="editSectionTitle('category')"></vs-button>
+                        <vs-button icon="check" size="small" type="border"
+                                   @click="editSectionTitle('category')"></vs-button>
                     </div>
                 </div>
             </div>
@@ -141,13 +146,15 @@
                     <div class="vx-row mb-3">
 
                         <div class="vx-col w-2/3">
-                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer" @click="categoryForm(1)">
+                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer"
+                                 @click="categoryForm(1)">
                                 <h3 class="text-white">{{ pageStructure.categories.items[0].title }}</h3>
                             </div>
                         </div>
 
                         <div class="vx-col w-1/3 p-0">
-                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer" @click="categoryForm(2)">
+                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer"
+                                 @click="categoryForm(2)">
                                 <h3 class="text-white">{{ pageStructure.categories.items[1].title }}</h3>
                             </div>
                         </div>
@@ -157,13 +164,15 @@
                     <div class="vx-row">
 
                         <div class="vx-col w-1/3">
-                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer" @click="categoryForm(3)">
+                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer"
+                                 @click="categoryForm(3)">
                                 <h3 class="text-white">{{ pageStructure.categories.items[2].title }}</h3>
                             </div>
                         </div>
 
                         <div class="vx-col w-2/3 p-0">
-                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer" @click="categoryForm(4)">
+                            <div class="abr-category bg-primary flex justify-center items-center cursor-pointer"
+                                 @click="categoryForm(4)">
                                 <h3 class="text-white">{{ pageStructure.categories.items[3].title }}</h3>
                             </div>
                         </div>
@@ -174,7 +183,8 @@
 
                 <div class="vx-col w-1/4">
 
-                    <div class="abr-category bg-primary h-full flex justify-center items-center cursor-pointer" @click="categoryForm(5)">
+                    <div class="abr-category bg-primary h-full flex justify-center items-center cursor-pointer"
+                         @click="categoryForm(5)">
                         <h3 class="text-white">{{ pageStructure.categories.items[4].title }}</h3>
                     </div>
 
@@ -213,9 +223,9 @@
 
                                     <p class="mb-2">{{ getLabel('categories.title') }}</p>
                                     <vs-input
-                                            type="text"
-                                            v-model="selectedCategory.title"
-                                            class="w-full"
+                                        type="text"
+                                        v-model="selectedCategory.title"
+                                        class="w-full"
                                     >
                                     </vs-input>
 
@@ -225,9 +235,9 @@
 
                                     <p class="mb-2">{{ getLabel('categories.subtitle') }}</p>
                                     <vs-input
-                                            type="text"
-                                            v-model="selectedCategory.subtitle"
-                                            class="w-full"
+                                        type="text"
+                                        v-model="selectedCategory.subtitle"
+                                        class="w-full"
                                     >
                                     </vs-input>
 
@@ -236,7 +246,7 @@
                                 <div class="vx-col w-full mb-3">
 
                                     <p class="mb-2">{{ getLabel('categories.showButton') }}</p>
-                                    <vs-switch color="success" v-model="selectedCategory.showButton" />
+                                    <vs-switch color="success" v-model="selectedCategory.showButton"/>
 
                                 </div>
 
@@ -244,9 +254,9 @@
 
                                     <p class="mb-2">{{ getLabel('categories.buttonText') }}</p>
                                     <vs-input
-                                            type="text"
-                                            v-model="selectedCategory.buttonText"
-                                            class="w-full"
+                                        type="text"
+                                        v-model="selectedCategory.buttonText"
+                                        class="w-full"
                                     >
                                     </vs-input>
 
@@ -256,9 +266,9 @@
 
                                     <p class="mb-2">{{ getLabel('categories.link') }}</p>
                                     <vs-input
-                                            type="text"
-                                            v-model="selectedCategory.link"
-                                            class="w-full"
+                                        type="text"
+                                        v-model="selectedCategory.link"
+                                        class="w-full"
                                     >
                                     </vs-input>
 
@@ -271,7 +281,8 @@
                         <div class="vx-col w-1/2">
 
                             <p class="mb-2">{{ getLabel('categories.image') }}</p>
-                            <image-upload :key="selectedCategory.index" v-model="selectedCategory.image" preview-width="100%"></image-upload>
+                            <image-upload :key="selectedCategory.index" v-model="selectedCategory.image"
+                                          preview-width="100%"></image-upload>
 
                         </div>
 
@@ -285,7 +296,8 @@
             <div class="vx-row mb-6">
 
                 <div class="vx-col w-full" v-if="!forms.aboutUs.active">
-                    <div class="abr-editor-block bg-primary flex justify-center items-center cursor-pointer" @click="toggleForm('aboutUs')">
+                    <div class="abr-editor-block bg-primary flex justify-center items-center cursor-pointer"
+                         @click="toggleForm('aboutUs')">
 
                         <h3 class="text-white">{{ pageStructure.aboutUs.title }}</h3>
 
@@ -300,7 +312,8 @@
 
                             <h3>{{ getLabel('aboutUs.edit') }}</h3>
 
-                            <vs-button icon="check" color="success" type="border" @click="toggleForm('aboutUs')"></vs-button>
+                            <vs-button icon="check" color="success" type="border"
+                                       @click="toggleForm('aboutUs')"></vs-button>
 
                         </div>
 
@@ -312,9 +325,9 @@
 
                             <p class="mb-2">{{ getLabel('aboutUs.title') }}</p>
                             <vs-input
-                                    type="text"
-                                    v-model="pageStructure.aboutUs.title"
-                                    class="w-full"
+                                type="text"
+                                v-model="pageStructure.aboutUs.title"
+                                class="w-full"
                             >
                             </vs-input>
 
@@ -323,7 +336,8 @@
                         <div class="vx-col w-full mb-3">
 
                             <p class="mb-2">{{ getLabel('aboutUs.description') }}</p>
-                            <vs-textarea v-model="pageStructure.aboutUs.description" class="w-full textarea-high"></vs-textarea>
+                            <vs-textarea v-model="pageStructure.aboutUs.description"
+                                         class="w-full textarea-high"></vs-textarea>
 
                         </div>
 
@@ -349,7 +363,9 @@
 
                         <div class="vx-col w-1/4" :key="index" v-for="item, index in pageStructure.bottomLinks">
 
-                            <div class="abr-editor-block h-32 bg-primary flex justify-center items-center cursor-pointer" @click="linkForm(index)">
+                            <div
+                                class="abr-editor-block h-32 bg-primary flex justify-center items-center cursor-pointer"
+                                @click="linkForm(index)">
 
                                 <p class="text-white">{{ item.title }}</p>
 
@@ -381,9 +397,9 @@
 
                             <p class="mb-2">{{ getLabel('bottomLinks.title') }}</p>
                             <vs-input
-                                    type="text"
-                                    v-model="selectedBottomLink.title"
-                                    class="w-full"
+                                type="text"
+                                v-model="selectedBottomLink.title"
+                                class="w-full"
                             >
                             </vs-input>
 
@@ -393,9 +409,9 @@
 
                             <p class="mb-2">{{ getLabel('bottomLinks.link') }}</p>
                             <vs-input
-                                    type="text"
-                                    v-model="selectedBottomLink.link"
-                                    class="w-full"
+                                type="text"
+                                v-model="selectedBottomLink.link"
+                                class="w-full"
                             >
                             </vs-input>
 
@@ -415,215 +431,211 @@
 
 <style>
 
-    body .abr-editor-block{
+body .abr-editor-block {
 
-        width: 100%;
-        height: 250px;
+    width: 100%;
+    height: 250px;
 
-    }
+}
 
-    body .abr-category{
+body .abr-category {
 
-        width: 100%;
-        height: 250px;
+    width: 100%;
+    height: 250px;
 
-    }
+}
 
-    body div.textarea-high textarea{
-        height: 400px;
-    }
+body div.textarea-high textarea {
+    height: 400px;
+}
 
 </style>
 
 <script>
 
-    //Library for sending requests
-    import axios from 'axios';
+//Library for sending requests
+import axios from 'axios';
 
-    //Application routes
-    import { API } from "../../mixins/api/api";
+//Application routes
+import {API} from "../../mixins/api/api";
 
-    //Import page structure and necessary data
-    import { structure, slideModel } from "../../static/builder/home";
+//Import page structure and necessary data
+import {structure, slideModel} from "../../static/builder/home";
 
-    //Image uploader
-    import ImageUpload from '../../components/images/ImageUpload';
+//Image uploader
+import ImageUpload from '../../components/images/ImageUpload';
 
-    export default {
-        components: {ImageUpload},
-        props: {
-          instance: {
-              type: String,
-              default: 'builderLayout'
-          }
-        },
-        data() {
+export default {
+    components: {ImageUpload},
+    props: {
+        instance: {
+            type: String,
+            default: 'builderLayout'
+        }
+    },
+    data() {
 
-            return {
-                builderLayout: {
-                    slug: 'home'
+        return {
+            builderLayout: {
+                slug: 'home'
+            },
+            pageStructure: structure,
+            selectedCategory: {},
+            selectedBottomLink: {},
+            forms: {
+                slider: {
+                    active: false
                 },
-                pageStructure: structure,
-                selectedCategory: {},
-                selectedBottomLink: {},
-                forms: {
-                    slider: {
-                        active: false
-                    },
-                    category: {
-                        active: false
-                    },
-                    aboutUs: {
-                        active: false
-                    },
-                    bottomLink: {
-                        active: false
-                    }
+                category: {
+                    active: false
                 },
-                API
-            }
+                aboutUs: {
+                    active: false
+                },
+                bottomLink: {
+                    active: false
+                }
+            },
+            API
+        }
 
-        },
-        methods: {
-            saveLayout(){
+    },
+    methods: {
+        saveLayout() {
 
-                let requestUrl = this.API.builderLayout.update;
+            let requestUrl = this.API.builderLayout.update;
 
-                let requestParams = {
+            let requestParams = {
 
-                    slug: this.builderLayout.slug,
-                    content: JSON.stringify(this.pageStructure)
+                slug: this.builderLayout.slug,
+                content: JSON.stringify(this.pageStructure)
 
-                };
+            };
 
-                axios.put(requestUrl, requestParams)
-                    .then(
+            axios.put(requestUrl, requestParams)
+                .then(
+                    response => {
 
-                        response => {
+                        if (response.data === 'success') {
 
-                            if (response.data === 'success') {
-
-                                this.showNotification(this.instance, 'success', 'request.updatedSuccess', 'success');
-
-                            }
-
-                    })
-                    .catch(
-                        error => {
-
-                            this.showNotification(this.instance, 'error', 'request.error', 'danger');
+                            this.showNotification(this.instance, 'success', 'request.updatedSuccess', 'success');
 
                         }
-                    );
 
-            },
-            getLayout(){
+                    })
+                .catch(
+                    error => {
 
-                let requestUrl = this.API.builderLayout.single;
-
-                let requestParams = {
-                    params: {
-
-                        slug: this.builderLayout.slug
+                        this.showNotification(this.instance, 'error', 'request.error', 'danger');
 
                     }
-                };
+                );
 
-                axios.get(requestUrl, requestParams)
-                    .then(
+        },
+        getLayout() {
 
-                        response => {
+            let requestUrl = this.API.builderLayout.single;
 
-                            //Set a data for builder
-                            this.pageStructure = JSON.parse(response.data.content);
+            let requestParams = {
+                params: {
 
-                        });
-
-            },
-            toggleForm(slug){
-
-                let form = this.forms[slug];
-
-                if(form !== undefined){
-
-                    let status = form.active;
-
-                    form.active = !status;
+                    slug: this.builderLayout.slug
 
                 }
+            };
 
-            },
-            categoryForm(id){
+            axios.get(requestUrl, requestParams)
+                .then(
+                    response => {
 
-                if(id !== undefined){
-
-                    let category = this.pageStructure.categories.items.find(function(item){
-
-                        return item.index === id;
+                        //Set a data for builder
+                        this.pageStructure = JSON.parse(response.data.content);
 
                     });
 
-                    this.selectedCategory = category;
+        },
+        toggleForm(slug) {
 
-                }
-                else{
+            let form = this.forms[slug];
 
-                    this.selectedCategory = Object.assign({}, {});
+            if (form !== undefined) {
 
-                }
+                let status = form.active;
 
-                this.toggleForm('category');
-
-            },
-            linkForm(index){
-
-                if(index !== undefined) {
-
-                    this.selectedBottomLink = this.pageStructure.bottomLinks[index];
-
-                }
-                else{
-
-                    this.selectedBottomLink = Object.assign({}, {});
-
-                }
-
-                this.toggleForm('bottomLink');
-
-            },
-            editSectionTitle(slug){
-
-                let sectionTitle = this.pageStructure.sectionTitles[slug];
-
-                let editStatus = sectionTitle.edit;
-
-                sectionTitle.edit = !editStatus;
-
-            },
-            addSlide(){
-
-                let newSlide = Object.assign({}, slideModel);
-
-                this.pageStructure.slider.slides.push(newSlide);
-
-            },
-            removeSlide(index){
-
-                this.pageStructure.slider.slides.splice(index, 1);
-
-            },
-            getLabel(slug){
-
-                return this.$t('builder.home.' + slug);
+                form.active = !status;
 
             }
-        },
-        mounted(){
 
-            //Get layout
-            this.getLayout();
+        },
+        categoryForm(id) {
+
+            if (id !== undefined) {
+
+                let category = this.pageStructure.categories.items.find(function (item) {
+
+                    return item.index === id;
+
+                });
+
+                this.selectedCategory = category;
+
+            } else {
+
+                this.selectedCategory = Object.assign({}, {});
+
+            }
+
+            this.toggleForm('category');
+
+        },
+        linkForm(index) {
+
+            if (index !== undefined) {
+
+                this.selectedBottomLink = this.pageStructure.bottomLinks[index];
+
+            } else {
+
+                this.selectedBottomLink = Object.assign({}, {});
+
+            }
+
+            this.toggleForm('bottomLink');
+
+        },
+        editSectionTitle(slug) {
+
+            let sectionTitle = this.pageStructure.sectionTitles[slug];
+
+            let editStatus = sectionTitle.edit;
+
+            sectionTitle.edit = !editStatus;
+
+        },
+        addSlide() {
+
+            let newSlide = Object.assign({}, slideModel);
+
+            this.pageStructure.slider.slides.push(newSlide);
+
+        },
+        removeSlide(index) {
+
+            this.pageStructure.slider.slides.splice(index, 1);
+
+        },
+        getLabel(slug) {
+
+            return this.$t('builder.home.' + slug);
 
         }
+    },
+    mounted() {
+
+        //Get layout
+        this.getLayout();
+
     }
+}
 
 </script>

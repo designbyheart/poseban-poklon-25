@@ -1568,11 +1568,13 @@ export default {
     showDashboardLink() {
       let user = this.applicationParams.user;
 
-      if (user !== null) {
-        if (user.role.name === "admin" || user.role.name === "editor") {
-          return true;
+        if (user !== null) {
+            if (user.role.name === "admin" || user.role.name === "editor") {
+                return true;
+            }
         }
-      }
+
+        return false;
     },
     searchResults() {
       let results = [];

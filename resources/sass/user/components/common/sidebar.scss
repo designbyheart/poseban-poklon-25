@@ -231,7 +231,7 @@
         margin: auto 0;
         text-align: left;
         font-size: 14px;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
     }
 }
 @keyframes opacity-dropdown {
@@ -244,7 +244,7 @@
 }
 
 .sidebar-list-parent {
-    font-family: Rubik;
+    font-family: Rubik, sans-serif;
     font-size: 16px;
     color: $main-text-color;
     &:active,
@@ -264,7 +264,7 @@
 }
 .cat-sidebar-dropdown-list {
     .cat-sidebar-list-child {
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
     }
@@ -281,7 +281,7 @@
     border-radius: 4px;
     box-shadow: 0 2px 20px 0 rgba(214, 214, 214, 0.5);
     .sidebar-list-parent {
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
     }
@@ -297,7 +297,7 @@
     border-radius: 4px;
     box-shadow: 0 2px 20px 0 rgba(214, 214, 214, 0.5);
     .sidebar-list-parent {
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
     }

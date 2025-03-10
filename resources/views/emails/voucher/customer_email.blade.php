@@ -80,9 +80,9 @@
             </td>
             <td width="508">
                 Ćao,
-                <br><br>u prilogu mejla šaljemo e-vaučer po porudžbini br <span style="font-family: Rubik; color: #ed2025; font-size: 20px;">{{ $order->id }}</span> i želimo ti da uživaš u posebnom poklonu.
-                <br>Mnogo nam je drago što smo deo vašeg darivanja. 
-                <br><br>Hvala na poverenju i veliki pozdrav, 
+                <br><br>u prilogu mejla šaljemo e-vaučer po porudžbini br <span style="font-family: Rubik, sans-serif; color: #ed2025; font-size: 20px;">{{ $order->id }}</span> i želimo ti da uživaš u posebnom poklonu.
+                <br>Mnogo nam je drago što smo deo vašeg darivanja.
+                <br><br>Hvala na poverenju i veliki pozdrav,
                 <br>Poseban Poklon Tim
             </td>
             <td width="46" style="width: 46px; background: #ffffff;">

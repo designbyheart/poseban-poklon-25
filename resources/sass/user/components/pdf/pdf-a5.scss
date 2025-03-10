@@ -45,7 +45,7 @@
                     color: $main-text-color-white;
                     font-size: 14px;
                     text-align: right;
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                     line-height: 1;
                 }
             }
@@ -144,7 +144,7 @@
         overflow: hidden;
         width: 100%;
         font-size: 10px;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         line-height: 1;
         overflow: hidden;
     }
@@ -153,7 +153,7 @@
     width: 130px;
     vertical-align: text-top;
     overflow: hidden;
-    font-family: Rubik;
+    font-family: Rubik, sans-serif;
     .a5-desc-title {
         font-size: 12px;
         width: 100%;
@@ -175,7 +175,7 @@
         margin-top: 2px;
         width: 100%;
         font-size: 10px;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         line-height: 1;
         overflow: hidden;
     }
@@ -238,7 +238,7 @@
         height: 130px;
         overflow: hidden;
         text-align: justify;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         line-height: 1;
     }
 }
@@ -253,14 +253,14 @@
         width: 100%;
         font-size: 9px;
         color: $main-color;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         line-height: 1;
     }
     .a5-desc-text {
         width: 100%;
         font-size: 9px;
         color: $main-text-color;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         line-height: 1;
     }
 }
@@ -290,13 +290,13 @@
                 .a5-desc-info-title {
                     font-size: 7px;
                     color: $main-color;
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                     line-height: 1;
                 }
                 .a5-desc-info-subtitle {
                     font-size: 7px;
                     color: $main-text-color;
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                     line-height: 1;
                 }
             }
@@ -336,14 +336,14 @@
                                     color: $main-text-color-white;
                                     font-size: 12px;
                                     text-transform: uppercase;
-                                    font-family: Rubik;
+                                    font-family: Rubik, sans-serif;
                                     line-height: 1;
                                 }
                                 .a5-footer-item-text {
                                     margin: 0 0 0 15px;
                                     font-size: 11px;
                                     color: $main-text-color-white;
-                                    font-family: Rubik;
+                                    font-family: Rubik, sans-serif;
                                     line-height: 1;
                                 }
                             }

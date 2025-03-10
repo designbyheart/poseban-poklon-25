@@ -137,30 +137,24 @@ class OrderController extends Controller
      */
     public function calculate(Request $request)
     {
-
         $order = new Order($request->all());
 
         if (!empty($request->giftcard_code)) {
 
-            $giftcard = GiftCard::where('code', $request->giftcard_code)->first();
+            $giftCard = GiftCard::where('code', $request->giftcard_code)->first();
 
-            if (!empty($giftcard) && $giftcard->validate()) {
-                $order->giftcard_code = $giftcard->code;
+            if (!empty($giftCard) && $giftCard->validate()) {
+                $order->giftcard_code = $giftCard->code;
             }
         }
 
         $orderItems = $request->order_items;
 
         foreach ($orderItems as $item) {
-
             $product = Product::find($item['product_id']);
-
             $orderItem = new OrderItem($item);
-
             $orderItem->product()->associate($product);
-
             $orderItem->order()->associate($order);
-
             $orderItem->product_price = $product->price;
 
             //every order item can have multiple versions(color, material, size, etc..) which can affect price value.

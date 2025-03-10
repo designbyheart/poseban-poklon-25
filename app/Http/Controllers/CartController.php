@@ -20,10 +20,9 @@ class CartController extends Controller
     /**
      * Checkout page
      */
-    public function checkout(){
-
+    public function checkout()
+    {
         return view('user.cart.checkout');
-
     }
 
     /**
@@ -39,7 +38,7 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -50,7 +49,7 @@ class CartController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Cart  $cart
+     * @param \App\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function show(Cart $cart)
@@ -61,7 +60,7 @@ class CartController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Cart  $cart
+     * @param \App\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function edit(Cart $cart)
@@ -72,8 +71,8 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Cart  $cart
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Cart $cart)
@@ -84,7 +83,7 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Cart  $cart
+     * @param \App\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function destroy(Cart $cart)

@@ -61,7 +61,7 @@
 .modal-title {
     margin: 5px 0;
     padding: 15px 0;
-    font-family: Rubik;
+    font-family: Rubik, sans-serif;
     font-size: 20px;
     color: $main-text-color;
     opacity: 0.8;
@@ -73,7 +73,7 @@
             padding: 13px;
             width: 100%;
             max-width: 535px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: $main-text-color;
             border: 1px solid #dcdcdc;
@@ -92,7 +92,7 @@
         margin-top: 20px;
         width: 100%;
         max-width: 160px;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         background: $main-color;
         color: $main-text-color-white;
@@ -116,7 +116,7 @@
         padding-left: 25px;
         display: block;
         position: relative;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         opacity: 0.5;
@@ -186,7 +186,7 @@
             margin-top: 20px;
             width: 100%;
             max-width: 160px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             background: $main-color;
             color: $main-text-color-white;
@@ -200,7 +200,7 @@
     }
 }
 .signup-desc {
-    font-family: Rubik;
+    font-family: Rubik, sans-serif;
     font-size: 16px;
     color: $main-text-color;
 }

@@ -32,7 +32,7 @@
     }
     .product-list-title {
         padding: 10px 0;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         opacity: 0.5;
@@ -59,7 +59,7 @@
     }
     .product-list-title {
         padding: 10px 0;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         opacity: 0.5;
@@ -123,7 +123,7 @@
             padding-left: 25px;
             display: block;
             position: relative;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: $main-text-color;
             opacity: 0.5;
@@ -139,7 +139,7 @@
                 height: 0;
                 width: 0;
             }
-            .product-item-add-box{
+            .product-item-add-box {
                 margin-top: 20px;
             }
             .product-item-check {
@@ -191,7 +191,7 @@
     }
 }
 .product-list-item-price {
-    font-family: Rubik-medium;
+    font-family: Rubik-medium, sans-serif;
     font-size: 16px;
     text-align: center;
     color: $main-text-color;
@@ -229,7 +229,7 @@
         .item-less,
         .item-counter,
         .item-more {
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: $main-text-color;
             text-align: center;
@@ -276,10 +276,10 @@
         min-height: 50px;
         border: 1px solid rgba(0, 0, 0, 0.4);
         border-radius: 4px;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
-        opacity: 0.4;
+        opacity: 0.8;
         outline: none;
         @include mq(768px, min) {
             margin-left: 110px;
@@ -298,7 +298,7 @@
         position: absolute;
         right: 10px;
         bottom: 10px;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         opacity: 0.4;
@@ -328,7 +328,7 @@
         .order-total-shipping-text,
         .order-total-price-text {
             flex: 1;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 14px;
             color: $main-text-color;
             overflow: hidden;
@@ -446,31 +446,31 @@
             border: 1px solid #dcdcdc;
             outline: none;
             font-size: 15px;
-            font-family: Rubik-light;
+            font-family: Rubik-Light, sans-serif;
             color: $main-text-color;
             &::-webkit-input-placeholder {
                 font-size: 15px;
-                font-family: Rubik-light;
+                font-family: Rubik-Light, sans-serif;
                 color: $main-text-color;
             }
             &::-moz-placeholder {
                 font-size: 15px;
-                font-family: Rubik-light;
+                font-family: Rubik-Light, sans-serif;
                 color: $main-text-color;
             }
             &:-ms-input-placeholder {
                 font-size: 15px;
-                font-family: Rubik-light;
+                font-family: Rubik-Light, sans-serif;
                 color: $main-text-color;
             }
             &:-moz-placeholder {
                 font-size: 15px;
-                font-family: Rubik-light;
+                font-family: Rubik-Light, sans-serif;
                 color: $main-text-color;
             }
             &::placeholder {
                 font-size: 15px;
-                font-family: Rubik-light;
+                font-family: Rubik-Light, sans-serif;
                 color: $main-text-color;
             }
             @media screen and (min-width: 1000px) {
@@ -532,7 +532,7 @@
         align-content: center;
         align-items: center;
         justify-content: center;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
         border: 1px solid rgba(0, 0, 0, 0.5);
@@ -607,7 +607,7 @@
                     font-family: Rubik-bold;
                 }
                 .type-tabs-btn-desc {
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                 }
             }
             &.tabs-active {
@@ -697,7 +697,7 @@
                     font-family: Rubik-bold;
                 }
                 .type-tabs-btn-desc {
-                    font-family: Rubik;
+                    font-family: Rubik, sans-serif;
                 }
             }
             &.tabs-active {
@@ -844,7 +844,7 @@
             align-items: center;
             width: 150px;
             height: 57px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: $main-text-color;
             opacity: 0.5;
@@ -862,7 +862,7 @@
                 padding: 13px;
                 width: 100%;
                 height: 47px;
-                font-family: Rubik;
+                font-family: Rubik, sans-serif;
                 font-size: 16px;
                 color: $main-text-color;
                 border: 1px solid #dcdcdc;
@@ -884,7 +884,7 @@
     padding: 13px;
     width: 100%;
     height: 47px;
-    font-family: Rubik;
+    font-family: Rubik, sans-serif;
     font-size: 16px;
     color: $main-text-color;
     border: 1px solid #dcdcdc;
@@ -912,7 +912,7 @@
         padding-left: 25px;
         display: block;
         position: relative;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 14px;
         color: $main-text-color;
         opacity: 0.7;
@@ -985,7 +985,7 @@
         flex-wrap: wrap;
         .tabs-payment-input {
             padding: 20.5px;
-            font-family: Rubik;
+            font-family: Rubik, sans-serif;
             font-size: 16px;
             color: $main-text-color;
             border: 1px solid #dcdcdc;
@@ -1028,7 +1028,7 @@
     }
     .tabs-bank-desc {
         width: 100%;
-        font-family: Rubik;
+        font-family: Rubik, sans-serif;
         font-size: 16px;
         color: $main-text-color;
     }
@@ -1042,7 +1042,7 @@
             padding-right: 20px;
             .bank-col-item {
                 padding: 5px 0;
-                font-family: Rubik;
+                font-family: Rubik, sans-serif;
                 font-size: 16px;
                 color: $main-text-color;
                 opacity: 0.8;
