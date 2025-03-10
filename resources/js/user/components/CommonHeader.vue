@@ -70,7 +70,7 @@
           <div class="header-col-logo col-lg-3 col-md-6 col-sm-6 col-6">
             <a href="/" class="header-logo-link">
               <img
-                :src="applicationParams.siteLogo !== null ? applicationParams.siteLogo : '/images/header/posebanpoklon_logo.png'"
+                :src="applicationParams.siteLogo !== null ? '/images/header/posebanpoklon_logo.png' : '/images/header/posebanpoklon_logo.png'"
                 alt
                 class="header-logo-image"
               />

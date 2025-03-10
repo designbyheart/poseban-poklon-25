@@ -2,7 +2,9 @@
 const applicationData = {
     data() {
         return {
-           applicationParams: {}
+           applicationParams: {
+               siteLogo: "/images/header/posebanpoklon_logo.png"
+           }
         }
     },
     methods: {
