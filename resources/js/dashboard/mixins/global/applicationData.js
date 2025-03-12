@@ -2,43 +2,33 @@
 const applicationData = {
     data() {
         return {
-           applicationParams: {}
+            applicationParams: {}
         }
     },
     methods: {
         setApplicationParams() {
+            let params = window.applicationParams ?? {};
 
-            let params = window.applicationParams;
-
-            if(params !== undefined){
-
-                this.applicationParams = params;
+            if (params !== undefined) {
+                this.applicationParams = params ?? {};
                 this.setUser();
-
             }
-
         },
-        setUser(){
-
-            if(this.applicationParams.user !== undefined){
-
-                if(this.$store !== undefined){
-
+        setUser() {
+            if (this.applicationParams.user !== undefined) {
+                if (this.$store !== undefined) {
                     this.$store.dispatch('setAppActiveUser', this.applicationParams.user);
-
                 }
-
             }
-
         }
     },
-    mounted(){
+    mounted() {
         this.setApplicationParams();
     }
 };
 
 export default {
-    install (Vue, options){
+    install(Vue, options) {
         Vue.mixin(applicationData)
     }
 }

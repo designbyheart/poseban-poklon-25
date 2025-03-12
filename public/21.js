@@ -727,7 +727,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\nbody .abr-editor-block {\r\n\r\n    width: 100%;\r\n    height: 250px;\n}\nbody .abr-category {\r\n\r\n    width: 100%;\r\n    height: 250px;\n}\nbody div.textarea-high textarea {\r\n    height: 400px;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\nbody .abr-editor-block {\n\n    width: 100%;\n    height: 250px;\n}\nbody .abr-category {\n\n    width: 100%;\n    height: 250px;\n}\nbody div.textarea-high textarea {\n    height: 400px;\n}\n\n", ""]);
 
 // exports
 

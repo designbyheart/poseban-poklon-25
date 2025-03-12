@@ -1650,13 +1650,13 @@
                                             :value="paymentParams.encoding"
                                         />
                                     </form>
-                                    <!-- <button
-                                        class="tabs-payment-btn"
-                                        @click="validateForm"
-                                        v-show="!paymentParams"
-                                    >
-                                        Poruči1
-                                    </button> -->
+<!--                                    <button-->
+<!--                                        class="tabs-payment-btn"-->
+<!--                                        @click="validateForm"-->
+<!--                                        v-show="!paymentParams"-->
+<!--                                    >-->
+<!--                                        Poruči1-->
+<!--                                    </button>-->
                                 </div>
                                 <div class="tabs-payment-btn-row">
                                     <button
@@ -1896,7 +1896,7 @@ export default {
             return this.type === "guest";
         },
         isLoginCheckout() {
-            return this.applicationParams.user !== null;
+            return this?.applicationParams?.user !== null;
         },
     },
     watch: {
@@ -2381,7 +2381,7 @@ export default {
             }*/
 
             if (this.applicationParams.user !== null) {
-                order.user_id = this.applicationParams.user.id;
+                order.user_id = this.applicationParams?.user?.id;
             }
 
             order.payment_method_id = this.paymentMethod.id;
@@ -2503,7 +2503,7 @@ export default {
         selectAddress() {
             let checkoutAddress = this.address;
             let address = this.selectedAddress;
-            let userEmail = this.applicationParams.user.email;
+            let userEmail = this.applicationParams?.user?.email;
 
             checkoutAddress.customer_name = address.first_name;
             checkoutAddress.customer_surname = address.last_name;

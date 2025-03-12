@@ -25,7 +25,7 @@ const globalFunctions = {
 
         isLoggedIn(){
 
-            return this.applicationParams.user !== null;
+            return this.applicationParams?.user !== null;
 
         }
 
@@ -126,7 +126,7 @@ const globalFunctions = {
 
             if(this.isLoggedIn){
 
-                let wishlistId = this.applicationParams.user.wishlist.id;
+                let wishlistId = this.applicationParams?.user?.wishlist?.id;
 
                 let productsList = [product.id];
 
@@ -147,7 +147,7 @@ const globalFunctions = {
                 });
 
                 //Update user's wishlist
-                this.applicationParams.user.wishlist.products.push(product);
+                this.applicationParams?.user?.wishlist?.products?.push(product);
 
                 this.EventBus.$emit('added-to-wishlist', product.id);
 
@@ -161,7 +161,7 @@ const globalFunctions = {
         },
         removeFromWishlist(productId){
 
-            let wishlistId = this.applicationParams.user.wishlist.id;
+            let wishlistId = this.applicationParams?.user?.wishlist?.id;
 
             let productsList = [productId];
 
@@ -182,7 +182,7 @@ const globalFunctions = {
             });
 
             //Update user's wishlist
-            let wishlistProducts = this.applicationParams.user.wishlist.products;
+            let wishlistProducts = this.applicationParams?.user?.wishlist?.products;
 
             let removedProduct = wishlistProducts.find(function (product) {
                 return product.id === productId;
