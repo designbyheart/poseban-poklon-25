@@ -1,4 +1,4 @@
-//Get and set the global parameters of application
+// Get and set the global parameters of application
 const applicationData = {
     data() {
         return {
