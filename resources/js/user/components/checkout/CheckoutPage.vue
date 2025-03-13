@@ -50,21 +50,21 @@
                                                 {{ product.title }}
                                             </h4>
                                         </a>
-<!--                                        <label-->
-<!--                                            class="product-item-label product-item-add-box"-->
-<!--                                            :class="{-->
-<!--                                                selected: product.add_box,-->
-<!--                                            }"-->
-<!--                                        >-->
-<!--                                            <input-->
-<!--                                                v-model="product.add_box"-->
-<!--                                                type="checkbox"-->
-<!--                                                class="product-item-checkbox"-->
-<!--                                                @change="toggleBox(index)"-->
-<!--                                            />-->
-<!--                                            <span class="product-item-check"/>-->
-<!--                                            Dodaj poklon kutiju-->
-<!--                                        </label>-->
+                                        <!--                                        <label-->
+                                        <!--                                            class="product-item-label product-item-add-box"-->
+                                        <!--                                            :class="{-->
+                                        <!--                                                selected: product.add_box,-->
+                                        <!--                                            }"-->
+                                        <!--                                        >-->
+                                        <!--                                            <input-->
+                                        <!--                                                v-model="product.add_box"-->
+                                        <!--                                                type="checkbox"-->
+                                        <!--                                                class="product-item-checkbox"-->
+                                        <!--                                                @change="toggleBox(index)"-->
+                                        <!--                                            />-->
+                                        <!--                                            <span class="product-item-check"/>-->
+                                        <!--                                            Dodaj poklon kutiju-->
+                                        <!--                                        </label>-->
                                         <label class="product-item-label">
                                             <input
                                                 v-model="
@@ -2209,10 +2209,7 @@ export default {
             let requestUrl = this.API.order.create;
 
             axios.post(requestUrl, order).then(response => {
-                console.log('order response', order, response);
-
                 if (response.data === 'success') {
-
                     //Clear the cart
                     this.EventBus.$emit('order-placed', true);
 
@@ -2263,9 +2260,8 @@ export default {
 
         async validateForm() {
             const errors = await this.isFormValid()
-            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-            if (errors.length === 0 || isLocalhost) {
+            if (errors.length === 0) {
                 this.placeOrder();
                 return;
             }
@@ -2314,7 +2310,7 @@ export default {
         selectCheckoutType(type) {
             if (type === "login") {
                 //Show login form
-                console.log("login form");
+                // console.log("login form");
             }
         },
         guestCheckout() {
