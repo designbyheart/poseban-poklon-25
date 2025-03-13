@@ -1493,7 +1493,7 @@
                                     <vue-recaptcha
                                         v-if="!isLoggedIn"
                                         ref="reCaptcha"
-                                        sitekey="6LcAyvIqAAAAAHWPhMKBxtC1qdJNHWFG9Z4KyOTm"
+                                        sitekey="6LccCIQcAAAAABVlESQ5bPVyS3k_MUwbGHi-vMfI"
                                         language="sr"
                                         :load-recaptcha-script="true"
                                         @verify="setCaptchaVerified"
