@@ -1,0 +1,33 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 1rem;
+}
+
+.grid > div {
+  background: #ede7f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+}
+
+/*# sourceMappingURL=home-grid.css.map*/

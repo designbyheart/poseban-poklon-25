@@ -1,0 +1,96 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+.filters-row {
+  padding: 0 10px 20px 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+.filters-row .filters-item {
+  position: relative;
+  z-index: 1;
+}
+@media only screen and (min-width: 768px) {
+  .filters-row .filters-item {
+    width: 25%;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .filters-row .filters-item {
+    margin: 10px auto;
+    width: 100%;
+  }
+}
+.filters-row .filters-item::after {
+  content: " ";
+  position: absolute;
+  top: -6px;
+  right: -12px;
+  width: 40px;
+  height: 40px;
+  background: url("/images/icons/select_arrow_icon.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+.filters-row .filters-item .filter-select {
+  padding: 7px 0;
+  position: relative;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 1px solid rgba(7, 7, 7, 0.3);
+  border-radius: 0;
+  background: none;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  outline: none;
+  z-index: 2;
+}
+@media only screen and (min-width: 768px) {
+  .filters-row .filters-item .filter-select {
+    width: 100%;
+    max-width: 450px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .filters-row .filters-item .filter-select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+.filters-row .filters-item .filter-select .filter-option {
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  opacity: 0.8;
+}
+/*# sourceMappingURL=filters.css.map*/

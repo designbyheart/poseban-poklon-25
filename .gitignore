@@ -1,10 +1,6 @@
 /node_modules
 /public/hot
 /public/storage
-/public/js
-/public/tests
-/public/css
-/public/svg
 /storage/*.key
 package-lock.json
 /vendor

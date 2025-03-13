@@ -1,0 +1,68 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+
+.breadcrumb-row {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  font-family: Rubik, sans-serif;
+  font-size: 14px;
+  color: #000;
+  opacity: 0.5;
+}
+
+.breadcrumb-row .breadcrumb-row-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.breadcrumb-row .breadcrumb-row-item a {
+  font-family: Rubik, sans-serif;
+  font-size: 14px;
+  color: #000;
+}
+
+.breadcrumb-row .breadcrumb-row-item a:active, .breadcrumb-row .breadcrumb-row-item a:focus, .breadcrumb-row .breadcrumb-row-item a:visited, .breadcrumb-row .breadcrumb-row-item a:link {
+  color: #000;
+}
+
+.breadcrumb-row .breadcrumb-row-item a:hover {
+  color: #ed2025;
+}
+
+.breadcrumb-row .breadcrumb-row-item a .breadcrumb-item-text {
+  font-family: Rubik, sans-serif;
+  font-size: 14px;
+}
+
+.breadcrumb-row .breadcrumb-row-item .breadcrumb-arrow {
+  padding: 0 10px;
+}
+
+/*# sourceMappingURL=breadcrumb.css.map*/

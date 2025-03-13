@@ -50,21 +50,21 @@
                                                 {{ product.title }}
                                             </h4>
                                         </a>
-                                        <label
-                                            class="product-item-label product-item-add-box"
-                                            :class="{
-                                                selected: product.add_box,
-                                            }"
-                                        >
-                                            <input
-                                                v-model="product.add_box"
-                                                type="checkbox"
-                                                class="product-item-checkbox"
-                                                @change="toggleBox(index)"
-                                            />
-                                            <span class="product-item-check"/>
-                                            Dodaj poklon kutiju
-                                        </label>
+<!--                                        <label-->
+<!--                                            class="product-item-label product-item-add-box"-->
+<!--                                            :class="{-->
+<!--                                                selected: product.add_box,-->
+<!--                                            }"-->
+<!--                                        >-->
+<!--                                            <input-->
+<!--                                                v-model="product.add_box"-->
+<!--                                                type="checkbox"-->
+<!--                                                class="product-item-checkbox"-->
+<!--                                                @change="toggleBox(index)"-->
+<!--                                            />-->
+<!--                                            <span class="product-item-check"/>-->
+<!--                                            Dodaj poklon kutiju-->
+<!--                                        </label>-->
                                         <label class="product-item-label">
                                             <input
                                                 v-model="
@@ -1503,7 +1503,7 @@
 
                                 <div class="tabs-payment-btn-row">
                                     <form
-                                        v-if="paymentParams && method.id === 2"
+                                        v-if="paymentParams && method.id === 3"
                                         id="payment-form"
                                         method="post"
                                         action="https://bib.eway2pay.com/fim/est3Dgate"

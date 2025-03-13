@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./resources/sass/custom/custom.scss"],"names":[],"mappings":"AAAA;EACE,gBAAe;CACjB;;AACA;EAEI,wBAAuB;CAC3B","file":"/css/custom/custom.css","sourcesContent":["div.vs-tabs--content{\n  padding: 10px 0;\n}\ndiv.vs-tabs-primary {\n  .con-tab button:not(:disabled):hover{\n    color: white !important;\n  }\n}"],"sourceRoot":""}

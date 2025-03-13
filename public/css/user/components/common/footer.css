@@ -1,0 +1,171 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+.home-footer {
+  padding: 20px 0;
+}
+
+.footer-row {
+  margin: auto;
+  padding: 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 450px;
+  font-family: Rubik, sans-serif;
+  text-align: center;
+}
+
+.footer-logo-row .footer-logo-link {
+  text-decoration: none;
+}
+.footer-logo-row .footer-logo-link .footer-logo-image {
+  margin: auto;
+  width: 100%;
+  max-width: 210px;
+}
+
+.footer-desc-row .footer-desc-text {
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+}
+
+.footer-social-row .footer-social-icons {
+  padding: 0 13px;
+}
+
+.footer-links-row {
+  flex-wrap: wrap;
+}
+.footer-links-row .footer-links-item .footer-link {
+  padding: 5px 5px;
+  border-bottom: 1px solid #fff;
+  color: #000;
+  font-size: 12px;
+  font-family: Rubik, sans-serif;
+  text-decoration: none;
+}
+.footer-links-row .footer-links-item .footer-link:hover {
+  border-bottom: 1px solid #000;
+}
+
+.footer-copyright-row .footer-copyright-text {
+  font-size: 16px;
+  font-family: Rubik-Light, sans-serif;
+}
+
+.footer-bank-row {
+  width: 100%;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.footer-bank-row a {
+  height: 40px;
+}
+.footer-bank-row img {
+  margin: 0 5px;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.footer-bank-row .mastercard {
+  width: 62px;
+  height: 40px;
+}
+.footer-bank-row .maestro {
+  width: 62px;
+  height: 40px;
+}
+.footer-bank-row .dina {
+  width: 60px;
+  height: 40px;
+}
+.footer-bank-row .visa {
+  width: 62px;
+  height: 40px;
+}
+.footer-bank-row .american {
+  width: 40px;
+  height: 40px;
+}
+.footer-bank-row .intesa {
+  width: 267px;
+  height: 40px;
+  -o-object-position: center;
+     object-position: center;
+}
+.footer-bank-row .securecode {
+  height: 40px;
+}
+.footer-bank-row .visa-secure {
+  height: 40px;
+}
+@media screen and (max-width: 767px) {
+  .footer-bank-row {
+    padding: 0;
+  }
+  .footer-bank-row img {
+    margin: 0 5px 10px;
+  }
+  .footer-bank-row a {
+    margin: 0 5px 10px;
+  }
+  .footer-bank-row a img {
+    margin: 0;
+  }
+  .footer-bank-row .mastercard {
+    order: 1;
+  }
+  .footer-bank-row .maestro {
+    order: 2;
+  }
+  .footer-bank-row .dina {
+    order: 3;
+  }
+  .footer-bank-row .visa {
+    order: 4;
+  }
+  .footer-bank-row .american {
+    order: 6;
+  }
+  .footer-bank-row .bank-img-intesa {
+    width: 100%;
+    order: 5;
+  }
+  .footer-bank-row .bank-img-securecode {
+    order: 7;
+  }
+  .footer-bank-row .bank-img-visa-secure {
+    order: 8;
+  }
+}
+@media screen and (min-width: 767px) and (max-width: 1023px) {
+  .footer-bank-row img {
+    margin: 0 5px 10px;
+  }
+  .footer-bank-row a {
+    margin: 0 5px 10px;
+  }
+  .footer-bank-row a img {
+    margin: 0;
+  }
+}
+/*# sourceMappingURL=footer.css.map*/
