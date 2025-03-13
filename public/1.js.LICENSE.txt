@@ -1,0 +1,27 @@
+/*!
+ * FilePond 4.32.7
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * Please visit https://pqina.nl/filepond/ for details.
+ */
+
+/*!
+ * FilePondPluginFileValidateSize 2.2.8
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * Please visit https://pqina.nl/filepond/ for details.
+ */
+
+/*!
+ * FilePondPluginFileValidateType 1.2.9
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * Please visit https://pqina.nl/filepond/ for details.
+ */
+
+/*!
+ * vue-filepond v5.1.3
+ * A handy FilePond adapter component for Vue
+ * 
+ * Copyright (c) 2019 PQINA
+ * https://pqina.nl/filepond
+ * 
+ * Licensed under the MIT license.
+ */
