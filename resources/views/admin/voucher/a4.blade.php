@@ -15,27 +15,27 @@
 
         @font-face {
             font-family: Rubik, sans-serif;
-            src: url("https://posebanpoklon.rs/fonts/user/Rubik-Regular.ttf");
+            src: url("/fonts/user/Rubik-Regular.ttf");
         }
 
         @font-face {
             font-family: Rubik-Light, sans-serif;
-            src: url("https://posebanpoklon.rs/fonts/user/Rubik-Light.ttf");
+            src: url("/fonts/user/Rubik-Light.ttf");
         }
 
         @font-face {
             font-family: Rubik-bold;
-            src: url("https://posebanpoklon.rs/fonts/user/Rubik-Bold.ttf");
+            src: url("/fonts/user/Rubik-Bold.ttf");
         }
 
         @font-face {
             font-family: Rubik-medium;
-            src: url("https://posebanpoklon.rs/fonts/user/Rubik-Medium.ttf");
+            src: url("/fonts/user/Rubik-Medium.ttf");
         }
 
         @font-face {
             font-family: Atziluth;
-            src: url("https://posebanpoklon.rs/fonts/user/Atziluth-Script.ttf");
+            src: url("/fonts/user/Atziluth-Script.ttf");
         }
 
         .pdf-a4-template {

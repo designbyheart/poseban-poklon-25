@@ -1635,27 +1635,19 @@
 import axios from "axios";
 
 //Addresses
-import {
-    phoneValidationRule,
-    countries,
-} from "../../static/address/structures";
+import {countries, phoneValidationRule,} from "../../static/address/structures";
 
 //Validation
-import {
-    ValidationProvider,
-    ValidationObserver,
-    Validator,
-} from "vee-validate";
-
-Validator.extend("truthy", {
-    validate: (value) => !!value,
-});
-
+import {ValidationObserver, ValidationProvider, Validator,} from "vee-validate";
 //Phone number input mask
 import Inputmask from "inputmask";
 
 //reCaptcha
 import VueRecaptcha from "vue-recaptcha";
+
+Validator.extend("truthy", {
+    validate: (value) => !!value,
+});
 
 export default {
     name: "CheckoutPage",
@@ -1941,7 +1933,7 @@ export default {
 
                 let freeShipping = this.shippingMethods.find(function (method) {
                     return method.id === 10;
-                });
+                }) ?? {};
 
                 freeShipping.is_free = true;
 
@@ -2098,7 +2090,6 @@ export default {
         },
         placeOrder() {
             let order = this.buildOrderParams();
-console.log('order', order);
 
             //Address
             order.customer_name = this.address.customer_name;
@@ -2218,6 +2209,7 @@ console.log('order', order);
             let requestUrl = this.API.order.create;
 
             axios.post(requestUrl, order).then(response => {
+                console.log('order response', order, response);
 
                 if (response.data === 'success') {
 
