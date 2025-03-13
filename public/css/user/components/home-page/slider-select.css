@@ -1,0 +1,170 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+
+.slider-select-container {
+  position: relative;
+  width: 100%;
+  z-index: 3;
+}
+
+@media only screen and (min-width: 1000px) {
+  .slider-select-container {
+    margin-top: -39px;
+  }
+}
+
+@media only screen and (max-width: 999px) {
+  .slider-select-container {
+    margin-top: 10px;
+  }
+}
+
+.slider-select-container .container .slider-select-row {
+  padding: 18px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0 1px 20px 0 rgba(210, 210, 210, 0.5);
+  border-radius: 4px;
+}
+
+@media only screen and (min-width: 1000px) {
+  .slider-select-container .container .slider-select-row {
+    flex-direction: row;
+  }
+}
+
+@media only screen and (max-width: 999px) {
+  .slider-select-container .container .slider-select-row {
+    flex-direction: column;
+  }
+  .slider-select-container .container .slider-select-row .slider-select-item {
+    margin: 10px auto;
+    width: 100%;
+  }
+}
+
+.slider-content {
+  width: 100%;
+  height: 550px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.slider-content h2 {
+  padding: 10px;
+  font-family: Rubik-bold;
+  font-size: 54px;
+  color: #fff;
+}
+
+.slider-content p {
+  padding-bottom: 30px;
+  font-family: Rubik, sans-serif;
+  font-size: 36px;
+  color: #fff;
+}
+
+.slider-content a {
+  padding: 17px 30px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #fff;
+  background: #ed2025;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 991px) {
+  .slider-select-item {
+    text-align: center;
+  }
+}
+
+.slider-select-item .slider-select-button .select-button {
+  padding: 12px 30px;
+  border: none;
+  background: #ed2025;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: Rubik-bold;
+  color: #fff;
+  letter-spacing: 1px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider-select-item .slider-select-input {
+  position: relative;
+  min-width: 250px;
+  outline: none;
+}
+
+.slider-select-item .slider-select-input::after {
+  content: " ";
+  position: absolute;
+  top: -6px;
+  right: -12px;
+  width: 40px;
+  height: 40px;
+  background: url("/images/icons/select_arrow_icon.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.slider-select-item .slider-select-input .select-element {
+  padding: 7px 0;
+  position: relative;
+  width: 100%;
+  background: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  outline: none;
+  z-index: 1;
+}
+
+.slider-select-item .slider-select-input .select-element .option-element {
+  font-size: 16px;
+  font-family: Rubik, sans-serif;
+  color: #000;
+}
+
+/*# sourceMappingURL=slider-select.css.map*/

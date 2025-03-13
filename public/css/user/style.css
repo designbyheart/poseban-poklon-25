@@ -1,0 +1,30 @@
+/* Main Page Style */
+@import "components/common/header.css";
+@import "components/common/footer.css";
+@import "components/common/sidebar.css";
+@import "components/app/mixin.css";
+@import "components/home-page/slider-select.css";
+@import "components/home-page/home-info.css";
+@import "components/home-page/home-grid.css";
+@import "components/home-page/home-information.css";
+@import "components/home-page/home-newsletter.css";
+@import "components/home-page/masonry.css";
+@import "components/common/breadcrumb.css";
+@import "components/common/filters.css";
+@import "components/common/modal.css";
+/* Product page */
+@import "components/product/carousel.css";
+@import "components/product/product-carousel.css";
+/* Profile page */
+@import "components/profile/profile-content.css";
+
+/* Category Page Style */
+@import "components/category-page/category-main.css";
+/* Cart Page Style */
+@import "components/cart-page/cart-content.css";
+/* Information Page Style */
+@import "components/information-page/information-page.css";
+/* Product Page Style */
+@import "components/product/product-grid.css";
+@import "components/product/product-content.css";
+@import "components/app/default-style-values.css";

@@ -1,0 +1,93 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+.cat-container {
+  margin: 0 auto 40px auto;
+  width: 100%;
+}
+
+.pagination-row {
+  width: 100%;
+}
+.pagination-row .pagination-col {
+  margin: auto 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.pagination-row .pagination-col .pagination-item {
+  margin: 10px;
+  padding: 18px 0;
+  width: 50%;
+  max-width: 150px;
+  background: #ed2025;
+  box-shadow: 0 2px 10px 0 #d4393d;
+  border-radius: 4px;
+  text-align: center;
+  font-family: Rubik-bold;
+  font-size: 16px;
+  color: #fff;
+}
+.pagination-row .pagination-col .pagination-item:hover {
+  background: #e33235;
+  color: #fff;
+}
+
+.cat-main-bn {
+  padding: 0 0 40px 0;
+  width: 100%;
+}
+.cat-main-bn .cat-bn {
+  width: 100%;
+  height: 300px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.cat-main-bn .cat-bn .cat-bn-title {
+  padding: 10px;
+  font-family: Rubik-bold;
+  font-size: 54px;
+  color: #fff;
+}
+.cat-main-bn .cat-bn .cat-bn-subtitle {
+  padding-bottom: 30px;
+  font-family: Rubik, sans-serif;
+  font-size: 28px;
+  color: #fff;
+}
+.cat-main-bn .cat-bn .cat-bn-btn {
+  padding: 17px 30px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #fff;
+  background: #ed2025;
+  border-radius: 4px;
+  text-decoration: none;
+}
+/*# sourceMappingURL=category-main.css.map*/

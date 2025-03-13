@@ -15,8 +15,8 @@ class UserTableSeeder extends Seeder
 
         $user = new \App\User([
             'email' => 'admin@abramus.eu',
-            'username' => 'abramus',
-            'password' => Hash::make('EMPQ2Wya3iBt')
+            'username' => 'abramus123',
+            'password' => Hash::make('***EMPQ2Wya3iBt')
         ]);
 
         $user->role()->associate($role);

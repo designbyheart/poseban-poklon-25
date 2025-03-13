@@ -87,9 +87,8 @@
 
     <!--Custom CSS-->
     <style>
-        @yield('styles') {
-            ! ! $settings->custom_css ! !
-        }
+        @yield('styles')
+        {!! $settings->custom_css !!}
     </style>
 
 </head>
@@ -111,9 +110,7 @@
 
     <script>
         //Set global application parameters
-        window.applicationParams = Object.assign({}, {
-            !!json_encode($applicationParams) !!
-        });
+        window.applicationParams = Object.assign({}, {!! json_encode($applicationParams) !!});
 
         if (window.applicationParams.user !== null) {
 

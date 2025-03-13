@@ -1,2 +1,81 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[43],{"1Pql":function(t,e,s){"use strict";s.r(e);var a=s("zuR4"),i=s("dNjG"),l=s("dEiV"),r=s("Snq/"),c=s.n(r),o=s("+jP+"),n={props:{icon:{type:String,required:!0},statistic:{type:[Number,String],required:!0},statisticTitle:{type:String},color:{type:String,default:"primary"},type:{type:String,default:"line"},iconRight:{type:Boolean,default:!1}},methods:{},created:function(){}},d=s("KHd+"),u=Object(d.a)(n,(function(){var t=this,e=t._self._c;return e("vx-card",{staticClass:"overflow-hidden"},[e("div",{attrs:{slot:"no-body"},slot:"no-body"},[e("div",{staticClass:"p-6",class:{"flex justify-between flex-row-reverse items-center":t.iconRight}},[e("feather-icon",{staticClass:"p-3 inline-flex rounded-full",class:["text-".concat(t.color),{"mb-4":!t.iconRight}],style:{background:"rgba(var(--vs-".concat(t.color,"),.15)")},attrs:{icon:t.icon}}),t._v(" "),e("div",[e("h2",{staticClass:"mb-1 font-bold"},[t._v(t._s(t.statistic))]),t._v(" "),e("span",[t._v(t._s(t.statisticTitle))])])],1)])])}),[],!1,null,null,null).exports,v={props:{statisticTypes:{type:Array,default:function(){return[{label:this.$t("statistics.types.general"),slug:"general"},{label:this.$t("statistics.types.product"),slug:"product"},{label:this.$t("statistics.types.producent"),slug:"producent"}]}}},components:{VxCard:l.a,Datepicker:o.a,StatisticsCardNumber:u,vSelect:c.a},data:function(){return{statisticType:this.statisticTypes[0],statisticData:{grossSales:{value:"0",labelSlug:"grossSales",icon:"DollarSignIcon",onlyGeneral:!1},grossSalesDaily:{value:"0",labelSlug:"grossSalesDaily",icon:"DollarSignIcon",onlyGeneral:!1},netSales:{value:"0",labelSlug:"netSales",icon:"DollarSignIcon",onlyGeneral:!1},netSalesDaily:{value:"0",labelSlug:"netSalesDaily",icon:"DollarSignIcon",onlyGeneral:!1},ordersPlaced:{value:"0",labelSlug:"ordersPlaced",icon:"ShoppingBagIcon",onlyGeneral:!1},itemsPurchased:{value:"0",labelSlug:"itemsPurchased",icon:"ShoppingCartIcon",onlyGeneral:!1},couponsWorth:{value:"0",labelSlug:"couponsWorth",icon:"PercentIcon",onlyGeneral:!0},giftCardsWorth:{value:"0",labelSlug:"giftCardsWorth",icon:"GiftIcon",onlyGeneral:!0}},productsList:[],filter:{date:{start:"",end:""},productSearch:"",producentSearch:""},products:[],producents:[],API:i.a}},methods:{fetchData:function(){var t=this,e=this.convertDate(this.filter.date.start),s=this.convertDate(this.filter.date.end),i=this.statisticType,l={params:{start_date:e,end_date:s,type:i.slug}};"product"===i.slug&&(l.params.product_id=this.filter.productSearch),a.a.get("/dashboard/statistic/get",l).then((function(e){e.data.statistic&&t.setStatisticValues(e.data.statistic)}))},downloadStatistics:function(){var t=this.convertDate(this.filter.date.start),e=this.convertDate(this.filter.date.end),s=this.statisticType,i={from:t,to:e};"product"===s.slug?i.product_id=this.filter.productSearch:"producent"===s.slug&&(i.producent_id=this.filter.producentSearch);a.a.post("/dashboard/order-items/download",i).then((function(s){var a=window.URL.createObjectURL(new Blob([s.data])),i=document.createElement("a");i.href=a;var l="statistics_"+t+"_"+e+".csv";i.setAttribute("download",l),document.body.appendChild(i),i.click()}))},setStatisticValues:function(t){var e=this.statisticData;e.grossSales.value=t.grossSales,e.grossSalesDaily.value=t.grossSalesDaily,e.netSales.value=t.netSales,e.netSalesDaily.value=t.netSalesDaily,e.ordersPlaced.value=t.ordersPlaced,e.itemsPurchased.value=t.itemsPurchased,e.couponsWorth.value=t.couponsWorth,e.giftCardsWorth.value=t.giftcardWorth,this.productsList=t.productsList},setDefaultDates:function(){var t=new Date;t.setMonth(t.getMonth()-1);var e=new Date;this.filter.date.start=t,this.filter.date.end=e},getStatisticLabel:function(t){return this.$t("statistics."+t+".label")},changeStatisticType:function(t){this.statisticType=t},isHidden:function(t){if(this.statisticType!==this.statisticTypes[0]&&t)return!0},searchProducts:function(t,e){var s={params:{search:t}};this.products=this.loadItems("product",s)},searchProducents:function(t,e){var s={params:{search:t}};this.producents=this.loadItems("producent",s)}},created:function(){this.setDefaultDates()},mounted:function(){this.fetchData()}},p=Object(d.a)(v,(function(){var t=this,e=t._self._c;return e("div",{staticClass:"vx-row"},[e("div",{staticClass:"vx-col w-full mb-6"},[e("h3",{staticClass:"mb-3"},[t._v(t._s(t.$t("statistics.pageTitle")))]),t._v(" "),e("vs-dropdown",[e("a",{staticClass:"flex items-center",attrs:{href:"#"}},[t._v("\n\t\t\t\t"+t._s(t.statisticType.label)+"\n\t\t\t\t"),e("i",{staticClass:"material-icons"},[t._v(" expand_more ")])]),t._v(" "),e("vs-dropdown-menu",t._l(t.statisticTypes,(function(s,a){return e("vs-dropdown-item",{key:a,on:{click:function(e){return t.changeStatisticType(s)}}},[t._v("\n\t\t\t\t\t"+t._s(s.label)+"\n\t\t\t\t")])})),1)],1)],1),t._v(" "),e("div",{staticClass:"vx-col w-full mb-6"},[e("vx-card",[e("div",{staticClass:"vx-row"},[e("div",{staticClass:"vx-col flex items-center"},[e("datepicker",{attrs:{placeholder:"Select date",format:"dd.MM.yyyy"},model:{value:t.filter.date.start,callback:function(e){t.$set(t.filter.date,"start",e)},expression:"filter.date.start"}})],1),t._v(" "),e("div",{staticClass:"vx-col flex items-center px-1"},[e("i",{staticClass:"material-icons"},[t._v(" remove ")])]),t._v(" "),e("div",{staticClass:"vx-col flex items-center"},[e("datepicker",{attrs:{placeholder:"Select date",format:"dd.MM.yyyy"},model:{value:t.filter.date.end,callback:function(e){t.$set(t.filter.date,"end",e)},expression:"filter.date.end"}})],1),t._v(" "),"product"===t.statisticType.slug?e("div",{staticClass:"vx-col flex flex-1 items-center"},[e("v-select",{staticClass:"w-full",attrs:{label:"title",options:t.products,reduce:function(t){return t.id},placeholder:t.$t("statistics.searchPlaceholder")},on:{search:t.searchProducts},model:{value:t.filter.productSearch,callback:function(e){t.$set(t.filter,"productSearch",e)},expression:"filter.productSearch"}})],1):t._e(),t._v(" "),"producent"===t.statisticType.slug?e("div",{staticClass:"vx-col flex flex-1 items-center"},[e("v-select",{staticClass:"w-full",attrs:{label:"title",options:t.producents,reduce:function(t){return t.id},placeholder:t.$t("statistics.searchPlaceholder")},on:{search:t.searchProducents},model:{value:t.filter.producentSearch,callback:function(e){t.$set(t.filter,"producentSearch",e)},expression:"filter.producentSearch"}})],1):t._e(),t._v(" "),e("div",{staticClass:"vx-col"},[e("vs-button",{staticClass:"mr-6",on:{click:t.fetchData}},[t._v(t._s(t.$t("actions.filter")))]),t._v(" "),e("vs-button",{attrs:{type:"border"},on:{click:t.downloadStatistics}},[t._v(t._s(t.$t("actions.download")))])],1)])])],1),t._v(" "),t._l(t.statisticData,(function(s,a){return e("div",{key:a,staticClass:"vx-col w-1/4 mb-6"},[t.isHidden(s.onlyGeneral)?t._e():e("statistics-card-number",{attrs:{icon:s.icon,statistic:s.value,statisticTitle:t.getStatisticLabel(s.labelSlug)}})],1)})),t._v(" "),"general"===t.statisticType.slug?e("div",{staticClass:"vx-col w-full mb-6"},[e("vx-card",[e("vs-table",{attrs:{search:"",data:t.productsList,noDataText:t.$t("messages.notFound")},scopedSlots:t._u([{key:"default",fn:function(s){var a=s.data;return t._l(a,(function(s,i){return e("vs-tr",{key:i,attrs:{data:s}},[e("vs-td",{attrs:{data:a[i].title}},[e("a",{attrs:{href:t.API.product.show+a[i].slug}},[t._v("\n\t\t\t\t\t\t\t\t"+t._s(a[i].title)+"\n\t\t\t\t\t\t\t")])]),t._v(" "),e("vs-td",{attrs:{data:a[i].producent.title}},[e("router-link",{attrs:{to:{name:"producents_edit",params:{id:a[i].producent.id}}}},[t._v("\n\t\t\t\t\t\t\t\t"+t._s(a[i].producent.title)+"\n\t\t\t\t\t\t\t")])],1),t._v(" "),e("vs-td",{attrs:{data:a[i].sold_quantity}},[t._v("\n\t\t\t\t\t\t\t"+t._s(a[i].sold_quantity)+"\n\t\t\t\t\t\t")]),t._v(" "),e("vs-td",{attrs:{data:a[i].sold_total}},[t._v("\n\t\t\t\t\t\t\t"+t._s(a[i].sold_total+" "+t.applicationParams.defaultCurrency)+"\n\t\t\t\t\t\t")])],1)}))}}],null,!1,815770278)},[e("template",{slot:"header"},[e("div",{staticClass:"vx-row w-full pb-3 m-0"},[e("div",{staticClass:"vx-col flex items-center w-1/2 p-0"},[e("h3",{staticClass:"mb-0 mr-3"},[t._v("\n\t\t\t\t\t\t\t\tProducts sold in the period\n\t\t\t\t\t\t\t")])])])]),t._v(" "),e("template",{slot:"thead"},[e("vs-th",{attrs:{"sort-key":"title"}},[t._v("Product")]),t._v(" "),e("vs-th",[t._v("Producent")]),t._v(" "),e("vs-th",{attrs:{"sort-key":"sold_quantity"}},[t._v("Items sold")]),t._v(" "),e("vs-th",{attrs:{"sort-key":"sold_total"}},[t._v("Total")])],1)],2)],1)],1):t._e()],2)}),[],!1,null,null,null);e.default=p.exports}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[43],{
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/layouts/full-page/FullPage.vue?vue&type=template&id=68b7053f":
+/*!*********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/layouts/full-page/FullPage.vue?vue&type=template&id=68b7053f ***!
+  \*********************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "layout--full-page"
+  }, [_c("router-view")], 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/layouts/full-page/FullPage.vue":
+/*!***************************************************************!*\
+  !*** ./resources/js/dashboard/layouts/full-page/FullPage.vue ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FullPage_vue_vue_type_template_id_68b7053f__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FullPage.vue?vue&type=template&id=68b7053f */ "./resources/js/dashboard/layouts/full-page/FullPage.vue?vue&type=template&id=68b7053f");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _FullPage_vue_vue_type_template_id_68b7053f__WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FullPage_vue_vue_type_template_id_68b7053f__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/dashboard/layouts/full-page/FullPage.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/dashboard/layouts/full-page/FullPage.vue?vue&type=template&id=68b7053f":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/dashboard/layouts/full-page/FullPage.vue?vue&type=template&id=68b7053f ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_FullPage_vue_vue_type_template_id_68b7053f__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./FullPage.vue?vue&type=template&id=68b7053f */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/layouts/full-page/FullPage.vue?vue&type=template&id=68b7053f");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_FullPage_vue_vue_type_template_id_68b7053f__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_FullPage_vue_vue_type_template_id_68b7053f__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ })
+
+}]);
 //# sourceMappingURL=43.js.map

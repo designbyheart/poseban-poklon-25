@@ -1,0 +1,264 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+
+.modal-login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  z-index: 9;
+}
+
+.modal-login-row {
+  position: relative;
+  padding: 20px 20px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.modal-login-row .modal-btn-close {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.modal-login-row .modal-btn-close .modal-btn {
+  background: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.modal-login-row .modal-btn-close .modal-btn .modal-btn-image {
+  width: 16px;
+  height: 16px;
+  zoom: 1;
+}
+
+@media only screen and (min-width: 768px) {
+  .modal-login-row {
+    max-width: 800px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .modal-login-row {
+    max-width: 90%;
+  }
+}
+
+@media only screen and (max-width: 627px) {
+  .modal-login-row {
+    flex-direction: column;
+  }
+}
+
+.modal-login-row .col-signin,
+.modal-login-row .col-signup {
+  padding: 10px 10px;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.modal-title {
+  margin: 5px 0;
+  padding: 15px 0;
+  font-family: Rubik, sans-serif;
+  font-size: 20px;
+  color: #000;
+  opacity: 0.8;
+}
+
+.signin-form form .signin-input {
+  margin: 5px 0;
+  padding: 13px;
+  width: 100%;
+  max-width: 535px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.signin-btn-row,
+.signup-btn-row {
+  width: 100%;
+}
+
+.signin-btn-row .signin-btn,
+.signin-btn-row .signup-btn,
+.signin-btn-row a .signup-btn,
+.signup-btn-row .signin-btn,
+.signup-btn-row .signup-btn,
+.signup-btn-row a .signup-btn {
+  padding: 13px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 160px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  background: #ed2025;
+  color: #fff;
+  text-decoration: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.signin-btn-row .signin-btn:hover,
+.signin-btn-row .signup-btn:hover,
+.signin-btn-row a .signup-btn:hover,
+.signup-btn-row .signin-btn:hover,
+.signup-btn-row .signup-btn:hover,
+.signup-btn-row a .signup-btn:hover {
+  background: #e33235;
+}
+
+.signin-btn-row a,
+.signup-btn-row a {
+  text-align: center;
+  text-decoration: none;
+}
+
+.modal-form-checkbox {
+  padding: 5px 0;
+}
+
+.modal-form-checkbox .modal-item-label {
+  padding-left: 25px;
+  display: block;
+  position: relative;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  opacity: 0.5;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.modal-form-checkbox .modal-item-label .modal-item-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.modal-form-checkbox .modal-item-label .modal-item-check {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.modal-form-checkbox .modal-item-label .modal-item-check:after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 9px;
+  background: url("/images/icons/check.svg");
+  background-size: cover;
+  background-position: center;
+}
+
+.modal-form-checkbox .modal-item-label:hover .modal-item-checkbox ~ .modal-item-check {
+  background-color: #ed2025;
+}
+
+.modal-form-checkbox .modal-item-label:hover .modal-item-checkbox ~ .modal-item-check:after {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 9px;
+  background: url("/images/icons/check.svg");
+  background-size: cover;
+  background-position: center;
+}
+
+.modal-form-checkbox .modal-item-label .modal-item-checkbox:checked ~ .modal-item-check {
+  background-color: #000000;
+}
+
+.modal-form-checkbox .modal-item-label .modal-item-checkbox:checked ~ .modal-item-check:after {
+  display: block;
+}
+
+.col-signup .signup-btn-row {
+  width: 100%;
+}
+
+.col-signup .signup-btn-row .signup-btn {
+  padding: 13px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 160px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  background: #ed2025;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.col-signup .signup-btn-row .signup-btn:hover {
+  background: #e33235;
+}
+
+.signup-desc {
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+
+/*# sourceMappingURL=modal.css.map*/

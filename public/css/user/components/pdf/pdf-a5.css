@@ -1,0 +1,343 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+.pdf-a5-template {
+  padding: 15px 0 0 0;
+  width: 100%;
+  position: relative;
+}
+.pdf-a5-template .pdf-a5-row-1 {
+  width: 100%;
+  background: #fff;
+}
+
+.pdf-a5-row-1 .pdf-a5-1-grey {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 35px;
+  background: #ed2025;
+  position: relative;
+}
+.pdf-a5-row-1 .pdf-a5-1-grey tr .pdf-a5-col-1-left {
+  position: relative;
+  width: 50%;
+  height: 30px;
+}
+.pdf-a5-row-1 .pdf-a5-1-grey tr .pdf-a5-col-1-left .pdf-a5-logo {
+  margin: auto;
+  position: absolute;
+  left: 11%;
+  top: -12px;
+  height: 45px;
+}
+.pdf-a5-row-1 .pdf-a5-1-grey tr .pdf-a5-col-1-right {
+  width: 50%;
+  height: 35px;
+}
+.pdf-a5-row-1 .pdf-a5-1-grey tr .pdf-a5-col-1-right .pdf-a5-1-text {
+  padding: 7px 10px 7px 0;
+  width: 100%;
+  color: #fff;
+  font-size: 14px;
+  text-align: right;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+
+.pdf-a5-row-2 {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+.pdf-a5-row-2 .pdf-a5-2-main-table {
+  width: 100%;
+}
+.pdf-a5-row-2 .pdf-a5-2-main-table tr .pdf-a5-2-col {
+  width: 100%;
+  overflow: hidden;
+}
+.pdf-a5-row-2 .pdf-a5-2-main-table tr .pdf-a5-2-col table tr .pdf-a5-col-2-left {
+  width: 100%;
+  height: 350px;
+  position: relative;
+  vertical-align: top;
+}
+.pdf-a5-row-2 .pdf-a5-2-main-table tr .pdf-a5-2-col table tr .pdf-a5-col-2-left .pdf-a5-2-table tr .pdf-a5-2-table-item {
+  padding: 0 5px;
+}
+.pdf-a5-row-2 .pdf-a5-2-main-table tr .pdf-a5-2-col table tr .pdf-a5-col-2-left .pdf-a5-2-table tr .pdf-a5-2-table-item.a5-table-item-left {
+  border-right: 1px solid black;
+}
+
+.pdf-a5-2-title {
+  padding: 8px 10px 8px 10px;
+  width: 100%;
+  font-family: Rubik-medium;
+  font-size: 18px;
+  text-align: center;
+  vertical-align: middle;
+  color: #ed2025;
+  line-height: 1;
+  min-height: 25px;
+  max-height: 37px;
+  overflow: hidden;
+}
+
+.pdf-a5-table-border {
+  padding: 5px;
+}
+
+.pdf-a5-table-border-none {
+  padding: 5px;
+}
+
+.pdf-a5-table-border tr td,
+.pdf-a5-table-border-none tr td {
+  overflow: hidden;
+}
+
+.a5-item-image {
+  padding-right: 4px;
+  vertical-align: text-top;
+  width: 20px;
+  text-align: left;
+}
+.a5-item-image .a5-item-icon {
+  max-width: 100%;
+  max-height: 18px;
+}
+
+.a5-item-more-information {
+  padding: 10px 10px 5px 10px;
+}
+
+.more-information {
+  padding: 0 10px 5px 10px;
+  width: 100%;
+  max-height: 60px;
+  overflow: hidden;
+}
+.more-information .a5-desc-text {
+  max-height: 55px;
+  overflow: hidden;
+  width: 100%;
+  font-size: 10px;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.a5-item-desc {
+  width: 130px;
+  vertical-align: text-top;
+  overflow: hidden;
+  font-family: Rubik, sans-serif;
+}
+.a5-item-desc .a5-desc-title {
+  font-size: 12px;
+  width: 100%;
+  font-family: Rubik-bold;
+  line-height: 1;
+}
+
+.a5-desc-2 .a5-desc-text {
+  height: 29px;
+  overflow: hidden;
+}
+
+.a5-item-desc-full {
+  width: 100%;
+}
+.a5-item-desc-full .a5-desc-text {
+  margin-top: 2px;
+  width: 100%;
+  font-size: 10px;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.pdf-a5-right {
+  vertical-align: top;
+  overflow-y: hidden;
+}
+
+.pdf-a5-col-2-right {
+  padding-left: 5px;
+  padding-right: 10px;
+  width: 100%;
+  vertical-align: top;
+}
+
+.pdf-a5-image-container {
+  position: relative;
+  margin-top: 5px;
+  padding: 6px 6px 6px 6px;
+  width: 100%;
+  height: 247px;
+  border: 1px solid black;
+  overflow: hidden;
+}
+.pdf-a5-image-container .pdf-a5-main-image {
+  position: absolute;
+  padding: 2px;
+  width: 100%;
+  height: 242px;
+  overflow: hidden;
+}
+.pdf-a5-image-container .pdf-a5-main-image .main-product-img {
+  margin-top: -10%;
+  max-width: 1660px;
+  height: 242px;
+}
+
+.a5-2-desc-right {
+  width: 100%;
+  height: 165px;
+  overflow: hidden;
+}
+.a5-2-desc-right .a5-2-desc-title {
+  padding: 10px 10px 10px 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  font-family: Rubik-bold;
+  line-height: 1.1;
+  min-height: 15px;
+  max-height: 30px;
+  overflow: hidden;
+}
+.a5-2-desc-right .a5-2-desc-text {
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  font-size: 11px;
+  height: 130px;
+  overflow: hidden;
+  text-align: justify;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+
+.pdf-a5-table-border {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.a5-desc-col .a5-desc-text-color {
+  width: 100%;
+  font-size: 9px;
+  color: #ed2025;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+.a5-desc-col .a5-desc-text {
+  width: 100%;
+  font-size: 9px;
+  color: #000;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+
+.a5-2-desc-left {
+  vertical-align: bottom;
+}
+
+.a5-2-desc-right {
+  vertical-align: bottom;
+}
+
+.a5-desc-table_code {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.a5-desc-col.code-right {
+  width: 160px;
+}
+.a5-desc-col.code-right .a5-desc-qcode {
+  margin-left: 5px;
+}
+.a5-desc-col.code-right .a5-desc-qcode tr .a5-desc-qcode-col {
+  padding-left: 5px;
+  padding-right: 2px;
+  vertical-align: text-bottom;
+  text-align: right;
+}
+.a5-desc-col.code-right .a5-desc-qcode tr .a5-desc-qcode-col .a5-desc-info-title {
+  font-size: 7px;
+  color: #ed2025;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+.a5-desc-col.code-right .a5-desc-qcode tr .a5-desc-qcode-col .a5-desc-info-subtitle {
+  font-size: 7px;
+  color: #000;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+.a5-desc-col.code-right .a5-desc-qcode tr .a5-qcode-image {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ed2025;
+}
+
+.pdf-a5-row-3 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.pdf-a5-row-3 .pdf-a5-footer-table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 30px;
+  background: #ed2025;
+}
+.pdf-a5-row-3 .pdf-a5-footer-table tr .pdf-a5-footer-item table {
+  width: 100%;
+}
+.pdf-a5-row-3 .pdf-a5-footer-table tr .pdf-a5-footer-item table tr td .a5-footer-item-img {
+  padding-left: 16px;
+  height: 20px;
+}
+.pdf-a5-row-3 .pdf-a5-footer-table tr .pdf-a5-footer-item table tr td .a5-footer-item-box .a5-footer-item-title {
+  margin: 0 0 0 15px;
+  color: #fff;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+.pdf-a5-row-3 .pdf-a5-footer-table tr .pdf-a5-footer-item table tr td .a5-footer-item-box .a5-footer-item-text {
+  margin: 0 0 0 15px;
+  font-size: 11px;
+  color: #fff;
+  font-family: Rubik, sans-serif;
+  line-height: 1;
+}
+
+.without_message_a5 {
+  height: 30px;
+}
+/*# sourceMappingURL=pdf-a5.css.map*/

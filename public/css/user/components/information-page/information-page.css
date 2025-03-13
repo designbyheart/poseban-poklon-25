@@ -1,0 +1,226 @@
+@font-face {
+  font-family: Rubik, sans-serif;
+  src: url("/fonts/user/Rubik-Regular.ttf");
+}
+@font-face {
+  font-family: Rubik-Light, sans-serif;
+  src: url("/fonts/user/Rubik-Light.ttf");
+}
+@font-face {
+  font-family: Rubik-bold;
+  src: url("/fonts/user/Rubik-Bold.ttf");
+}
+@font-face {
+  font-family: Rubik-medium;
+  src: url("/fonts/user/Rubik-Medium.ttf");
+}
+@font-face {
+  font-family: Atziluth;
+  src: url("/fonts/user/Atziluth-Script.ttf");
+}
+.information-sidebar-dropdown-list {
+  margin-left: 35px;
+}
+.information-sidebar-dropdown-list .information-sidebar-list-child {
+  padding: 10px 0;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+
+.information-title {
+  padding: 30px 0;
+  font-family: Rubik-medium;
+  font-size: 28px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.information-text-container {
+  width: 100%;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+.information-text-container .information-text-title {
+  font-family: Rubik-medium;
+  font-size: 16px;
+  color: #000;
+}
+.information-text-container .information-text {
+  padding: 10px 0;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+}
+
+.contact-info .contact-info-title {
+  font-family: Rubik-medium;
+  font-size: 16px;
+  color: #000;
+  text-transform: uppercase;
+}
+.contact-info .contant-info-desc {
+  padding: 10px 0;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  line-height: 1.4;
+}
+.contact-info .contact-info-icons {
+  width: 100%;
+}
+.contact-info .contact-info-icons .info-icon-number,
+.contact-info .contact-info-icons .info-icon-email,
+.contact-info .contact-info-icons .info-icon-locat {
+  padding: 10px 0;
+}
+.contact-info .contact-info-icons .info-icon-number .info-icon-link,
+.contact-info .contact-info-icons .info-icon-email .info-icon-link,
+.contact-info .contact-info-icons .info-icon-locat .info-icon-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  font-family: Rubik-medium;
+  font-size: 16px;
+  color: #000;
+}
+.contact-info .contact-info-icons .info-icon-number .info-icon-link .info-image,
+.contact-info .contact-info-icons .info-icon-email .info-icon-link .info-image,
+.contact-info .contact-info-icons .info-icon-locat .info-icon-link .info-image {
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  width: 23px;
+  height: 23px;
+}
+.contact-info .contact-info-icons .info-icon-number .info-icon-link .info-image .icon-number,
+.contact-info .contact-info-icons .info-icon-email .info-icon-link .info-image .icon-number,
+.contact-info .contact-info-icons .info-icon-locat .info-icon-link .info-image .icon-number {
+  margin: auto;
+  width: 21px;
+  height: 22px;
+}
+.contact-info .contact-info-icons .info-icon-number .info-icon-link .info-image .icon-email,
+.contact-info .contact-info-icons .info-icon-email .info-icon-link .info-image .icon-email,
+.contact-info .contact-info-icons .info-icon-locat .info-icon-link .info-image .icon-email {
+  margin: auto;
+  width: 23px;
+  height: 17px;
+}
+.contact-info .contact-info-icons .info-icon-number .info-icon-link .info-image .icon-locat,
+.contact-info .contact-info-icons .info-icon-email .info-icon-link .info-image .icon-locat,
+.contact-info .contact-info-icons .info-icon-locat .info-icon-link .info-image .icon-locat {
+  margin: auto;
+  width: 16px;
+  height: 23px;
+}
+.contact-info .contact-info-icons .contact-open-time {
+  padding: 20px 0 80px 0;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  opacity: 0.5;
+}
+.contact-info .contact-info-icons .contact-company-info {
+  padding: 10px 0 0 0;
+}
+.contact-info .contact-info-icons .contact-company-info p {
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.contact-form .contact-info-title {
+  font-family: Rubik-medium;
+  font-size: 16px;
+  color: #000;
+  text-transform: uppercase;
+}
+.contact-form .contant-info-desc {
+  padding: 10px 0;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  line-height: 1.4;
+}
+.contact-form .contact-form-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.contact-form .contact-form-container .form-col-title .form-input-title {
+  margin: 5px 0;
+  padding: 15px 0;
+  width: 120px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  opacity: 0.5;
+}
+.contact-form .contact-form-container .form-col form .form-input {
+  margin: 5px 0;
+  padding: 13px;
+  width: 100%;
+  max-width: 535px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  outline: none;
+}
+.contact-form .contact-form-container .form-col form .form-textarea {
+  margin: 5px 0;
+  padding: 13px;
+  width: 100%;
+  max-width: 535px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  color: #000;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  outline: none;
+}
+.contact-form .contact-form-container .form-col form .form-btn {
+  padding: 13px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 160px;
+  font-family: Rubik, sans-serif;
+  font-size: 16px;
+  background: #ed2025;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.contact-form .contact-form-container .form-col form .form-btn:hover {
+  background: #e33235;
+}
+
+.information-sidebar {
+  margin-bottom: 30px;
+}
+
+.information-text-container h1,
+.information-text-container h2,
+.information-text-container h3,
+.information-text-container h4,
+.information-text-container h5,
+.information-text-container p {
+  width: 100%;
+}
+.information-text-container h1 img,
+.information-text-container h2 img,
+.information-text-container h3 img,
+.information-text-container h4 img,
+.information-text-container h5 img,
+.information-text-container p img {
+  width: 100%;
+}
+/*# sourceMappingURL=information-page.css.map*/

@@ -5,15 +5,15 @@
         <div class="row">
           <div class="sub-header-col col-left col-lg-6 col-md-12">
             <div class="sub-header-number">
-              <a :href="'tel:' + applicationParams.contact_phone" class="sub-header-number-link">
+              <a :href="'tel:' + applicationParams?.contact_phone" class="sub-header-number-link">
                 <img src="/images/icons/phone_icon.svg" alt class="sub-header-number-icon" />
-                <span class="sub-header-number-text">{{ applicationParams.contact_phone }}</span>
+                <span class="sub-header-number-text">{{ applicationParams?.contact_phone }}</span>
               </a>
             </div>
             <div class="sub-header-email">
-              <a :href="'mailto:' + applicationParams.contact_email" class="sub-header-email-link">
+              <a :href="'mailto:' + applicationParams?.contact_email" class="sub-header-email-link">
                 <img src="/images/icons/envelope_icon.svg" alt class="sub-header-email-icon" />
-                <span class="sub-header-email-text">{{ applicationParams.contact_email }}</span>
+                <span class="sub-header-email-text">{{ applicationParams?.contact_email }}</span>
               </a>
             </div>
           </div>
@@ -70,7 +70,7 @@
           <div class="header-col-logo col-lg-3 col-md-6 col-sm-6 col-6">
             <a href="/" class="header-logo-link">
               <img
-                :src="applicationParams.siteLogo !== null ? '/images/header/posebanpoklon_logo.png' : '/images/header/posebanpoklon_logo.png'"
+                :src="applicationParams?.siteLogo !== null ? '/images/header/posebanpoklon_logo.png' : '/images/header/posebanpoklon_logo.png'"
                 alt
                 class="header-logo-image"
               />
@@ -137,13 +137,13 @@
                 <a href="/profile/edit" class="dropdown-list-link">
                   <div class="dropdown-list-item">Profil</div>
                 </a>
-                <div class="dropdown-list-link" v-if="applicationParams.user === null">
+                <div class="dropdown-list-link" v-if="applicationParams?.user === null">
                   <div class="dropdown-list-item" @click="openAuthModal('login')">Uloguj se</div>
                 </div>
-                <div class="dropdown-list-link" v-if="applicationParams.user !== null">
+                <div class="dropdown-list-link" v-if="applicationParams?.user !== null">
                   <form name="logout" action="/logout" method="post">
                     <input type="submit" value="Odjava" class="dropdown-list-item" />
-                    <input type="hidden" name="_token" :value="applicationParams.csrf" />
+                    <input type="hidden" name="_token" :value="applicationParams?.csrf" />
                   </form>
                 </div>
               </div>
@@ -1566,7 +1566,7 @@ export default {
   },
   computed: {
     showDashboardLink() {
-      let user = this.applicationParams.user;
+      let user = this.applicationParams?.user;
 
         if (user !== null) {
             if (user.role.name === "admin" || user.role.name === "editor") {
@@ -1614,10 +1614,10 @@ export default {
     },
     checkWishlist() {
       if (
-        this.applicationParams.user !== undefined &&
-        this.applicationParams.user !== null
+        this.applicationParams?.user !== undefined &&
+        this.applicationParams?.user !== null
       ) {
-        let user = this.applicationParams.user;
+        let user = this.applicationParams?.user;
         if (user.wishlist !== undefined && user.wishlist !== null) {
           if (
             user.wishlist.products !== undefined &&

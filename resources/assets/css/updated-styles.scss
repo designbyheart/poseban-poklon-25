@@ -26,17 +26,27 @@
 #recommended-slide-next {
     &:after {
         background: white;
-        padding: 0 .5rem;
+        padding: 0 0.5rem;
     }
 }
 
-#home-slide-prev,  #home-slide-next {
+#home-slide-prev,
+#home-slide-next {
     background: #ed2025;
     max-height: 1rem;
 
     &:after {
         background: #ed2025;
-        padding: .5rem 1rem;
-        color:white;
+        padding: 0.5rem 1rem;
+        color: white;
     }
+}
+
+.swal2-container {
+    font-family: Rubik-Regular, sans-serif;
+}
+
+.swal2-title {
+    font-size: 1.4rem;
+    line-height: 1.3;
 }
