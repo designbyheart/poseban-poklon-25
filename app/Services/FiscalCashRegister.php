@@ -58,6 +58,7 @@ class FiscalCashRegister
             $invoice->save();
         } catch (Exception $e) {
             Log::error('error with fiscal invoice: ' . $e->getMessage());
+            Log::error(sprintf('error with fiscal invoice: %s', $order));
             exit;
         }
     }
