@@ -14,6 +14,7 @@ class UserTableSeeder extends Seeder
         $role = \App\UserRole::where('name', 'admin')->firstOrFail();
 
         $user = new \App\User([
+            'name' => 'Admin User',
             'email' => 'admin@abramus.eu',
             'username' => 'abramus123',
             'password' => Hash::make('***EMPQ2Wya3iBt')

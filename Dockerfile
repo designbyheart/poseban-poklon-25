@@ -16,6 +16,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get update && apt-get install -y nodejs \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Configure and install PHP extensions (including zip)
 RUN docker-php-ext-configure zip \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -29,39 +34,32 @@ RUN echo "memory_limit=-1" > /usr/local/etc/php/conf.d/memory-limit.ini
 # Set working directory
 WORKDIR /var/www
 
-# Copy composer files first for better caching
-COPY composer.json composer.lock ./
+# Create necessary directories with proper permissions first
+RUN mkdir -p ./storage && chmod -R 777 storage \
+    && mkdir -p ./bootstrap/cache && chmod -R 777 bootstrap/cache
+
+# Copy the entire application
+COPY . .
 
 # Configure Composer to avoid timeout issues
 RUN composer config --global process-timeout 2000
 
-# Copy the rest of the application
-COPY app ./app
-COPY bootstrap ./bootstrap
-COPY config ./config
-COPY database ./database
-COPY public ./public
-COPY resources ./resources
-COPY routes ./routes
-COPY storage ./storage
-COPY tests ./tests
-COPY vendor ./vendor
-COPY artisan .
-COPY package.json .
-COPY ./.env .
-COPY .editorconfig .
-COPY package-lock.json .
+# Install PHP dependencies properly before running autoload
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --verbose
 
-RUN ls database/seeds
+# Run autoload only after dependencies are installed
+RUN composer dump-autoload --optimize
 
-# Install PHP dependencies
-# Uncomment one of these lines when ready to run composer install
-# RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --verbose
-# RUN composer install --no-interaction --optimize-autoloader --no-scripts --verbose
-RUN composer dump-autoload --verbose
+# Install npm dependencies
+RUN npm install
 
-# Set proper permissions if needed
-# RUN chown -R www-data:www-data /var/www
+# Build the frontend
+RUN npm run dev
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www
+
+
 
 # Expose PHP-FPM port
 EXPOSE 9000

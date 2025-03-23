@@ -17,8 +17,8 @@ class CreateCategoriesFiltersTable extends Migration
             $table->increments('id');
             $table->integer('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->integer('filter_id')->unsigned()->nullable();
-            $table->foreign('filter_id')->references('id')->on('filter')->onDelete('cascade');
+            $table->integer('filter_id')->unsigned();
+            $table->foreign('filter_id')->references('id')->on('filters')->onDelete('cascade');
             $table->timestamps();
         });
     }
