@@ -396,7 +396,7 @@ class OrderController extends Controller
 
         // Generate and send eVouchers if needed
         try {
-            if ($order->shipping_method_id === 9) {
+            if ((int)$order->shipping_method_id === 9) {
                 Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
 
                 // First generate vouchers
@@ -556,7 +556,7 @@ class OrderController extends Controller
     protected function handleVoucherGeneration(Order $order)
     {
         try {
-            if ($order->shipping_method_id === 9) {
+            if ((int)$order->shipping_method_id === 9) {
                 Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
 
                 // First generate vouchers
