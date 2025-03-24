@@ -19,11 +19,11 @@ use App\ShippingMethod;
 use App\Version;
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Mail;
 
 class OrderController extends Controller
 {
@@ -326,66 +326,113 @@ class OrderController extends Controller
      */
     public function paymentSuccess(Request $request)
     {
-        if (isset($request->oid)) {
-            $order = Order::find($request->oid);
+        if (!isset($request->oid)) {
+            Log::error('Payment success called without order ID');
+            return redirect()->route('home')->with('error', 'Invalid payment information');
+        }
 
-            try {
-                $payment_params = $request->payment_params;
-            } catch (Exception $e) {
-                // create debug error log with given error
-                Log::error($e);
-                $payment_params = null;
-            }
+        $order = Order::find($request->oid);
+        if (!$order) {
+            Log::error('Payment success: Order not found', ['order_id' => $request->oid]);
+            return redirect()->route('home')->with('error', 'Order not found');
+        }
 
-            $transaction_data = [
+        try {
+            $payment_params = $request->payment_params;
+        } catch (Exception $e) {
+            Log::error('Error retrieving payment params', [
                 'order_id' => $request->oid,
-                'auth_code' => $request->AuthCode,
-                'trans_id' => $request->TransId,
-                'response' => $request->Response,
-                'proc_return_code' => $request->ProcReturnCode,
-                'md_status' => $request->mdStatus,
-                'extra_trxdate' => Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s')
-            ];
+                'error' => $e->getMessage()
+            ]);
+            $payment_params = null;
+        }
+
+        $transaction_data = [
+            'order_id' => $request->oid,
+            'auth_code' => $request->AuthCode ?? null,
+            'trans_id' => $request->TransId ?? null,
+            'response' => $request->Response ?? null,
+            'proc_return_code' => $request->ProcReturnCode ?? null,
+            'md_status' => $request->mdStatus ?? null,
+            'extra_trxdate' => isset($request->EXTRA_TRXDATE) ?
+                Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s') :
+                Carbon::now()->format('Y-m-d H:i:s')
+        ];
+
+        try {
+            DB::beginTransaction();
+
             $order->transaction_data = json_encode($transaction_data);
             //Set paid status
             $status = OrderStatus::find(2);
 
-            try {
-                $cashRegister = new FiscalCashRegister();
-                $cashRegister->sendInvoice($order);
-            } catch (\Exception $e) {
-                Log::error($e);
-            }
-
-            //            $order->sendCustomerEmail();
-            $emailService = new EmailService();
-            $emailService->sendVoucher($order->id);
-//            dispatch(new SendVoucherEmailJob($order->id));
-//            dd($order);
-
+            // Save order before other operations
             $order->save();
 
             if (isset($status)) {
                 $order->setStatus($status);
             }
-            $transaction_data = (object)$transaction_data;
-            $success = true;
 
-            try {
-                //Generate and send eVouchers
-                if ($order->shipping_method_id === 9) {
-                    Log::debug("Generate vouchers");
-                    if ($order->generateVouchers() && $order->sendCustomerEmail()) {
-                        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
-                    }
-                } else {
-                    Log::debug('Skip generating vouchers');
-                    return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
-                }
-            } catch (Exception $e) {
-                Log::error($e);
-            }
+            \DB::commit();
+        } catch (Exception $e) {
+            \DB::rollBack();
+            Log::error('Failed to update order with transaction data', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
         }
+
+        // Fiscal cash register - outside transaction as it's an external service
+        try {
+            $cashRegister = new FiscalCashRegister();
+            $cashRegister->sendInvoice($order);
+        } catch (Exception $e) {
+            Log::error('Failed to send invoice to fiscal cash register', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        // Email service - outside transaction as it's an external service
+        try {
+            $emailService = new EmailService();
+            $emailService->sendVoucher($order->id);
+        } catch (Exception $e) {
+            Log::error('Failed to send voucher email', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        $transaction_data = (object)$transaction_data;
+        $success = true;
+
+        // Generate and send eVouchers if needed
+        try {
+            if ($order->shipping_method_id === 9) {
+                Log::debug("Generating vouchers for order", ['order_id' => $order->id]);
+                $vouchersGenerated = $order->generateVouchers();
+                $emailSent = $order->sendCustomerEmail();
+
+                if (!$vouchersGenerated) {
+                    Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
+                }
+
+                if (!$emailSent) {
+                    Log::error('Failed to send customer email', ['order_id' => $order->id]);
+                }
+            } else {
+                Log::debug('Skipping voucher generation', ['order_id' => $order->id]);
+            }
+        } catch (Exception $e) {
+            Log::error('Exception during voucher generation/email sending', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+
+        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
     }
 
     /**
@@ -479,7 +526,6 @@ class OrderController extends Controller
 
     public function updateOrderStatus(Request $request)
     {
-
         $order = Order::find($request->order_id);
         $status = OrderStatus::find($request->order_status_id);
 
@@ -491,12 +537,12 @@ class OrderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Order $order
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function destroy(Order $order)
     {
         if ($order->delete()) {
-            return response()->json('success', 200);
+            return response('success', 200);
         }
     }
 }

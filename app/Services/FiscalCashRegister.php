@@ -35,6 +35,11 @@ class FiscalCashRegister
 
     public function sendInvoice(Order $order)
     {
+        if (empty($this->url)) {
+            Log::error('Cannot send invoice: FISCAL_URL not configured properly');
+            return false;
+        }
+
         try {
             $invoiceItem = new InvoiceItem($order);
             $invoice = new Invoice();
@@ -47,7 +52,8 @@ class FiscalCashRegister
                 'headers' => [
                     'authId' => $this->authId,
                     'requestId' => $invoice->id,
-                ], 'json' => $invoiceItem->toArray()
+                ],
+                'json' => $invoiceItem->toArray()
             ]);
 
             if ($res->getStatusCode() != 200) {
