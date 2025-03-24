@@ -16,12 +16,17 @@ class Invoice extends Model
 
         static::creating(function ($model) {
             if (!$model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
+                $model->{$model->getKeyName()} = (string) Str::orderedUuid();
             }
         });
     }
 
     protected $fillable = [
-        'id', 'order_id', 'user_id', 'email', 'created_at', 'updated_at'
+        'id',
+        'order_id',
+        'user_id',
+        'email',
+        'created_at',
+        'updated_at'
     ];
 }
