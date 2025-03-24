@@ -216,11 +216,11 @@ class Order extends Model
     //Generate a PDF Voucher
     public function generateVouchers()
     {
-
         try {
             $order = $this;
 
             $order_items = $order->items->load('product');
+            $vouchersGenerated = false;
 
             foreach ($order_items as $item) {
 
@@ -280,43 +280,70 @@ class Order extends Model
                             $voucher->additional_info = $product_properties->additional_info;
 
                             if ($voucher->save() && $order->customer_email !== 'abramusagency@gmail.com') {
-
+                                // Send email to partner company
                                 $voucher->sendCompanyEmail();
+                                $vouchersGenerated = true;
                             }
                         }
                     }
                 }
             }
+
+            // Send email to customer with vouchers
+            if ($vouchersGenerated && $order->customer_email !== 'abramusagency@gmail.com') {
+                Log::info('Vouchers were generated, sending email to customer', ['order_id' => $order->id]);
+                $this->sendCustomerEmail();
+            }
+
             return true;
         } catch (\Exception $e) {
+            Log::error('Error generating vouchers', [
+                'order_id' => $this->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return false;
         }
     }
 
     /**
-     * Send email with vouchers
-     * @param $vouchers
-     * @param $email
-     * @return false
+     * Send email with vouchers to the customer
+     * @param string $paper_size
+     * @return bool Whether the email was sent successfully
      */
     public function sendCustomerEmail($paper_size = 'a4')
     {
         try {
-            $order = $this;
-            if (isset($order) && isset($order->customer_email)) {
-                // Use the updated job to send vouchers
-                SendVoucherEmail::dispatch($this->id)->delay(now()->addSeconds(5));
-                Log::info('Voucher email job dispatched', ['order_id' => $this->id]);
-                return true;
+            if (empty($this->customer_email)) {
+                Log::error('Cannot send customer email: missing customer email', [
+                    'order_id' => $this->id
+                ]);
+                return false;
             }
+
+            // Count vouchers to verify they exist
+            $voucherCount = Voucher::where('order_id', $this->id)->count();
+            if ($voucherCount == 0) {
+                Log::error('Cannot send customer email: no vouchers found', [
+                    'order_id' => $this->id
+                ]);
+                return false;
+            }
+
+            // Use the job to send vouchers
+            SendVoucherEmail::dispatch($this->id)->delay(now()->addSeconds(5));
+            Log::info('Voucher email job dispatched for customer', [
+                'order_id' => $this->id,
+                'customer_email' => $this->customer_email
+            ]);
+            return true;
         } catch (\Exception $e) {
             Log::error('Exception in sendCustomerEmail', [
                 'order_id' => $this->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
+            return false;
         }
-
-        return false;
     }
 }

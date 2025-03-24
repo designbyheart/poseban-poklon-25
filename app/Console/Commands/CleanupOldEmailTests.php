@@ -66,7 +66,7 @@ class CleanupOldEmailTests extends Command
             if (File::exists($path)) {
                 $this->line(" - <fg=yellow>{$file}</>");
             } else {
-                $this->line(" - <fg=gray>{$file}</> (not found)");
+                $this->comment(" - {$file} (not found)");
             }
         }
 
