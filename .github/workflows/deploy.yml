@@ -50,6 +50,10 @@ jobs:
           script: |
             cd ${{ secrets.PROD_DEPLOY_PATH }}
             cp ../.env .
+
+            # Transform PROD_NESTPAY to NESTPAY in the .env file
+            sed -i 's/^PROD_//' .env
+
             composer install --no-interaction
             php artisan view:clear
             php artisan view:cache

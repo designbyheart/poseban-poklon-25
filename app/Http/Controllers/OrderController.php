@@ -373,9 +373,9 @@ class OrderController extends Controller
                 $order->setStatus($status);
             }
 
-            \DB::commit();
+            DB::commit();
         } catch (Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             Log::error('Failed to update order with transaction data', [
                 'order_id' => $order->id,
                 'error' => $e->getMessage()
