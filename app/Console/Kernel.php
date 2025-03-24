@@ -15,6 +15,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         \App\Console\Commands\TestEmailSending::class,
+        \App\Console\Commands\TestBrevoEmail::class,
+        \App\Console\Commands\TestBrevoEmailCodecept::class,
+        \App\Console\Commands\CleanupOldEmailTests::class,
     ];
 
     /**
