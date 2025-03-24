@@ -20,9 +20,9 @@ class InvoiceItem
     public $items;
     public $options;
 
-    public function __construct(Order $order)
+    public function __construct(Order $order, $type = InvoiceType::NORMAL)
     {
-        $this->invoiceType = InvoiceType::NORMAL; //  InvoiceType::TRAINING;
+        $this->invoiceType = $type;
         $this->transactionType = TransactionType::SALE;
         $this->buyerId = null;
 
