@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Utilities;
+
 use App\Voucher;
 use Illuminate\Support\Facades\Log;
 use PDF;
@@ -8,8 +9,10 @@ use \Exception;
 
 set_time_limit(1800);
 
-class VoucherUtility {
-    public static function generateVoucherPDF(Voucher $voucher, $paperSize = 'a4'){
+class VoucherUtility
+{
+    public static function generateVoucherPDF(Voucher $voucher, $paperSize = 'a4')
+    {
         try {
             $order_item = $voucher->orderItem->load('product');
             $company = $order_item->product->producent;
@@ -39,8 +42,12 @@ class VoucherUtility {
                 $pdf = PDF::loadView('admin.voucher.' . $paperSize, $data);
                 return $pdf;
             }
-        }catch (Exception $e) {
-            Log::error($e->getMessage(), $e);
+        } catch (Exception $e) {
+            Log::error('Error generating voucher PDF: ' . $e->getMessage(), [
+                'voucher_id' => $voucher->id,
+                'exception' => $e
+            ]);
+            return null;
         }
     }
 }

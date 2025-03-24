@@ -42,7 +42,17 @@ class EmailService
     {
         try {
             $order = Order::where('id', '=', $orderId)->first();
+            if (!$order) {
+                Log::error('Order not found for sending voucher', ['order_id' => $orderId]);
+                return false;
+            }
+
             $vouchers = Voucher::where('order_id', '=', $orderId)->get();
+            if ($vouchers->isEmpty()) {
+                Log::error('No vouchers found for order', ['order_id' => $orderId]);
+                return false;
+            }
+
             $customer_email = $order->customer_email;
 
             if (isset($order->rec_email)) {
@@ -51,6 +61,7 @@ class EmailService
 
             $attachments = [];
             foreach ($vouchers as $voucher) {
+                Log::info('Generating PDF for voucher', ['voucher_id' => $voucher->id]);
                 $pdf = VoucherUtility::generateVoucherPDF($voucher);
                 if ($pdf != null) {
                     // Convert PDF output to base64
@@ -58,6 +69,9 @@ class EmailService
                         'content' => base64_encode($pdf->output()),
                         'name' => 'voucher_' . $voucher->voucher_code . '.pdf'
                     ];
+                    Log::info('PDF generated successfully', ['voucher_id' => $voucher->id]);
+                } else {
+                    Log::error('Failed to generate PDF for voucher', ['voucher_id' => $voucher->id]);
                 }
             }
 
@@ -91,7 +105,12 @@ class EmailService
 
             return response()->json('Email was sent successfully!');
         } catch (\Exception $exception) {
-            Log::error('error sending voucher' . $exception->getMessage());
+            Log::error('Error sending voucher email', [
+                'order_id' => $orderId,
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString()
+            ]);
+            return false;
         }
     }
 

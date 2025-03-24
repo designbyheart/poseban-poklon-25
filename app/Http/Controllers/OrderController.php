@@ -17,9 +17,9 @@ use App\Services\FiscalCashRegister;
 use App\Setting;
 use App\ShippingMethod;
 use App\Version;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -114,10 +114,8 @@ class OrderController extends Controller
      */
     public function ordersHistory()
     {
-
         $user = Auth::User();
-
-        $orders = $user->orders();
+        $orders = Order::where('user_id', $user->id)->get();
 
         return view('user.profile.orders-history', compact('orders'));
     }
@@ -393,39 +391,47 @@ class OrderController extends Controller
             ]);
         }
 
-        // Email service - outside transaction as it's an external service
-        try {
-            $emailService = new EmailService();
-            $emailService->sendVoucher($order->id);
-        } catch (Exception $e) {
-            Log::error('Failed to send voucher email', [
-                'order_id' => $order->id,
-                'error' => $e->getMessage()
-            ]);
-        }
-
         $transaction_data = (object)$transaction_data;
         $success = true;
 
         // Generate and send eVouchers if needed
         try {
             if ($order->shipping_method_id === 9) {
-                Log::debug("Generating vouchers for order", ['order_id' => $order->id]);
+                Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
+
+                // First generate vouchers
                 $vouchersGenerated = $order->generateVouchers();
-                $emailSent = $order->sendCustomerEmail();
 
                 if (!$vouchersGenerated) {
                     Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
-                }
+                } else {
+                    Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
 
-                if (!$emailSent) {
-                    Log::error('Failed to send customer email', ['order_id' => $order->id]);
+                    // Now send email with vouchers
+                    try {
+                        $emailService = new EmailService();
+                        $emailSent = $emailService->sendVoucher($order->id);
+
+                        if (!$emailSent) {
+                            Log::error('Failed to send voucher email', ['order_id' => $order->id]);
+                        } else {
+                            Log::info('Voucher email sent successfully', ['order_id' => $order->id]);
+                        }
+                    } catch (Exception $e) {
+                        Log::error('Exception sending voucher email', [
+                            'order_id' => $order->id,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
                 }
             } else {
-                Log::debug('Skipping voucher generation', ['order_id' => $order->id]);
+                Log::debug('Skipping voucher generation - not an e-voucher order', [
+                    'order_id' => $order->id,
+                    'shipping_method_id' => $order->shipping_method_id
+                ]);
             }
         } catch (Exception $e) {
-            Log::error('Exception during voucher generation/email sending', [
+            Log::error('Exception during voucher generation process', [
                 'order_id' => $order->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
@@ -517,16 +523,15 @@ class OrderController extends Controller
         $order->countPrice();
 
         if ((!empty($request->order_status_id)) && ($order->status->id != $request->order_status_id)) {
-            $request->order_id = $order->id;
-            $this->updateOrderStatus($request);
+            $this->updateOrderStatus($request, $order->id);
         }
 
         return response()->json('success', 200);
     }
 
-    public function updateOrderStatus(Request $request)
+    public function updateOrderStatus(Request $request, $orderId = null)
     {
-        $order = Order::find($request->order_id);
+        $order = Order::find($orderId ?: $request->order_id);
         $status = OrderStatus::find($request->order_status_id);
 
         $message = $request->message;
@@ -543,6 +548,59 @@ class OrderController extends Controller
     {
         if ($order->delete()) {
             return response('success', 200);
+        }
+    }
+
+    /**
+     * Handle voucher generation process (for testing)
+     *
+     * @param Order $order
+     * @return bool
+     */
+    protected function handleVoucherGeneration(Order $order)
+    {
+        try {
+            if ($order->shipping_method_id === 9) {
+                Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
+
+                // First generate vouchers
+                $vouchersGenerated = $order->generateVouchers();
+
+                if (!$vouchersGenerated) {
+                    Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
+                    return false;
+                } else {
+                    Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
+
+                    // Now send email with vouchers
+                    try {
+                        $emailService = app(EmailService::class);
+                        $emailSent = $emailService->sendVoucher($order->id);
+
+                        if (!$emailSent) {
+                            Log::error('Failed to send voucher email', ['order_id' => $order->id]);
+                            return false;
+                        } else {
+                            Log::info('Voucher email sent successfully', ['order_id' => $order->id]);
+                            return true;
+                        }
+                    } catch (Exception $e) {
+                        Log::error('Exception sending voucher email', [
+                            'order_id' => $order->id,
+                            'error' => $e->getMessage()
+                        ]);
+                        return false;
+                    }
+                }
+            }
+            return false;
+        } catch (Exception $e) {
+            Log::error('Exception during voucher generation process', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
         }
     }
 }
