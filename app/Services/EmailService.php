@@ -55,10 +55,6 @@ class EmailService
 
             $customer_email = $order->customer_email;
 
-            if (isset($order->rec_email)) {
-                $customer_email = $order->rec_email;
-            }
-
             $attachments = [];
             foreach ($vouchers as $voucher) {
                 Log::info('Generating PDF for voucher', ['voucher_id' => $voucher->id]);

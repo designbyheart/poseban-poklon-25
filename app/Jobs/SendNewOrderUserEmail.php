@@ -3,18 +3,20 @@
 namespace App\Jobs;
 
 use App\Services\EmailService;
+use App\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 class SendNewOrderUserEmail implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $order;
+    protected $orderId;
 
     /**
      * Create a new job instance.
@@ -23,7 +25,7 @@ class SendNewOrderUserEmail implements ShouldQueue
      */
     public function __construct($order)
     {
-        $this->order = $order;
+        $this->orderId = $order->id;
     }
 
     /**
@@ -33,13 +35,19 @@ class SendNewOrderUserEmail implements ShouldQueue
      */
     public function handle()
     {
-//        Mail::send(new NewOrderUserMailable($this->order));
+        $order = Order::find($this->orderId);
+
+        if (!$order) {
+            Log::error('Order not found for user email', ['order_id' => $this->orderId]);
+            return;
+        }
+
         $emailService = new EmailService();
         $emailService->sendEmail(
             'emails.order.new-order-user',
-            ['order' => $this->order, 'transaction_data' => isset($this->order->transaction_data) ? json_decode($this->order->transaction_data) : null],
-            [['email' => $this->order->email]],
-            'Vaš poseban poklon - priznanica porudžbine br. ' . $this->order->id
+            ['order' => $order, 'transaction_data' => isset($order->transaction_data) ? json_decode($order->transaction_data) : null],
+            [['email' => $order->customer_email]],
+            'Vaš poseban poklon - priznanica porudžbine br. ' . $order->id
         );
     }
 }
