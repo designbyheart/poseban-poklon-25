@@ -54,7 +54,7 @@
                                     <img src="/images/icons/information_locat_icon.svg" alt="PosebanPoklon"
                                         class="icon-locat">
                                 </div>
-                                <div class="icon-locat-text">Metalska 64/4, Beograd, Srbija</div>
+                                <div class="icon-locat-text">Svetozara Lazovića Gonga 4, 31000 Užice, Srbija</div>
                             </a>
                         </div>
                         <div class="contact-open-time">
