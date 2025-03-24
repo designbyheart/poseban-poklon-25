@@ -30,6 +30,16 @@ class SendVoucherEmail implements ShouldQueue
     }
 
     /**
+     * Get the order ID
+     *
+     * @return int
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
+    }
+
+    /**
      * Execute the job.
      *
      * @return void
