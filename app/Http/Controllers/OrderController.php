@@ -407,18 +407,14 @@ class OrderController extends Controller
                 } else {
                     Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
 
-                    // Now send email with vouchers
+                    // Queue email job instead of sending directly
                     try {
-                        $emailService = new EmailService();
-                        $emailSent = $emailService->sendVoucher($order->id);
-
-                        if (!$emailSent) {
-                            Log::error('Failed to send voucher email', ['order_id' => $order->id]);
-                        } else {
-                            Log::info('Voucher email sent successfully', ['order_id' => $order->id]);
-                        }
+                        // Use job to send voucher email in the background
+                        // Give more time for voucher generation to complete
+                        \App\Jobs\SendVoucherEmail::dispatch($order->id)->delay(now()->addSeconds(30));
+                        Log::info('Voucher email job queued successfully', ['order_id' => $order->id]);
                     } catch (Exception $e) {
-                        Log::error('Exception sending voucher email', [
+                        Log::error('Exception queuing voucher email job', [
                             'order_id' => $order->id,
                             'error' => $e->getMessage()
                         ]);

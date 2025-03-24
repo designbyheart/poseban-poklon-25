@@ -304,41 +304,17 @@ class Order extends Model
         try {
             $order = $this;
             if (isset($order) && isset($order->customer_email)) {
-//                $vouchers = $order->vouchers;
-//                $customer_email = isset($order->rec_email) ? $order->rec_email : $order->customer_email;
-
-
-                //Without queue
-                /*Mail::send('emails.voucher.customer_email', ['order' => $order], function ($message) use ($customer_email, $order, $vouchers, $paper_size){
-
-                    $message->to($customer_email)->subject('Vaš e-vaučer posebnog poklona - po porudzbini br. '. $order->id);
-
-                    foreach ($vouchers as $voucher){
-
-                        $pdf = $voucher->generatePDF($paper_size);
-
-                        if($paper_size === 'a4'){
-                            $message->attachData($pdf->setPaper($paper_size, 'portrait')->stream(), 'voucher_'.$voucher->voucher_code.'.pdf');
-                        }
-                        elseif($paper_size === 'a5'){
-                            $message->attachData($pdf->setPaper($paper_size, 'landscape')->stream(), 'voucher_'.$voucher->voucher_code.'.pdf');
-                        }
-
-                    }
-
-                });*/
-
-                //Use queue
-
-                $emailService = new EmailService();
-                $emailService->sendVoucher($this->id);
-                //                SendVoucherEmail::dispatch($customer_email, $order, $vouchers, $paper_size)->delay(now()->addSeconds(5));
-
+                // Use the updated job to send vouchers
+                SendVoucherEmail::dispatch($this->id)->delay(now()->addSeconds(5));
+                Log::info('Voucher email job dispatched', ['order_id' => $this->id]);
                 return true;
             }
-
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::error('Exception in sendCustomerEmail', [
+                'order_id' => $this->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
 
         return false;

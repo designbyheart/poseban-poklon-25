@@ -141,7 +141,7 @@ class EmailService
             $sendSmtpEmail = new SendSmtpEmail($emailParams);
 
             $result = $this->apiInstance->sendTransacEmail($sendSmtpEmail);
-            \Log::info($result);
+            Log::info($result);
 
             return response()->json('Email was sent successfully!');
         } catch (\Exception $exception) {
