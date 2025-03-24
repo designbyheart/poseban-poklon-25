@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\TestBrevoEmail::class,
         \App\Console\Commands\TestBrevoEmailCodecept::class,
         \App\Console\Commands\CleanupOldEmailTests::class,
+        \App\Console\Commands\TestVoucherPDF::class,
     ];
 
     /**
