@@ -437,29 +437,72 @@ class OrderController extends Controller
      */
     public function paymentFail(Request $request)
     {
-        if (isset($request->oid)) {
-            $order = Order::find($request->oid);
-            $transaction_data = [
-                'order_id' => $request->oid,
-                'auth_code' => $request->AuthCode,
-                'trans_id' => $request->TransId,
-                'response' => $request->Response,
-                'proc_return_code' => $request->ProcReturnCode,
-                'md_status' => $request->mdStatus,
-                'extra_trxdate' => Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s')
-            ];
+        if (!isset($request->oid)) {
+            Log::error('Payment fail called without order ID', [
+                'request_data' => $request->all()
+            ]);
+            return redirect()->route('home')->with('error', 'Invalid payment information');
+        }
+
+        $order = Order::find($request->oid);
+        if (!$order) {
+            Log::error('Payment fail: Order not found', ['order_id' => $request->oid]);
+            return redirect()->route('home')->with('error', 'Order not found');
+        }
+
+        Log::warning('Payment failed for order', [
+            'order_id' => $order->id,
+            'payment_method' => $order->paymentMethod->name ?? 'Unknown',
+            'amount' => $order->total
+        ]);
+
+        $transaction_data = [
+            'order_id' => $request->oid,
+            'auth_code' => $request->AuthCode ?? null,
+            'trans_id' => $request->TransId ?? null,
+            'response' => $request->Response ?? null,
+            'proc_return_code' => $request->ProcReturnCode ?? null,
+            'md_status' => $request->mdStatus ?? null,
+            'extra_trxdate' => isset($request->EXTRA_TRXDATE) ?
+                Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s') :
+                Carbon::now()->format('Y-m-d H:i:s')
+        ];
+
+        try {
+            DB::beginTransaction();
+
             $order->transaction_data = json_encode($transaction_data);
             //Set failed status
             $status = OrderStatus::find(4);
-            $order->save();
-            if (isset($status)) {
-                $order->setStatus($status);
+
+            if (!$status) {
+                Log::error('Failed status (4) not found in order_statuses table');
+                throw new Exception('Failed status not found');
             }
-            $transaction_data = (object)$transaction_data;
-            $success = false;
-            $payment_params = $order->getPaymentParams();
-            return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+
+            $order->save();
+            $order->setStatus($status);
+
+            DB::commit();
+
+            Log::info('Order status updated to Failed after payment failure', [
+                'order_id' => $order->id,
+                'status_id' => $status->id
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to update order status after payment failure', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
+
+        $transaction_data = (object)$transaction_data;
+        $success = false;
+        $payment_params = $order->getPaymentParams();
+
+        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
     }
 
     /**

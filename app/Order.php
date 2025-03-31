@@ -220,6 +220,15 @@ class Order extends Model
         try {
             $order = $this;
 
+            // Don't generate vouchers for failed or unpaid orders
+            if ($order->status->id !== 2) { // 2 = Paid status
+                Log::warning('Attempted to generate vouchers for non-paid order', [
+                    'order_id' => $order->id,
+                    'status_id' => $order->status->id
+                ]);
+                return false;
+            }
+
             $order_items = $order->items->load('product');
             $vouchersGenerated = false;
 

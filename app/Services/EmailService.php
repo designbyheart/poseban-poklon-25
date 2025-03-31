@@ -68,6 +68,15 @@ class EmailService
                 return false;
             }
 
+            // Don't send vouchers for failed or unpaid orders
+            if ($order->status->id !== 2) { // 2 = Paid status
+                Log::warning('Attempted to send vouchers for non-paid order', [
+                    'order_id' => $order->id,
+                    'status_id' => $order->status->id
+                ]);
+                return false;
+            }
+
             $vouchers = Voucher::where('order_id', '=', $orderId)->get();
             if ($vouchers->isEmpty()) {
                 Log::error('No vouchers found for order', ['order_id' => $orderId]);
