@@ -1,112 +1,78 @@
-<center>
-    <table cellpadding="0" cellspacing="0" width="600" style="width: 600px;">
-        <tr>
-            <td width="600">
-                <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                    <img src="https://posebanpoklon.rs/images/email/header.jpg" style="width: 600px; display: block;" >
-                </a>
-            </td>
-        </tr>
-    </table>
-    <table cellpadding="0" cellspacing="0" width="600" style="width: 600px; border: 0;">
-        <tr>
-            <td width="300">
-                <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                    <img src="https://posebanpoklon.rs/images/email/social_left.jpg" style="width: 300px; display: block;" >
-                </a>
-            </td>
-            <td width="300">
-                <table cellpadding="0" cellspacing="0" width="300" style="width: 300px;">
-                    <tr>
-                        <td width="38">
-                            <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_01.jpg" style="width: 38px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="37">
-                            <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_02.jpg" style="width: 37px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="38">
-                            <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_03.jpg" style="width: 38px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="37">
-                            <a href="https://www.facebook.com/PosebanPoklon" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_04.jpg" style="width: 37px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="38">
-                            <a href="https://twitter.com/PPoklon" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_05.jpg" style="width: 38px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="37">
-                            <a href="https://www.instagram.com/poseban_poklon/" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_06.jpg" style="width: 37px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="38">
-                            <a href="https://posebanpoklon.rs/#youtube" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_07.jpg" style="width: 38px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                        <td width="37">
-                            <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                                <img src="https://posebanpoklon.rs/images/email/social_right_08.jpg" style="width: 37px; display: block;"
-                                    >
-                            </a>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+<!DOCTYPE html>
+<html>
 
-    <table cellpadding="0" cellspacing="0" width="600"
-           style="padding: 20px 0 10px 0; width: 600px; border: 0; background: #ffffff;">
-        <tr>
-            <td width="46" style="width: 46px; background: #ffffff;">
-                <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
-            </td>
-            <td width="508">
-                Ćao,
-                <br><br>u prilogu mejla šaljemo e-vaučer po porudžbini br <span style="font-family: Rubik, sans-serif; color: #ed2025; font-size: 20px;">{{ $order->id }}</span> i želimo ti da uživaš u posebnom poklonu.
-                <br>Mnogo nam je drago što smo deo vašeg darivanja.
-                <br><br>Hvala na poverenju i veliki pozdrav,
-                <br>Poseban Poklon Tim
-            </td>
-            <td width="46" style="width: 46px; background: #ffffff;">
-                <img src="https://posebanpoklon.rs/images/email/white_td.jpg" >
-            </td>
-        </tr>
-    </table>
+<head>
+    <meta charset="utf-8">
+    <title>Vaši e-vaučeri - Poseban Poklon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
 
-    <table cellpadding="0" cellspacing="0" width="600" style="width: 600px; border: 0;">
-        <tr>
-            <td width="600">
-                <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                    <img src="https://posebanpoklon.rs/images/email/footer_icons.jpg" style="width: 600px; display: block;" >
-                </a>
-            </td>
-        </tr>
-    </table>
-    <table cellpadding="0" cellspacing="0" width="600" style="width: 600px; border: 0;">
-        <tr>
-            <td width="600">
-                <a href="https://posebanpoklon.rs/" style="text-decoration: none;">
-                    <img src="https://posebanpoklon.rs/images/email/footer.jpg" style="width: 600px; display: block;" >
-                </a>
-            </td>
-        </tr>
-    </table>
-</center>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .voucher-info {
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vaši e-vaučeri su spremni!</h1>
+        </div>
+
+        <div class="content">
+            <p>Poštovani,</p>
+
+            <p>U prilogu ovog emaila nalaze se e-vaučeri za Vašu porudžbinu br. {{ $order->id }}.</p>
+
+            <div class="voucher-info">
+                <h3>Uputstvo za korišćenje:</h3>
+                <ol>
+                    <li>Preuzmite PDF fajlove sa e-vaučerima</li>
+                    <li>Štampajte ih ili sačuvajte na svom uređaju</li>
+                    <li>Prikazite vaučer prilikom realizacije usluge</li>
+                </ol>
+
+                <p><strong>Važi do:</strong> {{ $order->vouchers->first()->end_date->format('d.m.Y') }}</p>
+            </div>
+
+            <p>Ukoliko imate bilo kakvih pitanja u vezi sa Vašim vaučerima, slobodno nas kontaktirajte.</p>
+
+            <p>Srdačan pozdrav,<br>Tim Poseban Poklon</p>
+        </div>
+
+        <div class="footer">
+            <p>© {{ date('Y') }} Poseban Poklon. Sva prava zadržana.</p>
+        </div>
+    </div>
+</body>
+
+</html>

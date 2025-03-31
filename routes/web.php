@@ -1,4 +1,8 @@
 <?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -694,3 +698,25 @@ Route::get('/{page_slug}', [
 Route::post('/send-email', [EmailController::class, 'sendTransactionalEmail']);
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
+
+// Test route for voucher emails
+Route::get('/test/voucher-email/{orderId}', function ($orderId) {
+    $order = \App\Order::find($orderId);
+
+    if (!$order) {
+        return response()->json(['error' => 'Order not found'], 404);
+    }
+
+    // Generate vouchers if not already done
+    if ($order->vouchers->isEmpty()) {
+        $order->generateVouchers();
+    }
+
+    // Dispatch voucher email job immediately (bypassing the delay)
+    \App\Jobs\SendVoucherEmail::dispatch($order->id);
+
+    return response()->json([
+        'message' => 'Voucher email dispatched for order ' . $order->id,
+        'customer_email' => $order->customer_email
+    ]);
+});

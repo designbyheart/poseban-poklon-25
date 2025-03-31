@@ -4,6 +4,7 @@ namespace App;
 
 use App\Coupon;
 use App\Jobs\SendOrderStatusChangedEmail;
+use App\Jobs\SendNewOrderUserEmail;
 use App\Jobs\SendVoucherEmail;
 use App\Services\EmailService;
 use Auth;
@@ -321,6 +322,13 @@ class Order extends Model
                 return false;
             }
 
+            // First send order confirmation email immediately
+            SendNewOrderUserEmail::dispatch($this);
+            Log::info('Order confirmation email dispatched', [
+                'order_id' => $this->id,
+                'customer_email' => $this->customer_email
+            ]);
+
             // Count vouchers to verify they exist
             $voucherCount = Voucher::where('order_id', $this->id)->count();
             if ($voucherCount == 0) {
@@ -330,9 +338,9 @@ class Order extends Model
                 return false;
             }
 
-            // Use the job to send vouchers
-            SendVoucherEmail::dispatch($this->id)->delay(now()->addSeconds(5));
-            Log::info('Voucher email job dispatched for customer', [
+            // Use the job to send vouchers with delay
+            SendVoucherEmail::dispatch($this->id)->delay(now()->addMinutes(5));
+            Log::info('Voucher email job dispatched with delay', [
                 'order_id' => $this->id,
                 'customer_email' => $this->customer_email
             ]);

@@ -304,8 +304,8 @@ class OrderController extends Controller
             //Send email to administrator about new order
             SendNewOrderAdminEmail::dispatch($order)->delay(now()->addSeconds(2));
 
-            //Send email to administrator about new order
-            SendNewOrderUserEmail::dispatch($order)->delay(now()->addSeconds(3));
+            //Send order confirmation email to user immediately
+            SendNewOrderUserEmail::dispatch($order);
 
             $order->setStatus($default_status);
         }
@@ -394,6 +394,10 @@ class OrderController extends Controller
         $transaction_data = (object)$transaction_data;
         $success = true;
 
+        // Send order confirmation email immediately
+        \App\Jobs\SendNewOrderUserEmail::dispatch($order);
+        Log::info('Order confirmation email dispatched', ['order_id' => $order->id]);
+
         // Generate and send eVouchers if needed
         try {
             if ((int)$order->shipping_method_id === 9) {
@@ -407,18 +411,9 @@ class OrderController extends Controller
                 } else {
                     Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
 
-                    // Queue email job instead of sending directly
-                    try {
-                        // Use job to send voucher email in the background
-                        // Give more time for voucher generation to complete
-                        \App\Jobs\SendVoucherEmail::dispatch($order->id)->delay(now()->addSeconds(30));
-                        Log::info('Voucher email job queued successfully', ['order_id' => $order->id]);
-                    } catch (Exception $e) {
-                        Log::error('Exception queuing voucher email job', [
-                            'order_id' => $order->id,
-                            'error' => $e->getMessage()
-                        ]);
-                    }
+                    // Send voucher email immediately
+                    \App\Jobs\SendVoucherEmail::dispatch($order->id);
+                    Log::info('Voucher email dispatched immediately', ['order_id' => $order->id]);
                 }
             } else {
                 Log::debug('Skipping voucher generation - not an e-voucher order', [
