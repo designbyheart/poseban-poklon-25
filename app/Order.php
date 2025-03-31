@@ -71,18 +71,39 @@ class Order extends Model
         return $this->hasMany('App\Voucher', 'order_id');
     }
 
-    //Set order status function and send status email
+    /**
+     * Set order status and send notification email
+     * 
+     * @param OrderStatus $status Status to set
+     * @param string|null $message Custom message (defaults to status message)
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function setStatus($status, $message = null)
     {
+        // Update order status relationship
         $this->status()->associate($status);
-
+        
+        // Save the order and send email notification
         if ($this->update()) {
             $this->sendStatusEmail($status, $message);
+            
+            // For paid status, generate vouchers
+            if ($status->id === 2) { // 2 = Paid
+                Log::info('Order marked as paid, generating vouchers', ['order_id' => $this->id]);
+                $this->generateVouchers();
+            }
+            
             return response()->json('success', 200);
         }
     }
 
-    //Send status email info
+    /**
+     * Send order status change email notification
+     * 
+     * @param OrderStatus $status New status
+     * @param string|null $message Custom message (defaults to status message)
+     * @return void
+     */
     public function sendStatusEmail($status, $message = null)
     {
         if (empty($message)) {
@@ -90,17 +111,34 @@ class Order extends Model
         }
 
         $email = $this->customer_email;
+        if (empty($email)) {
+            Log::warning('Cannot send status email: missing customer email', [
+                'order_id' => $this->id
+            ]);
+            return;
+        }
 
         $order = $this->load('shippingMethod', 'paymentMethod', 'giftCard', 'coupon', 'currency', 'status', 'items.product', 'user');
 
         if (!empty($message)) {
             SendOrderStatusChangedEmail::dispatch($email, $message, $order)->delay(now()->addSeconds(10));
+            Log::info('Status change email dispatched', [
+                'order_id' => $this->id,
+                'status_id' => $status->id,
+                'customer_email' => $email
+            ]);
         }
     }
 
+    /**
+     * Calculate order prices including discounts
+     * 
+     * @param Request|null $request
+     * @param bool $check_price
+     * @return $this
+     */
     public function countPrice($request = null, $check_price = false)
     {
-
         $discount = 0;
         $this->coupon_discount = 0;
         $this->giftcard_discount = 0;
@@ -126,18 +164,15 @@ class Order extends Model
 
         //Validate coupon and calculate discount for order
         if (!empty($this->coupon_code)) {
-
             $coupon = Coupon::where('coupon_code', $this->coupon_code)->first();
 
             if (!empty($coupon) && $coupon->validate()) {
-
                 $discount += $this->coupon_discount = $coupon->process($this->items, $request);
             }
         }
 
         //Add giftcard price to discount
         if (!empty($this->giftcard_code)) {
-
             $giftCard = GiftCard::where('code', $this->giftcard_code)->first();
             $this->giftcard_discount = $giftCard->value;
             $discount += $this->giftcard_discount;
@@ -168,7 +203,11 @@ class Order extends Model
         return $this;
     }
 
-    //Prepare parameters for payment system
+    /**
+     * Prepare parameters for payment system
+     * 
+     * @return object Payment parameters
+     */
     public function getPaymentParams()
     {
         $orgClientId = env('NESTPAY_ID');
@@ -214,7 +253,11 @@ class Order extends Model
         ];
     }
 
-    //Generate a PDF Voucher
+    /**
+     * Generate vouchers for this order
+     * 
+     * @return bool Success status
+     */
     public function generateVouchers()
     {
         try {
@@ -233,66 +276,69 @@ class Order extends Model
             $vouchersGenerated = false;
 
             foreach ($order_items as $item) {
-
                 $order_item = OrderItem::find($item->id);
-
                 $product = $order_item->product;
-
                 $product_count = $order_item->product_quantity;
-
                 $product_properties = json_decode($product->properties);
 
+                // Check if we've already generated some vouchers for this order item
                 $already_generated = $order_item->vouchers->count();
-
                 $vouchers_count = $product_count - $already_generated;
-
                 $personal_messages = json_decode($item->personal_message);
 
                 if ($vouchers_count > 0) {
+                    Log::info('Generating ' . $vouchers_count . ' vouchers for order item', [
+                        'order_id' => $order->id,
+                        'item_id' => $item->id,
+                        'product_id' => $product->id
+                    ]);
 
                     for ($i = 0; $i < $vouchers_count; $i++) {
-
                         if (!empty($order_item)) {
-
                             $voucher = new Voucher();
-
                             $voucher->voucher_code = $voucher->generateVoucherCode();
-
                             $voucher->activation_code = $voucher->generateActivationCode();
-
                             $voucher->end_date = $voucher->generateEndDate();
-
                             $voucher->order()->associate($order);
                             $voucher->orderItem()->associate($order_item);
 
-                            //Set voucher values
+                            // Set voucher values
                             $voucher->title = $product->title;
                             $voucher->description = $product->voucher_description;
 
+                            // Set personal message
                             if ($already_generated > 0) {
-
-                                $voucher->personal_message = $personal_messages[$already_generated]->text;
+                                $message_index = $already_generated + $i;
+                                $voucher->personal_message = isset($personal_messages[$message_index]) ? 
+                                    $personal_messages[$message_index]->text : '';
                             } else {
-
-                                $voucher->personal_message = $personal_messages[$i]->text;
+                                $voucher->personal_message = isset($personal_messages[$i]) ? 
+                                    $personal_messages[$i]->text : '';
                             }
 
-                            //Voucher properties
-                            $voucher->weather = $product_properties->weather;
-                            $voucher->duration = $product_properties->duration;
-                            $voucher->location = $product_properties->location;
-                            $voucher->visitors = $product_properties->visitors;
-                            $voucher->dress_code = $product_properties->dress_code;
+                            // Voucher properties
+                            $voucher->weather = $product_properties->weather ?? '';
+                            $voucher->duration = $product_properties->duration ?? '';
+                            $voucher->location = $product_properties->location ?? '';
+                            $voucher->visitors = $product_properties->visitors ?? '';
+                            $voucher->dress_code = $product_properties->dress_code ?? '';
+                            
                             if (!empty($product_properties->za_gledaoce)) {
-
                                 $voucher->za_gledaoce = $product_properties->za_gledaoce;
                             }
-                            $voucher->additional_info = $product_properties->additional_info;
+                            
+                            $voucher->additional_info = $product_properties->additional_info ?? '';
 
                             if ($voucher->save() && $order->customer_email !== 'abramusagency@gmail.com') {
                                 // Send email to partner company
                                 $voucher->sendCompanyEmail();
                                 $vouchersGenerated = true;
+                                
+                                Log::info('Voucher generated successfully', [
+                                    'order_id' => $order->id,
+                                    'voucher_id' => $voucher->id,
+                                    'voucher_code' => $voucher->voucher_code
+                                ]);
                             }
                         }
                     }
@@ -318,7 +364,8 @@ class Order extends Model
 
     /**
      * Send email with vouchers to the customer
-     * @param string $paper_size
+     * 
+     * @param string $paper_size PDF paper size ('a4' or 'a5')
      * @return bool Whether the email was sent successfully
      */
     public function sendCustomerEmail($paper_size = 'a4')
@@ -351,7 +398,8 @@ class Order extends Model
             SendVoucherEmail::dispatch($this->id)->delay(now()->addMinutes(5));
             Log::info('Voucher email job dispatched with delay', [
                 'order_id' => $this->id,
-                'customer_email' => $this->customer_email
+                'customer_email' => $this->customer_email,
+                'recipient_email' => $this->rec_email ?? 'none'
             ]);
             return true;
         } catch (\Exception $e) {

@@ -39,7 +39,8 @@ class VoucherUtility
                 return null;
             }
 
-            $orderItem->load('product');
+            // Eager load product with producent to avoid N+1 queries
+            $orderItem->load(['product', 'product.producent', 'product.images']);
             $product = $orderItem->product;
             if (!$product) {
                 Log::error('Cannot generate PDF: Product not found for order item', [
@@ -77,27 +78,47 @@ class VoucherUtility
                 'dress_code' => $voucher->dress_code,
                 'za_gledaoce' => $voucher->za_gledaoce,
                 'personal_message' => $voucher->personal_message,
-                'qr_code' => $product->qr_code
+                'qr_code' => $product->qr_code,
+                'order' => $voucher->order
             ];
 
             // Verify the template exists
             $templatePath = 'admin.voucher.' . $paperSize;
 
-            // Generate the PDF
-            Log::debug('Generating PDF with template', [
-                'voucher_id' => $voucher->id,
-                'template' => $templatePath
-            ]);
+            // Generate the PDF with error handling
+            try {
+                // Set memory limit higher for PDF generation
+                ini_set('memory_limit', '512M');
+                
+                Log::debug('Generating PDF with template', [
+                    'voucher_id' => $voucher->id,
+                    'template' => $templatePath
+                ]);
 
-            $pdf = PDF::loadView($templatePath, $data);
+                $pdf = PDF::loadView($templatePath, $data);
+                
+                // Set paper orientation based on size
+                if ($paperSize === 'a4') {
+                    $pdf->setPaper($paperSize, 'portrait');
+                } else if ($paperSize === 'a5') {
+                    $pdf->setPaper($paperSize, 'landscape');
+                }
 
-            // Test if PDF generation was successful
-            if ($pdf) {
-                Log::debug('PDF generated successfully', ['voucher_id' => $voucher->id]);
-                return $pdf;
-            } else {
-                Log::error('PDF generation failed - no PDF returned from loadView', [
-                    'voucher_id' => $voucher->id
+                // Test if PDF generation was successful
+                if ($pdf) {
+                    Log::debug('PDF generated successfully', ['voucher_id' => $voucher->id]);
+                    return $pdf;
+                } else {
+                    Log::error('PDF generation failed - no PDF returned from loadView', [
+                        'voucher_id' => $voucher->id
+                    ]);
+                    return null;
+                }
+            } catch (Exception $innerException) {
+                Log::error('PDF rendering error: ' . $innerException->getMessage(), [
+                    'voucher_id' => $voucher->id,
+                    'template' => $templatePath,
+                    'error' => $innerException->getMessage()
                 ]);
                 return null;
             }
