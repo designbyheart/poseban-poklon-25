@@ -13,10 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
-        \App\Console\Commands\TestEmailSending::class,
-        \App\Console\Commands\TestBrevoEmail::class,
-        \App\Console\Commands\TestBrevoEmailCodecept::class,
+        // Comment out test email commands
+        // \App\Console\Commands\TestEmailSending::class,
+        // \App\Console\Commands\TestBrevoEmail::class,
+        // \App\Console\Commands\TestBrevoEmailCodecept::class,
         \App\Console\Commands\CleanupOldEmailTests::class,
         \App\Console\Commands\TestVoucherPDF::class,
     ];

@@ -32,7 +32,7 @@ class OrderController extends Controller
     public function __construct()
     {
 
-        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail']]);
+        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail', 'handleVoucherGeneration', 'testVoucherGeneration']]);
         $this->middleware('auth', ['only' => ['ordersHistory']]);
     }
 
@@ -406,27 +406,7 @@ class OrderController extends Controller
 
         // Generate and send eVouchers if needed
         try {
-            if ((int)$order->shipping_method_id === 9) {
-                Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
-
-                // First generate vouchers
-                $vouchersGenerated = $order->generateVouchers();
-
-                if (!$vouchersGenerated) {
-                    Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
-                } else {
-                    Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
-
-                    // Send voucher email immediately
-                    \App\Jobs\SendVoucherEmail::dispatch($order->id);
-                    Log::info('Voucher email dispatched immediately', ['order_id' => $order->id]);
-                }
-            } else {
-                Log::debug('Skipping voucher generation - not an e-voucher order', [
-                    'order_id' => $order->id,
-                    'shipping_method_id' => $order->shipping_method_id
-                ]);
-            }
+            $this->processVouchers($order);
         } catch (Exception $e) {
             Log::error('Exception during voucher generation process', [
                 'order_id' => $order->id,
@@ -493,7 +473,7 @@ class OrderController extends Controller
 
             Log::info('Order status updated to Failed after payment failure', [
                 'order_id' => $order->id,
-                'status_id' => $status->id
+                'order_status_id' => $status->id
             ]);
         } catch (Exception $e) {
             DB::rollBack();
@@ -592,55 +572,319 @@ class OrderController extends Controller
     }
 
     /**
-     * Handle voucher generation process (for testing)
-     *
-     * @param Order $order
-     * @return bool
+     * Handle voucher generation and sending
      */
-    protected function handleVoucherGeneration(Order $order)
+    public function handleVoucherGeneration(Order $order)
     {
         try {
-            if ((int)$order->shipping_method_id === 9) {
-                Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
+            if ((int)$order->shipping_method_id !== 9) {
+                return [
+                    'success' => false,
+                    'message' => 'Not an e-voucher order'
+                ];
+            }
 
-                // First generate vouchers
+            // Check paid status using order_status_id directly, cast both to integers
+            if ((int)$order->order_status_id !== 2) {
+                    Log::warning('Order is not in paid status', [
+                        'order_id' => $order->id,
+                    'order_status_id' => $order->order_status_id,
+                    ]);
+                    return [
+                        'success' => false,
+                        'message' => 'Order must be in paid status'
+                    ];
+                }
+
+                // Check existing vouchers
+                $existingVouchers = $order->vouchers()->count();
+            Log::info('Processing paid order', [
+                    'order_id' => $order->id,
+                'existing_vouchers' => $existingVouchers
+                ]);
+
+            // Generate vouchers if needed
+                if ($existingVouchers === 0) {
                 $vouchersGenerated = $order->generateVouchers();
 
                 if (!$vouchersGenerated) {
                     Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
-                    return false;
-                } else {
+                    return [
+                        'success' => false,
+                        'message' => 'Failed to generate vouchers'
+                    ];
+                }
+
                     Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
+                }
 
-                    // Now send email with vouchers
+            // Send email with vouchers
                     try {
-                        $emailService = app(EmailService::class);
-                        $emailSent = $emailService->sendVoucher($order->id);
+                if (app()->environment('local')) {
+                    // Execute directly in local environment
+                    $job = new \App\Jobs\SendVoucherEmail($order->id);
+                    $job->handle();
+                    Log::info('Voucher email sent directly (local environment)', ['order_id' => $order->id]);
+                } else {
+                    // Queue in production
+                    SendVoucherEmail::dispatch($order->id);
+                    Log::info('Voucher email queued (production environment)', ['order_id' => $order->id]);
+                }
 
-                        if (!$emailSent) {
-                            Log::error('Failed to send voucher email', ['order_id' => $order->id]);
-                            return false;
-                        } else {
-                            Log::info('Voucher email sent successfully', ['order_id' => $order->id]);
-                            return true;
-                        }
+                    return [
+                        'success' => true,
+                    'message' => app()->environment('local') ? 'Vouchers processed and email sent directly' : 'Vouchers processed and email queued',
+                        'existing_vouchers' => $existingVouchers,
+                        'new_vouchers' => $order->vouchers()->count() - $existingVouchers
+                    ];
                     } catch (Exception $e) {
                         Log::error('Exception sending voucher email', [
                             'order_id' => $order->id,
-                            'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                         ]);
-                        return false;
+                    return [
+                        'success' => false,
+                        'message' => 'Failed to send voucher email: ' . $e->getMessage()
+                    ];
                     }
-                }
-            }
-            return false;
         } catch (Exception $e) {
             Log::error('Exception during voucher generation process', [
                 'order_id' => $order->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return false;
+            return [
+                'success' => false,
+                'message' => 'Error processing vouchers: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    protected function processVouchers(Order $order): void
+    {
+        if ((int)$order->shipping_method_id === 9) {
+            Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
+
+            // First check if vouchers exist in database
+            $vouchersExist = $order->vouchers()->exists();
+
+            if (!$vouchersExist) {
+                // Generate vouchers in database if they don't exist
+            $vouchersGenerated = $order->generateVouchers();
+            if (!$vouchersGenerated) {
+                Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
+                    return;
+                }
+                Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
+            }
+
+            // Now handle PDF generation for each voucher
+            $order->vouchers->each(function ($voucher) {
+                $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+
+                // Check if PDF already exists
+                if (!file_exists($pdfPath)) {
+                    try {
+                        // Ensure directory exists
+                        if (!file_exists(storage_path('app/vouchers'))) {
+                            mkdir(storage_path('app/vouchers'), 0755, true);
+                        }
+
+                        // Generate and save PDF
+                        $pdf = VoucherUtility::generateVoucherPDF($voucher);
+                        if ($pdf) {
+                            $pdf->save($pdfPath);
+                            Log::info('Generated PDF for voucher', [
+                                'voucher_code' => $voucher->voucher_code,
+                                'path' => $pdfPath
+                            ]);
+            } else {
+                            Log::error('Failed to generate PDF for voucher', [
+                                'voucher_code' => $voucher->voucher_code
+                            ]);
+                        }
+                    } catch (Exception $e) {
+                        Log::error('Exception generating PDF for voucher', [
+                            'voucher_code' => $voucher->voucher_code,
+                            'error' => $e->getMessage()
+                        ]);
+                    }
+                } else {
+                    Log::info('PDF already exists for voucher', [
+                        'voucher_code' => $voucher->voucher_code,
+                        'path' => $pdfPath
+                    ]);
+                }
+            });
+
+            // Send voucher email
+                \App\Jobs\SendVoucherEmail::dispatch($order->id);
+            Log::info('Voucher email dispatched', ['order_id' => $order->id]);
+        } else {
+            Log::debug('Skipping voucher generation - not an e-voucher order', [
+                'order_id' => $order->id,
+                'shipping_method_id' => $order->shipping_method_id
+            ]);
+        }
+    }
+
+    protected function ensureOrderStatus(Order $order)
+    {
+        if (!$order->status) {
+            Log::warning('Order has no status, attempting to fix', [
+                'order_id' => $order->id
+            ]);
+
+            try {
+                // Get the default status (assuming ID 1 is the default/initial status)
+                $defaultStatus = OrderStatus::find(1);
+
+                if (!$defaultStatus) {
+                    Log::error('Default order status not found in database');
+                    throw new Exception('Default order status not found');
+                }
+
+                // Set the status
+                $order->status()->associate($defaultStatus);
+                $order->save();
+
+                // Reload the status relationship
+                $order->load('status');
+
+                Log::info('Successfully set default status for order', [
+                    'order_id' => $order->id,
+                    'order_status_id' => $defaultStatus->id
+                ]);
+
+                return true;
+            } catch (Exception $e) {
+                Log::error('Failed to set default status for order', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage()
+                ]);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected function validateOrderStatus(Order $order)
+    {
+        try {
+            Log::info('Validating order status', [
+                'order_id' => $order->id,
+                'current_status' => $order->order_status_id,
+                'has_transaction' => !empty($order->transaction_data)
+            ]);
+
+            // Primary check: Is order paid (order_status_id = 2)?
+            if (!$order->order_status_id || $order->order_status_id !== 2) {
+                // Secondary check: If status is not paid but transaction is successful,
+                // we should update the status to paid
+                if (!empty($order->transaction_data)) {
+                    $transData = json_decode($order->transaction_data);
+                    if (isset($transData->response) &&
+                        strtolower($transData->response) === 'approved' &&
+                        $transData->proc_return_code === '00') {
+
+                        // Update to paid status
+                        $order->order_status_id = 2;
+                        $order->save();
+
+                        Log::info('Updated order to paid status based on transaction data', [
+                            'order_id' => $order->id
+                        ]);
+
+                        return [
+                            'success' => true,
+                            'message' => 'Order updated to paid status',
+                            'status_id' => 2
+                        ];
+                    }
+                }
+
+                return [
+                    'success' => false,
+                    'message' => 'Order is not paid',
+                    'status_id' => $order->order_status_id
+                ];
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Order is paid',
+                'status_id' => $order->order_status_id
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Error validating order status', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Error validating order status: ' . $e->getMessage(),
+                'status_id' => $order->order_status_id
+            ];
+        }
+    }
+
+    public function testVoucherGeneration($orderId)
+    {
+        try {
+            // Load order with necessary relationships
+            $order = Order::with(['items', 'vouchers', 'status'])->find($orderId);
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+            // Now proceed with voucher generation
+            $result = $this->handleVoucherGeneration($order);
+
+            // Get status name safely
+            $statusName = null;
+            if ($order->status) {
+                $statusName = $order->status->title;
+            } else {
+                // Try to get status name directly
+                $status = OrderStatus::find($order->order_status_id);
+                $statusName = $status ? $status->title : null;
+            }
+
+            return response()->json([
+                'success' => $result['success'],
+                'message' => $result['message'],
+                'data' => [
+                    'order_id' => $order->id,
+                    'customer_email' => $order->customer_email,
+                    'shipping_method_id' => $order->shipping_method_id,
+                    'order_status_id' => $order->order_status_id,
+                    'status_name' => $statusName,
+                    'vouchers_count' => $order->vouchers()->count(),
+                    'is_evoucher' => (int)$order->shipping_method_id === 9,
+                    'existing_vouchers' => $result['existing_vouchers'] ?? 0,
+                    'new_vouchers' => $result['new_vouchers'] ?? 0
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Error in testVoucherGeneration', [
+                'order_id' => $orderId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error during voucher processing',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

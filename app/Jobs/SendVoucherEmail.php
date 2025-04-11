@@ -48,99 +48,37 @@ class SendVoucherEmail implements ShouldQueue
      */
     public function handle()
     {
-        try {
-            Log::info('Starting voucher email job', ['order_id' => $this->orderId, 'attempt' => $this->attempts()]);
+            $order = Order::with(['status', 'items', 'vouchers'])->find($this->orderId);
 
-            // Verify order exists
-            $order = Order::find($this->orderId);
             if (!$order) {
-                Log::error('Order not found in SendVoucherEmail job', ['order_id' => $this->orderId]);
+            Log::error('Order not found for voucher email', ['order_id' => $this->orderId]);
                 return;
             }
 
-            // Don't send vouchers for failed or unpaid orders
-            if ($order->status->id !== 2) { // 2 = Paid status
-                Log::warning('Attempted to send vouchers for non-paid order', [
-                    'order_id' => $this->orderId,
-                    'status_id' => $order->status->id
-                ]);
-                return;
-            }
+        // Verify all PDFs exist before sending
+        $allPDFsExist = $order->vouchers->every(function ($voucher) {
+            $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+            return file_exists($pdfPath);
+        });
 
-            // Verify vouchers exist for this order
-            $vouchers = Voucher::where('order_id', $this->orderId)->get();
-            if ($vouchers->isEmpty()) {
-                Log::warning('No vouchers found for order in SendVoucherEmail job', ['order_id' => $this->orderId]);
-
-                // Try to generate vouchers if they don't exist
-                $vouchersGenerated = $order->generateVouchers();
-                if (!$vouchersGenerated) {
-                    Log::error('Failed to generate vouchers in SendVoucherEmail job', ['order_id' => $this->orderId]);
-                    
-                    // Release job for retry with exponential backoff if under max retries
-                    if ($this->attempts() < $this->maxRetries) {
-                        $delay = pow(2, $this->attempts()) * 60; // 2, 4, 8 minutes
-                        $this->release($delay);
-                        Log::info('Releasing job for retry', [
-                            'order_id' => $this->orderId, 
-                            'attempt' => $this->attempts(), 
-                            'delay' => $delay
-                        ]);
-                    }
+        if (!$allPDFsExist) {
+            Log::error('Not all PDFs exist for vouchers', ['order_id' => $this->orderId]);
                     return;
                 }
 
-                Log::info('Vouchers generated successfully in job', ['order_id' => $this->orderId]);
-                
-                // Refresh vouchers collection after generation
-                $vouchers = Voucher::where('order_id', $this->orderId)->get();
-            }
-            
-            Log::info('Found vouchers', ['order_id' => $this->orderId, 'count' => $vouchers->count()]);
+        try {
+            app(EmailService::class)->sendVoucher($this->orderId);
 
-            // Now send email with vouchers
-            $emailService = new EmailService();
-            $result = $emailService->sendVoucher($this->orderId);
+            // Mark vouchers as sent
+            $order->vouchers()->update(['is_sent' => true]);
 
-            if ($result) {
-                Log::info('Voucher email sent successfully via job', [
-                    'order_id' => $this->orderId,
-                    'voucher_count' => $vouchers->count()
-                ]);
-                
-                // Update all vouchers as sent
-                foreach ($vouchers as $voucher) {
-                    if (!$voucher->is_sent) {
-                        $voucher->is_sent = true;
-                        $voucher->save();
-                    }
-                }
-            } else {
-                Log::error('Failed to send voucher email in job', ['order_id' => $this->orderId]);
-                
-                // Release for retry if under max retries
-                if ($this->attempts() < $this->maxRetries) {
-                    $delay = pow(2, $this->attempts()) * 60; // 2, 4, 8 minutes
-                    $this->release($delay);
-                    Log::info('Releasing email job for retry', [
-                        'order_id' => $this->orderId, 
-                        'attempt' => $this->attempts(), 
-                        'delay' => $delay
+            Log::info('Voucher email sent successfully', ['order_id' => $this->orderId]);
+        } catch (Exception $e) {
+            Log::error('Failed to send voucher email', [
+                        'order_id' => $this->orderId,
+                'error' => $e->getMessage()
                     ]);
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Exception in SendVoucherEmail job', [
-                'order_id' => $this->orderId,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            // Release for retry if under max retries
-            if ($this->attempts() < $this->maxRetries) {
-                $delay = pow(2, $this->attempts()) * 60; // 2, 4, 8 minutes
-                $this->release($delay);
-            }
+            throw $e;
         }
     }
 }

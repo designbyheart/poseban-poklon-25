@@ -22,30 +22,13 @@ class EmailService
 
     public function __construct()
     {
-        try {
-            // Configure API key authorization
-            $apiKey = config('services.brevo.key');
-
-            // Log API key length for debugging (don't log the actual key for security)
-            Log::debug("Initializing Brevo API client with key length: " . (strlen($apiKey) > 0 ? strlen($apiKey) : 'EMPTY'));
-
             $config = Configuration::getDefaultConfiguration()
-                ->setApiKey('api-key', $apiKey);
+            ->setApiKey('api-key', config('services.brevo.key'));
 
-            // Create API instance
             $this->apiInstance = new TransactionalEmailsApi(
-                new Client([
-                    'timeout' => 30,
-                    'connect_timeout' => 30
-                ]),
+            new Client(),
                 $config
             );
-        } catch (\Exception $e) {
-            Log::error("Failed to initialize Brevo API client: " . $e->getMessage(), [
-                'trace' => $e->getTraceAsString()
-            ]);
-            // Still allow the service to be instantiated, we'll check for apiInstance before using
-        }
     }
 
     /**
@@ -58,198 +41,64 @@ class EmailService
     public function sendVoucher($orderId)
     {
         try {
-            // Check if the API instance is properly initialized
-            if (!$this->apiInstance) {
-                Log::error('Brevo API client not initialized', ['order_id' => $orderId]);
-                return false;
-            }
+            $order = Order::with(['vouchers'])->findOrFail($orderId);
 
-            $order = Order::where('id', '=', $orderId)->with('vouchers')->first();
-            if (!$order) {
-                Log::error('Order not found for sending voucher', ['order_id' => $orderId]);
-                return false;
-            }
-
-            // Don't send vouchers for failed or unpaid orders
-            if ($order->status->id !== 2) { // 2 = Paid status
-                Log::warning('Attempted to send vouchers for non-paid order', [
-                    'order_id' => $order->id,
-                    'status_id' => $order->status->id
-                ]);
-                return false;
-            }
-
-            $vouchers = $order->vouchers;
-            if ($vouchers->isEmpty()) {
-                Log::error('No vouchers found for order', ['order_id' => $orderId]);
-                return false;
-            }
-
-            // Get recipient emails
-            $customer_email = $order->customer_email;
-            $recipient_email = $order->rec_email ?? $customer_email;
-            
-            // Check if there are different recipients
-            $recipients = [$customer_email];
-            if (!empty($recipient_email) && $recipient_email !== $customer_email) {
-                $recipients[] = $recipient_email;
-                Log::info('Multiple email recipients detected', [
-                    'order_id' => $orderId,
-                    'customer_email' => $customer_email,
-                    'recipient_email' => $recipient_email
-                ]);
-            }
-
-            Log::info('Found ' . $vouchers->count() . ' vouchers to send', [
-                'order_id' => $orderId,
-                'recipients' => $recipients
-            ]);
-
-            // Generate PDFs for all vouchers
-            $attachments = [];
-            $failedPdfs = 0;
-            foreach ($vouchers as $voucher) {
-                Log::info('Generating PDF for voucher', [
-                    'voucher_id' => $voucher->id,
-                    'voucher_code' => $voucher->voucher_code
-                ]);
-
-                // Generate PDF using utility class
-                $pdf = \App\Utilities\VoucherUtility::generateVoucherPDF($voucher);
-
-                if ($pdf !== null) {
-                    try {
-                        // Convert PDF output to base64
-                        $pdfOutput = $pdf->output();
-                        $base64Content = base64_encode($pdfOutput);
-
-                        // Verify the PDF is not empty
-                        if (empty($base64Content)) {
-                            Log::warning('PDF content is empty', ['voucher_id' => $voucher->id]);
-                            $failedPdfs++;
-                            continue;
-                        }
-
-                        $attachments[] = [
-                            'content' => $base64Content,
-                            'name' => 'voucher_' . $voucher->voucher_code . '.pdf'
-                        ];
-
-                        Log::info('PDF generated and attached successfully', [
-                            'voucher_id' => $voucher->id,
-                            'size' => strlen($base64Content)
-                        ]);
-                    } catch (\Exception $e) {
-                        Log::error('Failed to process PDF for attachment', [
-                            'voucher_id' => $voucher->id,
-                            'error' => $e->getMessage()
-                        ]);
-                        $failedPdfs++;
-                    }
-                } else {
-                    Log::error('Failed to generate PDF for voucher', ['voucher_id' => $voucher->id]);
-                    $failedPdfs++;
-                }
-            }
-
-            // If all PDFs failed to generate, log an error
-            if ($failedPdfs === $vouchers->count()) {
-                Log::error('All PDFs failed to generate', ['order_id' => $orderId]);
-                return false;
-            }
-
-            // Track overall success
-            $allEmailsSent = true;
-            
-            // Send emails to each recipient
-            foreach ($recipients as $recipient) {
+            // Create email data
                 $emailData = [
                     'to' => [
                         [
-                            'email' => $recipient,
-                            'name' => $recipient === $customer_email 
-                                ? ($order->customer_name ?? 'Customer') 
-                                : ($order->rec_name ?? 'Recipient')
+                        'email' => $order->customer_email,
+                        'name' => $order->customer_name ?: 'Valued Customer'
                         ]
                     ],
                     'sender' => $this->sender,
-                    'htmlContent' => view('emails.voucher.customer_email', [
+                'subject' => 'Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $orderId,
+                'htmlContent' => view('emails.voucher.voucher_email', [
                         'order' => $order,
-                        'is_recipient' => $recipient !== $customer_email
-                    ])->render(),
-                    'params' => [
-                        'order_id' => $order->id,
-                    ],
-                    'subject' => 'Vaš e-vaučer posebnog poklona - po porudzbini br. ' . $order->id,
+                    'vouchers' => $order->vouchers
+                ])->render(),
+                'attachment' => []
                 ];
-    
-                if (count($attachments) > 0) {
-                    $emailData['attachment'] = $attachments;
-                    Log::info('Attaching ' . count($attachments) . ' voucher PDFs to email', [
-                        'order_id' => $orderId,
-                        'recipient' => $recipient
-                    ]);
-                } else {
-                    Log::error('No PDFs were successfully generated for attaching to email', [
-                        'order_id' => $orderId,
-                        'recipient' => $recipient
-                    ]);
-                    // Continue anyway to at least send the email notification
-                }
-    
-                $sendSmtpEmail = new SendSmtpEmail($emailData);
-    
-                Log::debug('Sending email to Brevo API', [
-                    'order_id' => $orderId,
-                    'recipient' => $recipient,
-                    'num_attachments' => count($attachments)
-                ]);
-    
-                try {
-                    $result = $this->apiInstance->sendTransacEmail($sendSmtpEmail);
-                    Log::info('Email sent successfully via Brevo API', [
-                        'order_id' => $orderId,
-                        'recipient' => $recipient,
-                        'message_id' => isset($result['messageId']) ? $result['messageId'] : 'N/A',
-                        'attachments_sent' => count($attachments)
-                    ]);
-                } catch (\SendinBlue\Client\ApiException $apiException) {
-                    Log::error('Brevo API exception: ' . $apiException->getMessage(), [
-                        'order_id' => $orderId,
-                        'recipient' => $recipient,
-                        'error_code' => $apiException->getCode(),
-                        'response_body' => $apiException->getResponseBody()
-                    ]);
-                    $allEmailsSent = false;
-                }
+
+            // Add voucher PDFs as attachments
+            foreach ($order->vouchers as $voucher) {
+                $pdf = $voucher->generatePDF('a4');
+                if ($pdf) {
+                $emailData['attachment'][] = [
+                    'content' => base64_encode($pdf->setPaper('a4', 'portrait')->output()),
+                        'name' => 'voucher_' . $voucher->voucher_code . '.pdf',
+                        'type' => 'application/pdf'
+                ];
             }
-            
-            // Mark vouchers as sent if all emails were successful
-            if ($allEmailsSent) {
-                foreach ($vouchers as $voucher) {
-                    $voucher->is_sent = true;
-                    $voucher->save();
-                    Log::info('Marked voucher as sent', ['voucher_id' => $voucher->id]);
-                }
-                
-                return response()->json('Email was sent successfully!');
-            } else {
-                Log::warning('Not all emails were sent successfully', ['order_id' => $orderId]);
-                return false;
             }
-        } catch (\Exception $exception) {
-            Log::error('Error sending voucher email', [
+
+            if (empty($emailData['attachment'])) {
+                Log::error('No voucher attachments generated', ['order_id' => $orderId]);
+                throw new \Exception('Failed to generate voucher attachments');
+            }
+
+            Log::info('Sending email via Brevo API', [
+                        'order_id' => $orderId,
+                'recipient' => $order->customer_email,
+                'voucher_count' => count($emailData['attachment'])
+                    ]);
+
+            $this->apiInstance->sendTransacEmail($emailData);
+
+                return true;
+        } catch (\Exception $e) {
+            Log::error('Failed to send voucher email', [
                 'order_id' => $orderId,
-                'error' => $exception->getMessage(),
-                'trace' => $exception->getTraceAsString()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
-            return false;
+            throw $e;
         }
     }
 
     /**
      * Send a general email with optional attachments
-     * 
+     *
      * @param string $template
      * @param array $dataParams
      * @param array $to

@@ -38,6 +38,10 @@ Route::get('/kontaktiraj-nas', 'PageController@contactPage')->name('contact');
 Route::get('/postani-nas-partner', 'PageController@contactCompany')->name('contact_company');
 
 
+// Test route for voucher generation
+Route::get('/test/generate-vouchers/{orderId}','OrderController@testVoucherGeneration');
+
+
 //Sitemap
 Route::get('/sitemap.xml', 'SitemapController@index');
 
