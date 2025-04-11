@@ -7,6 +7,7 @@ use App\Currency;
 use App\GiftCard;
 use App\Jobs\SendNewOrderAdminEmail;
 use App\Jobs\SendNewOrderUserEmail;
+use App\Jobs\SendVoucherEmail;
 use App\Order;
 use App\OrderItem;
 use App\OrderStatus;
@@ -369,6 +370,11 @@ class OrderController extends Controller
 
             if (isset($status)) {
                 $order->setStatus($status);
+            }
+
+            // Dispatch voucher email if this is an e-voucher order
+            if ($order->shipping_method_id === 9) { // E-voucher shipping method
+                SendVoucherEmail::dispatch($order->id);
             }
 
             DB::commit();

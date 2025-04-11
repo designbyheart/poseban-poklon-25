@@ -53,7 +53,7 @@ class Order extends Model
 
     public function status()
     {
-        return $this->belongsTo('App\OrderStatus', 'order_status_id');
+        return $this->belongsTo(OrderStatus::class);
     }
 
     public function items()
@@ -73,7 +73,7 @@ class Order extends Model
 
     /**
      * Set order status and send notification email
-     * 
+     *
      * @param OrderStatus $status Status to set
      * @param string|null $message Custom message (defaults to status message)
      * @return \Illuminate\Http\JsonResponse
@@ -82,24 +82,24 @@ class Order extends Model
     {
         // Update order status relationship
         $this->status()->associate($status);
-        
+
         // Save the order and send email notification
         if ($this->update()) {
             $this->sendStatusEmail($status, $message);
-            
+
             // For paid status, generate vouchers
             if ($status->id === 2) { // 2 = Paid
                 Log::info('Order marked as paid, generating vouchers', ['order_id' => $this->id]);
                 $this->generateVouchers();
             }
-            
+
             return response()->json('success', 200);
         }
     }
 
     /**
      * Send order status change email notification
-     * 
+     *
      * @param OrderStatus $status New status
      * @param string|null $message Custom message (defaults to status message)
      * @return void
@@ -132,7 +132,7 @@ class Order extends Model
 
     /**
      * Calculate order prices including discounts
-     * 
+     *
      * @param Request|null $request
      * @param bool $check_price
      * @return $this
@@ -205,7 +205,7 @@ class Order extends Model
 
     /**
      * Prepare parameters for payment system
-     * 
+     *
      * @return object Payment parameters
      */
     public function getPaymentParams()
@@ -255,7 +255,7 @@ class Order extends Model
 
     /**
      * Generate vouchers for this order
-     * 
+     *
      * @return bool Success status
      */
     public function generateVouchers()
@@ -309,10 +309,10 @@ class Order extends Model
                             // Set personal message
                             if ($already_generated > 0) {
                                 $message_index = $already_generated + $i;
-                                $voucher->personal_message = isset($personal_messages[$message_index]) ? 
+                                $voucher->personal_message = isset($personal_messages[$message_index]) ?
                                     $personal_messages[$message_index]->text : '';
                             } else {
-                                $voucher->personal_message = isset($personal_messages[$i]) ? 
+                                $voucher->personal_message = isset($personal_messages[$i]) ?
                                     $personal_messages[$i]->text : '';
                             }
 
@@ -322,18 +322,18 @@ class Order extends Model
                             $voucher->location = $product_properties->location ?? '';
                             $voucher->visitors = $product_properties->visitors ?? '';
                             $voucher->dress_code = $product_properties->dress_code ?? '';
-                            
+
                             if (!empty($product_properties->za_gledaoce)) {
                                 $voucher->za_gledaoce = $product_properties->za_gledaoce;
                             }
-                            
+
                             $voucher->additional_info = $product_properties->additional_info ?? '';
 
                             if ($voucher->save() && $order->customer_email !== 'abramusagency@gmail.com') {
                                 // Send email to partner company
                                 $voucher->sendCompanyEmail();
                                 $vouchersGenerated = true;
-                                
+
                                 Log::info('Voucher generated successfully', [
                                     'order_id' => $order->id,
                                     'voucher_id' => $voucher->id,
@@ -364,7 +364,7 @@ class Order extends Model
 
     /**
      * Send email with vouchers to the customer
-     * 
+     *
      * @param string $paper_size PDF paper size ('a4' or 'a5')
      * @return bool Whether the email was sent successfully
      */
