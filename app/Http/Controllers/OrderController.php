@@ -664,16 +664,18 @@ class OrderController extends Controller
     protected function processVouchers(Order $order): void
     {
         if ((int)$order->shipping_method_id === 9) {
-            Log::debug("Starting voucher generation for order", ['order_id' => $order->id]);
+            Log::debug("Starting voucher generation for order", [
+                'order_id' => $order->id,
+                'voucher_count' => $order->vouchers->count()
+            ]);
 
             // First check if vouchers exist in database
             $vouchersExist = $order->vouchers()->exists();
 
             if (!$vouchersExist) {
-                // Generate vouchers in database if they don't exist
-            $vouchersGenerated = $order->generateVouchers();
-            if (!$vouchersGenerated) {
-                Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
+                $vouchersGenerated = $order->generateVouchers();
+                if (!$vouchersGenerated) {
+                    Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
                     return;
                 }
                 Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
@@ -696,36 +698,48 @@ class OrderController extends Controller
                         if ($pdf) {
                             $pdf->save($pdfPath);
                             Log::info('Generated PDF for voucher', [
+                                'voucher_id' => $voucher->id,
                                 'voucher_code' => $voucher->voucher_code,
-                                'path' => $pdfPath
+                                'path' => $pdfPath,
+                                'file_exists' => file_exists($pdfPath)
                             ]);
-            } else {
+                        } else {
                             Log::error('Failed to generate PDF for voucher', [
+                                'voucher_id' => $voucher->id,
                                 'voucher_code' => $voucher->voucher_code
                             ]);
                         }
                     } catch (Exception $e) {
                         Log::error('Exception generating PDF for voucher', [
+                            'voucher_id' => $voucher->id,
                             'voucher_code' => $voucher->voucher_code,
-                            'error' => $e->getMessage()
+                            'error' => $e->getMessage(),
+                            'trace' => $e->getTraceAsString()
                         ]);
                     }
-                } else {
-                    Log::info('PDF already exists for voucher', [
-                        'voucher_code' => $voucher->voucher_code,
-                        'path' => $pdfPath
-                    ]);
                 }
             });
 
-            // Send voucher email
+            // Verify PDFs were generated before dispatching email
+            $allPDFsExist = $order->vouchers->every(function ($voucher) {
+                $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+                $exists = file_exists($pdfPath);
+                if (!$exists) {
+                    Log::error('PDF missing for voucher', [
+                        'voucher_id' => $voucher->id,
+                        'voucher_code' => $voucher->voucher_code,
+                        'expected_path' => $pdfPath
+                    ]);
+                }
+                return $exists;
+            });
+
+            if ($allPDFsExist) {
                 \App\Jobs\SendVoucherEmail::dispatch($order->id);
-            Log::info('Voucher email dispatched', ['order_id' => $order->id]);
-        } else {
-            Log::debug('Skipping voucher generation - not an e-voucher order', [
-                'order_id' => $order->id,
-                'shipping_method_id' => $order->shipping_method_id
-            ]);
+                Log::info('Voucher email dispatched', ['order_id' => $order->id]);
+            } else {
+                Log::error('Not dispatching email - some PDFs are missing', ['order_id' => $order->id]);
+            }
         }
     }
 
