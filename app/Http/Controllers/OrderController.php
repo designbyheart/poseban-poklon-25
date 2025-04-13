@@ -13,18 +13,17 @@ use App\OrderItem;
 use App\OrderStatus;
 use App\PaymentMethod;
 use App\Product;
-use App\Services\EmailService;
 use App\Services\FiscalCashRegister;
 use App\Setting;
 use App\ShippingMethod;
-use App\Version;
 use App\Utilities\VoucherUtility;
-use Illuminate\Support\Facades\Auth;
+use App\Version;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -590,25 +589,25 @@ class OrderController extends Controller
 
             // Check paid status using order_status_id directly, cast both to integers
             if ((int)$order->order_status_id !== 2) {
-                    Log::warning('Order is not in paid status', [
-                        'order_id' => $order->id,
-                    'order_status_id' => $order->order_status_id,
-                    ]);
-                    return [
-                        'success' => false,
-                        'message' => 'Order must be in paid status'
-                    ];
-                }
-
-                // Check existing vouchers
-                $existingVouchers = $order->vouchers()->count();
-            Log::info('Processing paid order', [
+                Log::warning('Order is not in paid status', [
                     'order_id' => $order->id,
-                'existing_vouchers' => $existingVouchers
+                    'order_status_id' => $order->order_status_id,
                 ]);
+                return [
+                    'success' => false,
+                    'message' => 'Order must be in paid status'
+                ];
+            }
+
+            // Check existing vouchers
+            $existingVouchers = $order->vouchers()->count();
+            Log::info('Processing paid order', [
+                'order_id' => $order->id,
+                'existing_vouchers' => $existingVouchers
+            ]);
 
             // Generate vouchers if needed
-                if ($existingVouchers === 0) {
+            if ($existingVouchers === 0) {
                 $vouchersGenerated = $order->generateVouchers();
 
                 if (!$vouchersGenerated) {
@@ -619,11 +618,11 @@ class OrderController extends Controller
                     ];
                 }
 
-                    Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
-                }
+                Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
+            }
 
             // Send email with vouchers
-                    try {
+            try {
                 if (app()->environment('local')) {
                     // Execute directly in local environment
                     $job = new \App\Jobs\SendVoucherEmail($order->id);
@@ -635,23 +634,23 @@ class OrderController extends Controller
                     Log::info('Voucher email queued (production environment)', ['order_id' => $order->id]);
                 }
 
-                    return [
-                        'success' => true,
+                return [
+                    'success' => true,
                     'message' => app()->environment('local') ? 'Vouchers processed and email sent directly' : 'Vouchers processed and email queued',
-                        'existing_vouchers' => $existingVouchers,
-                        'new_vouchers' => $order->vouchers()->count() - $existingVouchers
-                    ];
-                    } catch (Exception $e) {
-                        Log::error('Exception sending voucher email', [
-                            'order_id' => $order->id,
+                    'existing_vouchers' => $existingVouchers,
+                    'new_vouchers' => $order->vouchers()->count() - $existingVouchers
+                ];
+            } catch (Exception $e) {
+                Log::error('Exception sending voucher email', [
+                    'order_id' => $order->id,
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
-                        ]);
-                    return [
-                        'success' => false,
-                        'message' => 'Failed to send voucher email: ' . $e->getMessage()
-                    ];
-                    }
+                ]);
+                return [
+                    'success' => false,
+                    'message' => 'Failed to send voucher email: ' . $e->getMessage()
+                ];
+            }
         } catch (Exception $e) {
             Log::error('Exception during voucher generation process', [
                 'order_id' => $order->id,
@@ -955,23 +954,25 @@ class OrderController extends Controller
             });
 
             if (!$allPDFsExist) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Some PDFs are missing'
-                ], 500);
+                if (!$this->regenerateMissingPDFs($order)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to generate some missing PDFs'
+                    ], 500);
+                }
             }
 
             // Force send email regardless of previous sends
-            if (app()->environment('local')) {
-                // Execute directly in local environment
-                $job = new SendVoucherEmail($order->id);
-                $job->handle();
-                Log::info('Voucher email sent directly (local environment)', ['order_id' => $order->id]);
-            } else {
-                // Queue in production
-                SendVoucherEmail::dispatch($order->id);
-                Log::info('Voucher email queued (production environment)', ['order_id' => $order->id]);
-            }
+//            if (app()->environment('local')) {
+            // Execute directly in local environment
+            $job = new SendVoucherEmail($order->id);
+            $job->handle();
+            Log::info('Voucher email sent directly (local environment)', ['order_id' => $order->id]);
+//            } else {
+//                // Queue in production
+//                SendVoucherEmail::dispatch($order->id);
+//                Log::info('Voucher email queued (production environment)', ['order_id' => $order->id]);
+//            }
 
             return response()->json([
                 'success' => true,
@@ -994,5 +995,33 @@ class OrderController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Regenerate missing PDFs for an order's vouchers
+     *
+     * @param Order $order
+     * @return bool True if all PDFs exist after regeneration, false otherwise
+     */
+    protected function regenerateMissingPDFs(Order $order): bool
+    {
+        foreach ($order->vouchers as $voucher) {
+            $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+            if (!file_exists($pdfPath)) {
+                $pdf = VoucherUtility::generateVoucherPDF($voucher);
+                if ($pdf) {
+                    $pdf->save($pdfPath);
+                    Log::info('Regenerated missing PDF for voucher', [
+                        'voucher_id' => $voucher->id,
+                        'voucher_code' => $voucher->voucher_code
+                    ]);
+                }
+            }
+        }
+
+        // Check if all PDFs exist after regeneration
+        return $order->vouchers->every(function ($voucher) {
+            return file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
+        });
     }
 }
