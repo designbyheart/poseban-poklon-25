@@ -388,8 +388,17 @@ class OrderController extends Controller
 
         // Fiscal cash register - outside transaction as it's an external service
         try {
+            Log::info('Attempting to send invoice to fiscal cash register', [
+                'order_id' => $order->id
+            ]);
+
             $cashRegister = new FiscalCashRegister();
-            $cashRegister->sendInvoice($order);
+            $result = $cashRegister->sendInvoice($order);
+
+            Log::info('Invoice sent successfully to fiscal cash register', [
+                'order_id' => $order->id,
+                'result' => $result
+            ]);
         } catch (Exception $e) {
             Log::error('Failed to send invoice to fiscal cash register', [
                 'order_id' => $order->id,
