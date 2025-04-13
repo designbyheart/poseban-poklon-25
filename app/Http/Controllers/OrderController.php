@@ -577,6 +577,9 @@ class OrderController extends Controller
      */
     public function handleVoucherGeneration(Order $order)
     {
+        $chunkSize = env('PDF_CHUNK_SIZE', 2);
+        $memoryLimit = env('MEMORY_LIMIT', '512M');
+
         try {
             if ((int)$order->shipping_method_id !== 9) {
                 return [
@@ -664,12 +667,16 @@ class OrderController extends Controller
 
     protected function processVouchers(Order $order): void
     {
-        if ((int)$order->shipping_method_id === 9) {
-            Log::debug("Starting voucher generation for order", [
-                'order_id' => $order->id,
-                'voucher_count' => $order->vouchers->count()
-            ]);
+        if ((int)$order->shipping_method_id !== 9) {
+            return;
+        }
 
+        Log::debug("Starting voucher generation for order", [
+            'order_id' => $order->id,
+            'voucher_count' => $order->vouchers->count()
+        ]);
+
+        try {
             // First generate vouchers in database if they don't exist
             if (!$order->vouchers()->exists()) {
                 $vouchersGenerated = $order->generateVouchers();
@@ -680,51 +687,97 @@ class OrderController extends Controller
                 Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
             }
 
-            // Refresh order to get newly generated vouchers
-            $order->refresh();
-
-            // Generate PDFs for all vouchers
-            foreach ($order->vouchers as $voucher) {
-                $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
-
-                if (!file_exists($pdfPath)) {
-                    try {
-                        // Ensure directory exists
-                        if (!file_exists(storage_path('app/vouchers'))) {
-                            mkdir(storage_path('app/vouchers'), 0755, true);
-                        }
-
-                        // Generate and save PDF
-                        $pdf = VoucherUtility::generateVoucherPDF($voucher);
-                        if ($pdf) {
-                            $pdf->save($pdfPath);
-                            Log::info('Generated PDF for voucher', [
-                                'voucher_id' => $voucher->id,
-                                'voucher_code' => $voucher->voucher_code,
-                                'path' => $pdfPath
-                            ]);
-                        }
-                    } catch (Exception $e) {
-                        Log::error('Exception generating PDF for voucher', [
-                            'voucher_id' => $voucher->id,
-                            'error' => $e->getMessage()
-                        ]);
-                        return;
-                    }
+            // Process vouchers in chunks to manage memory
+            $order->vouchers()->chunk(2, function ($vouchers) {
+                foreach ($vouchers as $voucher) {
+                    $this->processSingleVoucher($voucher);
+                    // Clear memory after each voucher
+                    gc_collect_cycles();
                 }
-            }
-
-            // Verify all PDFs exist before sending email
-            $allPDFsExist = $order->vouchers->every(function ($voucher) {
-                return file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
             });
 
-            if ($allPDFsExist) {
+            // Verify all PDFs exist before sending email
+            $missingPdfs = $order->vouchers()->get()->filter(function ($voucher) {
+                return !file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
+            });
+
+            if ($missingPdfs->isEmpty()) {
                 SendVoucherEmail::dispatch($order->id);
                 Log::info('Voucher email dispatched', ['order_id' => $order->id]);
             } else {
-                Log::error('Not dispatching email - some PDFs are missing', ['order_id' => $order->id]);
+                Log::error('Not dispatching email - missing PDFs', [
+                    'order_id' => $order->id,
+                    'missing_vouchers' => $missingPdfs->pluck('voucher_code')
+                ]);
             }
+
+        } catch (Exception $e) {
+            Log::error('Error processing vouchers', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
+
+    /**
+     * Process a single voucher PDF generation
+     */
+    protected function processSingleVoucher($voucher): bool
+    {
+        $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+
+        if (file_exists($pdfPath)) {
+            return true;
+        }
+
+        try {
+            // Ensure directory exists
+            if (!file_exists(storage_path('app/vouchers'))) {
+                mkdir(storage_path('app/vouchers'), 0755, true);
+            }
+
+            // Set higher memory limit for this specific operation
+            $originalMemoryLimit = ini_get('memory_limit');
+            ini_set('memory_limit', '512M');
+
+            // Generate and save PDF
+            $pdf = VoucherUtility::generateVoucherPDF($voucher);
+
+            if ($pdf) {
+                $pdf->save($pdfPath);
+
+                // Clear PDF object from memory
+                unset($pdf);
+
+                Log::info('Generated PDF for voucher', [
+                    'voucher_id' => $voucher->id,
+                    'voucher_code' => $voucher->voucher_code,
+                    'path' => $pdfPath
+                ]);
+
+                // Restore original memory limit
+                ini_set('memory_limit', $originalMemoryLimit);
+
+                return true;
+            }
+
+            return false;
+
+        } catch (Exception $e) {
+            Log::error('Exception generating PDF for voucher', [
+                'voucher_id' => $voucher->id,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        } finally {
+            // Ensure memory limit is restored even if an error occurs
+            if (isset($originalMemoryLimit)) {
+                ini_set('memory_limit', $originalMemoryLimit);
+            }
+
+            // Force garbage collection
+            gc_collect_cycles();
         }
     }
 
