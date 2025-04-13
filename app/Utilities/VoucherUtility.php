@@ -30,7 +30,7 @@ class VoucherUtility
             $originalMemoryLimit = ini_get('memory_limit');
             ini_set('memory_limit', '512M');
 
-            $templatePath = 'voucher/voucher_email'; // Adjust this to your actual template path
+            $templatePath = 'admin.voucher.a4'; // Uses resources/views/admin/voucher/a4.blade.php
 
             $data = [
                 'voucher' => $voucher,
