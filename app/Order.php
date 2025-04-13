@@ -7,6 +7,7 @@ use App\Jobs\SendOrderStatusChangedEmail;
 use App\Jobs\SendNewOrderUserEmail;
 use App\Jobs\SendVoucherEmail;
 use App\Services\EmailService;
+use App\Utilities\VoucherUtility;
 use Auth;
 use App\Product;
 use Illuminate\Support\Facades\Mail;
@@ -277,9 +278,7 @@ class Order extends Model
 
             foreach ($order_items as $item) {
                 $order_item = OrderItem::find($item->id);
-                $product = $order_item->product;
                 $product_count = $order_item->product_quantity;
-                $product_properties = json_decode($product->properties);
 
                 // Check if we've already generated some vouchers for this order item
                 $already_generated = $order_item->vouchers->count();
@@ -290,54 +289,26 @@ class Order extends Model
                     Log::info('Generating ' . $vouchers_count . ' vouchers for order item', [
                         'order_id' => $order->id,
                         'item_id' => $item->id,
-                        'product_id' => $product->id
+                        'product_id' => $order_item->product->id
                     ]);
 
                     for ($i = 0; $i < $vouchers_count; $i++) {
                         if (!empty($order_item)) {
-                            $voucher = new Voucher();
-                            $voucher->voucher_code = $voucher->generateVoucherCode();
-                            $voucher->activation_code = $voucher->generateActivationCode();
-                            $voucher->end_date = $voucher->generateEndDate();
-                            $voucher->order()->associate($order);
-                            $voucher->orderItem()->associate($order_item);
+                            $voucher = VoucherUtility::createVoucher(
+                                $order,
+                                $order_item,
+                                $i,
+                                $already_generated,
+                                $personal_messages
+                            );
 
-                            // Set voucher values
-                            $voucher->title = $product->title;
-                            $voucher->description = $product->voucher_description;
-
-                            // Set personal message
-                            if ($already_generated > 0) {
-                                $message_index = $already_generated + $i;
-                                $voucher->personal_message = isset($personal_messages[$message_index]) ?
-                                    $personal_messages[$message_index]->text : '';
-                            } else {
-                                $voucher->personal_message = isset($personal_messages[$i]) ?
-                                    $personal_messages[$i]->text : '';
-                            }
-
-                            // Voucher properties
-                            $voucher->weather = $product_properties->weather ?? '';
-                            $voucher->duration = $product_properties->duration ?? '';
-                            $voucher->location = $product_properties->location ?? '';
-                            $voucher->visitors = $product_properties->visitors ?? '';
-                            $voucher->dress_code = $product_properties->dress_code ?? '';
-
-                            if (!empty($product_properties->za_gledaoce)) {
-                                $voucher->za_gledaoce = $product_properties->za_gledaoce;
-                            }
-
-                            $voucher->additional_info = $product_properties->additional_info ?? '';
-
-                            if ($voucher->save() && $order->customer_email !== 'abramusagency@gmail.com') {
-                                // Send email to partner company
-                                $voucher->sendCompanyEmail();
+                            if ($voucher) {
                                 $vouchersGenerated = true;
-
-                                Log::info('Voucher generated successfully', [
+                            } else {
+                                Log::error('Failed to generate voucher', [
                                     'order_id' => $order->id,
-                                    'voucher_id' => $voucher->id,
-                                    'voucher_code' => $voucher->voucher_code
+                                    'item_id' => $item->id,
+                                    'index' => $i
                                 ]);
                             }
                         }
@@ -352,6 +323,7 @@ class Order extends Model
             }
 
             return true;
+
         } catch (\Exception $e) {
             Log::error('Error generating vouchers', [
                 'order_id' => $this->id,
