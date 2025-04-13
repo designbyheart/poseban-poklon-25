@@ -18,6 +18,7 @@ use App\Services\FiscalCashRegister;
 use App\Setting;
 use App\ShippingMethod;
 use App\Version;
+use App\Utilities\VoucherUtility;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -669,10 +670,8 @@ class OrderController extends Controller
                 'voucher_count' => $order->vouchers->count()
             ]);
 
-            // First check if vouchers exist in database
-            $vouchersExist = $order->vouchers()->exists();
-
-            if (!$vouchersExist) {
+            // First generate vouchers in database if they don't exist
+            if (!$order->vouchers()->exists()) {
                 $vouchersGenerated = $order->generateVouchers();
                 if (!$vouchersGenerated) {
                     Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
@@ -681,11 +680,13 @@ class OrderController extends Controller
                 Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
             }
 
-            // Now handle PDF generation for each voucher
-            $order->vouchers->each(function ($voucher) {
+            // Refresh order to get newly generated vouchers
+            $order->refresh();
+
+            // Generate PDFs for all vouchers
+            foreach ($order->vouchers as $voucher) {
                 $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
 
-                // Check if PDF already exists
                 if (!file_exists($pdfPath)) {
                     try {
                         // Ensure directory exists
@@ -700,42 +701,26 @@ class OrderController extends Controller
                             Log::info('Generated PDF for voucher', [
                                 'voucher_id' => $voucher->id,
                                 'voucher_code' => $voucher->voucher_code,
-                                'path' => $pdfPath,
-                                'file_exists' => file_exists($pdfPath)
-                            ]);
-                        } else {
-                            Log::error('Failed to generate PDF for voucher', [
-                                'voucher_id' => $voucher->id,
-                                'voucher_code' => $voucher->voucher_code
+                                'path' => $pdfPath
                             ]);
                         }
                     } catch (Exception $e) {
                         Log::error('Exception generating PDF for voucher', [
                             'voucher_id' => $voucher->id,
-                            'voucher_code' => $voucher->voucher_code,
-                            'error' => $e->getMessage(),
-                            'trace' => $e->getTraceAsString()
+                            'error' => $e->getMessage()
                         ]);
+                        return;
                     }
                 }
-            });
+            }
 
-            // Verify PDFs were generated before dispatching email
+            // Verify all PDFs exist before sending email
             $allPDFsExist = $order->vouchers->every(function ($voucher) {
-                $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
-                $exists = file_exists($pdfPath);
-                if (!$exists) {
-                    Log::error('PDF missing for voucher', [
-                        'voucher_id' => $voucher->id,
-                        'voucher_code' => $voucher->voucher_code,
-                        'expected_path' => $pdfPath
-                    ]);
-                }
-                return $exists;
+                return file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
             });
 
             if ($allPDFsExist) {
-                \App\Jobs\SendVoucherEmail::dispatch($order->id);
+                SendVoucherEmail::dispatch($order->id);
                 Log::info('Voucher email dispatched', ['order_id' => $order->id]);
             } else {
                 Log::error('Not dispatching email - some PDFs are missing', ['order_id' => $order->id]);
@@ -851,40 +836,96 @@ class OrderController extends Controller
             // Load order with necessary relationships
             $order = Order::with(['items', 'vouchers', 'status'])->find($orderId);
 
-        if (!$order) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Order not found'
-            ], 404);
-        }
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order not found'
+                ], 404);
+            }
 
-            // Now proceed with voucher generation
-            $result = $this->handleVoucherGeneration($order);
+            // Verify this is an e-voucher order
+            if ((int)$order->shipping_method_id !== 9) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Not an e-voucher order'
+                ], 400);
+            }
 
-            // Get status name safely
-            $statusName = null;
-            if ($order->status) {
-                $statusName = $order->status->title;
+            // Generate vouchers if they don't exist
+            $existingVouchers = $order->vouchers()->count();
+            if ($existingVouchers === 0) {
+                $vouchersGenerated = $order->generateVouchers();
+                if (!$vouchersGenerated) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to generate vouchers'
+                    ], 500);
+                }
+                $order->refresh();
+            }
+
+            // Generate/regenerate PDFs for all vouchers
+            foreach ($order->vouchers as $voucher) {
+                $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+
+                try {
+                    // Ensure directory exists
+                    if (!file_exists(storage_path('app/vouchers'))) {
+                        mkdir(storage_path('app/vouchers'), 0755, true);
+                    }
+
+                    // Generate and save PDF (overwrite if exists)
+                    $pdf = VoucherUtility::generateVoucherPDF($voucher);
+                    if ($pdf) {
+                        $pdf->save($pdfPath);
+                        Log::info('Generated/Updated PDF for voucher', [
+                            'voucher_id' => $voucher->id,
+                            'voucher_code' => $voucher->voucher_code,
+                            'path' => $pdfPath
+                        ]);
+                    }
+                } catch (Exception $e) {
+                    Log::error('Exception generating PDF for voucher', [
+                        'voucher_id' => $voucher->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Failed to generate PDF: ' . $e->getMessage()
+                    ], 500);
+                }
+            }
+
+            // Verify all PDFs exist
+            $allPDFsExist = $order->vouchers->every(function ($voucher) {
+                return file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
+            });
+
+            if (!$allPDFsExist) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Some PDFs are missing'
+                ], 500);
+            }
+
+            // Force send email regardless of previous sends
+            if (app()->environment('local')) {
+                // Execute directly in local environment
+                $job = new SendVoucherEmail($order->id);
+                $job->handle();
+                Log::info('Voucher email sent directly (local environment)', ['order_id' => $order->id]);
             } else {
-                // Try to get status name directly
-                $status = OrderStatus::find($order->order_status_id);
-                $statusName = $status ? $status->title : null;
+                // Queue in production
+                SendVoucherEmail::dispatch($order->id);
+                Log::info('Voucher email queued (production environment)', ['order_id' => $order->id]);
             }
 
             return response()->json([
-                'success' => $result['success'],
-                'message' => $result['message'],
-                'data' => [
-                    'order_id' => $order->id,
-                    'customer_email' => $order->customer_email,
-                    'shipping_method_id' => $order->shipping_method_id,
-                    'order_status_id' => $order->order_status_id,
-                    'status_name' => $statusName,
-                    'vouchers_count' => $order->vouchers()->count(),
-                    'is_evoucher' => (int)$order->shipping_method_id === 9,
-                    'existing_vouchers' => $result['existing_vouchers'] ?? 0,
-                    'new_vouchers' => $result['new_vouchers'] ?? 0
-                ]
+                'success' => true,
+                'message' => app()->environment('local') ? 'Vouchers processed and email sent directly' : 'Vouchers processed and email queued',
+                'order_id' => $order->id,
+                'voucher_count' => $order->vouchers->count(),
+                'customer_email' => $order->customer_email
             ]);
 
         } catch (Exception $e) {
