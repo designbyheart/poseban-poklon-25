@@ -109,13 +109,12 @@ class Voucher extends Model
     //Generate a pdf voucher
     public function generatePDF($paper_size)
     {
-
         $order_item = $this->orderItem->load('product');
         $company = $order_item->product->producent;
         $voucher = $this;
 
         $data = [
-            'title' => 'Voucher ' . $voucher->voucher_code,
+            'title' => 'Voucher ' . $voucher->voucher_code,  // Make sure this is included
             'product_title' => $voucher->title,
             'images' => $order_item->product->images,
             'voucher_code' => $voucher->voucher_code,
@@ -136,12 +135,8 @@ class Voucher extends Model
         ];
 
         if (!empty($paper_size)) {
-
             $pdf = PDF::loadView('admin.voucher.' . $paper_size, $data);
-
             return $pdf;
-
         }
-
     }
 }

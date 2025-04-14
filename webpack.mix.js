@@ -137,7 +137,7 @@ mix.webpackConfig({
         "public/css/user/updated-styles.css",
     )
     //User fonts
-    // .copyDirectory("resources/assets/fonts/user", "public/fonts/user")
+    .copyDirectory("resources/assets/fonts/user", "public/fonts/user")
     .sourceMaps()
     .version()
     .options({ processCssUrls: false })

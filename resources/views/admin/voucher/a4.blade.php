@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{ $title }}</title>
+    <title>{{ $title ?? 'Voucher' }}</title>
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/user/components/pdf/pdf.css') }}">
     <!-- External styles doesn't work for pdf in queue email-->

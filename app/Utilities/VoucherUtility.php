@@ -30,47 +30,57 @@ class VoucherUtility
             $originalMemoryLimit = ini_get('memory_limit');
             ini_set('memory_limit', '512M');
 
-            $templatePath = 'admin.voucher.a4'; // Uses resources/views/admin/voucher/a4.blade.php
+            $templatePath = 'admin.voucher.a4';
+
+            $orderItem = $voucher->orderItem->load('product');
+            $product = $orderItem->product;
 
             $data = [
                 'voucher' => $voucher,
-                // Add other necessary data for the template
+                'title' => $product->title ?? 'Voucher ' . $voucher->voucher_code,
+                'product_title' => $voucher->title,
+                'images' => $product->images ?? [],
+                'voucher_code' => $voucher->voucher_code,
+                'activation_code' => $voucher->activation_code,
+                'end_date' => $voucher->end_date,
+                'company_name' => $product->producent->title ?? '',
+                'company_phone' => $product->producent->phone_number ?? '',
+                'description' => $voucher->description,
+                'additional_info' => $voucher->additional_info,
+                'location' => $voucher->location,
+                'weather' => $voucher->weather,
+                'time_duration' => $voucher->duration,
+                'visitors' => $voucher->visitors,
+                'dress_code' => $voucher->dress_code,
+                'za_gledaoce' => $voucher->za_gledaoce,
+                'personal_message' => $voucher->personal_message,
+                'qr_code' => $product->qr_code ?? null
             ];
 
             Log::debug('Generating PDF with template', [
                 'voucher_id' => $voucher->id,
-                'template' => $templatePath
+                'template' => $templatePath,
+                'data_keys' => array_keys($data)
             ]);
 
             $pdf = PDF::loadView($templatePath, $data);
-
-            // Optimize PDF settings
             $pdf->setPaper('a4', 'portrait');
             $pdf->setWarnings(false);
 
-            // Test if PDF generation was successful
-            if ($pdf) {
-                Log::debug('PDF generated successfully', ['voucher_id' => $voucher->id]);
                 return $pdf;
-            }
 
-            Log::error('PDF generation failed - no PDF returned from loadView', [
-                'voucher_id' => $voucher->id
-            ]);
-            return null;
-
-        } catch (Exception $e) {
-            Log::error('Error generating PDF', [
+        } catch (\Exception $e) {
+            Log::error('Error in generateVoucherPDF', [
                 'voucher_id' => $voucher->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
-            return null;
+            throw $e;
         } finally {
             // Restore original memory limit
+            if (isset($originalMemoryLimit)) {
             ini_set('memory_limit', $originalMemoryLimit);
-
-            // Force garbage collection
-            gc_collect_cycles();
+            }
         }
     }
 
