@@ -317,7 +317,7 @@ class Order extends Model
             }
 
             // Send email to customer with vouchers
-            if ($vouchersGenerated && $order->customer_email !== 'abramusagency@gmail.com') {
+            if ($vouchersGenerated) {
                 Log::info('Vouchers were generated, sending email to customer', ['order_id' => $order->id]);
                 $this->sendCustomerEmail();
             }
