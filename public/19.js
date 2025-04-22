@@ -52,12 +52,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var _mixins_api_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/api/api */ "./resources/js/dashboard/mixins/api/api.js");
-/* harmony import */ var vue_feather_icons__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-feather-icons */ "./node_modules/vue-feather-icons/dist/vue-feather-icons.es.js");
-/* harmony import */ var _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/vx-card/VxCard */ "./resources/js/dashboard/components/vx-card/VxCard.vue");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
-/* harmony import */ var _components_statistics_cards_StatisticsCardNumber_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/components/statistics-cards/StatisticsCardNumber.vue */ "./resources/js/dashboard/components/statistics-cards/StatisticsCardNumber.vue");
+/* harmony import */ var _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/vx-card/VxCard */ "./resources/js/dashboard/components/vx-card/VxCard.vue");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+/* harmony import */ var _components_statistics_cards_StatisticsCardNumber_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/components/statistics-cards/StatisticsCardNumber.vue */ "./resources/js/dashboard/components/statistics-cards/StatisticsCardNumber.vue");
 //Library for working with requests
 
 
@@ -65,7 +64,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //Import icons
-
 
 //Import a card component
 
@@ -95,10 +93,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   components: {
-    VxCard: _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_3__["default"],
-    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_5__["default"],
-    StatisticsCardNumber: _components_statistics_cards_StatisticsCardNumber_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-    vSelect: vue_select__WEBPACK_IMPORTED_MODULE_4___default.a
+    VxCard: _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"],
+    StatisticsCardNumber: _components_statistics_cards_StatisticsCardNumber_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    vSelect: vue_select__WEBPACK_IMPORTED_MODULE_3___default.a
   },
   data: function data() {
     return {
@@ -348,18 +346,13 @@ var render = function render() {
     attrs: {
       href: "#"
     }
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.statisticType.label) + "\n\t\t\t\t"), _c("i", {
+  }, [_vm._v("\n                " + _vm._s(_vm.statisticType.label) + "\n                "), _c("i", {
     staticClass: "material-icons"
-  }, [_vm._v(" expand_more ")])]), _vm._v(" "), _c("vs-dropdown-menu", _vm._l(_vm.statisticTypes, function (type, index) {
-    return _c("vs-dropdown-item", {
-      key: index,
-      on: {
-        click: function click($event) {
-          return _vm.changeStatisticType(type);
-        }
-      }
-    }, [_vm._v("\n\t\t\t\t\t" + _vm._s(type.label) + "\n\t\t\t\t")]);
-  }), 1)], 1)], 1), _vm._v(" "), _c("div", {
+  }, [_vm._v(" expand_more ")])]), _vm._v(" "), _c("vs-dropdown-menu", [_c("vs-dropdown-item", [_vm._l(_vm.statisticTypes, function (statType, typeIndex) {
+    return _c("li", {
+      key: typeIndex
+    }, [_vm._v("\n                        " + _vm._s(statType) + "\n                    ")]);
+  }), _vm._v('\n                    :key="index" @click="changeStatis`ticType(type)">\n                    ' + _vm._s(_vm.type.label) + "\n                ")], 2)], 1)], 1)], 1), _vm._v(" "), _c("div", {
     staticClass: "vx-col w-full mb-6"
   }, [_c("vx-card", [_c("div", {
     staticClass: "vx-row"
@@ -490,7 +483,7 @@ var render = function render() {
             attrs: {
               href: _vm.API.product.show + data[indextr].slug
             }
-          }, [_vm._v("\n\t\t\t\t\t\t\t\t" + _vm._s(data[indextr].title) + "\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("vs-td", {
+          }, [_vm._v("\n                                " + _vm._s(data[indextr].title) + "\n                            ")])]), _vm._v(" "), _c("vs-td", {
             attrs: {
               data: data[indextr].producent.title
             }
@@ -503,18 +496,18 @@ var render = function render() {
                 }
               }
             }
-          }, [_vm._v("\n\t\t\t\t\t\t\t\t" + _vm._s(data[indextr].producent.title) + "\n\t\t\t\t\t\t\t")])], 1), _vm._v(" "), _c("vs-td", {
+          }, [_vm._v("\n                                " + _vm._s(data[indextr].producent.title) + "\n                            ")])], 1), _vm._v(" "), _c("vs-td", {
             attrs: {
               data: data[indextr].sold_quantity
             }
-          }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(data[indextr].sold_quantity) + "\n\t\t\t\t\t\t")]), _vm._v(" "), _c("vs-td", {
+          }, [_vm._v("\n                            " + _vm._s(data[indextr].sold_quantity) + "\n                        ")]), _vm._v(" "), _c("vs-td", {
             attrs: {
               data: data[indextr].sold_total
             }
-          }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(data[indextr].sold_total + " " + _vm.applicationParams.defaultCurrency) + "\n\t\t\t\t\t\t")])], 1);
+          }, [_vm._v("\n                            " + _vm._s(data[indextr].sold_total + " " + _vm.applicationParams.defaultCurrency) + "\n                        ")])], 1);
         });
       }
-    }], null, false, 815770278)
+    }], null, false, 3797329382)
   }, [_c("template", {
     slot: "header"
   }, [_c("div", {
@@ -523,7 +516,7 @@ var render = function render() {
     staticClass: "vx-col flex items-center w-1/2 p-0"
   }, [_c("h3", {
     staticClass: "mb-0 mr-3"
-  }, [_vm._v("\n\t\t\t\t\t\t\t\tProducts sold in the period\n\t\t\t\t\t\t\t")])])])]), _vm._v(" "), _c("template", {
+  }, [_vm._v("\n                                Products sold in the period\n                            ")])])])]), _vm._v(" "), _c("template", {
     slot: "thead"
   }, [_c("vs-th", {
     attrs: {

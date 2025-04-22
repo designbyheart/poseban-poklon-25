@@ -66,13 +66,14 @@ var render = function render() {
       fn: function fn(_ref) {
         var data = _ref.data;
         return _vm._l(data, function (order, indexItem) {
+          var _order$customer_name, _order$customer_surna, _order$status;
           return _c("vs-tr", {
             key: indexItem
           }, [_c("vs-td", [_c("span", {
             staticClass: "text-primary"
           }, [_vm._v("#" + _vm._s(order.id))]), _vm._v(" "), _c("span", {
             staticClass: "text-sm"
-          }, [_vm._v(_vm._s(order.customer_name + " " + order.customer_surname))]), _vm._v(" "), _c("br"), _vm._v(" "), _c("span", {
+          }, [_vm._v(_vm._s(((_order$customer_name = order === null || order === void 0 ? void 0 : order.customer_name) !== null && _order$customer_name !== void 0 ? _order$customer_name : "") + " " + ((_order$customer_surna = order.customer_surname) !== null && _order$customer_surna !== void 0 ? _order$customer_surna : "")))]), _vm._v(" "), _c("br"), _vm._v(" "), _c("span", {
             staticClass: "text-sm"
           }, [_vm._v(_vm._s(order.customer_email))])]), _vm._v(" "), _c("vs-td", [_c("span", {
             staticClass: "text-sm"
@@ -80,9 +81,14 @@ var render = function render() {
             staticClass: "text-sm text-primary"
           }, [_vm._v("\n                        " + _vm._s(order.shipping_method.name) + "\n                    ")])]), _vm._v(" "), _c("vs-td", [_c("span", {
             staticClass: "text-sm"
-          }, [_vm._v("\n                        " + _vm._s(order.status.title) + "\n                    ")])]), _vm._v(" "), _c("vs-td", [_c("span", {
+          }, [_vm._v("\n                        " + _vm._s({
+            1: "Kreirana",
+            2: "Plaćeno",
+            3: "Završeno",
+            4: "Neuspešno"
+          }[order.order_status_id] || (order === null || order === void 0 || (_order$status = order.status) === null || _order$status === void 0 ? void 0 : _order$status.title) || "") + "\n                    ")])]), _vm._v(" "), _c("vs-td", [_c("span", {
             staticClass: "text-sm"
-          }, [_vm._v("\n                        " + _vm._s(_vm.convertDate(order.created_at)) + "\n                    ")])]), _vm._v(" "), _c("vs-td", [_c("span", {
+          }, [_vm._v("\n                        " + _vm._s(_vm.convertDate(order === null || order === void 0 ? void 0 : order.created_at)) + "\n                    ")])]), _vm._v(" "), _c("vs-td", [_c("span", {
             staticClass: "text-sm"
           }, [_vm._v("\n                        " + _vm._s(order.total + " RSD") + "\n                    ")]), _vm._v(" "), _c("br"), _vm._v(" "), _c("span", {
             staticClass: "text-sm text-primary"
@@ -97,7 +103,7 @@ var render = function render() {
                 }
               }
             }
-          }, [_vm._v(_vm._s(_vm.$t("actions.view")))])], 1)], 1);
+          }, [_vm._v(_vm._s(_vm.$t("actions.view")) + "\n                    ")])], 1)], 1);
         });
       }
     }])

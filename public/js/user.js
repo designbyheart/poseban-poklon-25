@@ -13502,7 +13502,7 @@ var render = function render() {
     on: {
       click: _vm.submitForm
     }
-  }, [_vm._v("Registracijae")])])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Registracija")])])])])]), _vm._v(" "), _c("div", {
     staticClass: "modal-login-col col-signin"
   }, [_vm._m(3), _vm._v(" "), _c("div", {
     staticClass: "signup-btn-row"

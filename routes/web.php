@@ -439,7 +439,7 @@ Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.'], function () {
         'uses' => 'SettingController@indexData'
     ]);
 
-    //Receive orders list with pagination
+    // Receive orders list with pagination
     Route::get('/orders/list', [
         'uses' => 'OrderController@indexData',
         'as' => 'order.indexData'

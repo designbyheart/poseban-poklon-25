@@ -116,7 +116,8 @@ class OrderController extends Controller
     public function ordersHistory()
     {
         $user = Auth::User();
-        $orders = Order::where('user_id', $user->id)->get();
+//        $orders = Order::where('user_id', $user->id)->get();
+        $orders = $user->orders();
 
         return view('user.profile.orders-history', compact('orders'));
     }

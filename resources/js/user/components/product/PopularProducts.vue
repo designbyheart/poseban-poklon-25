@@ -115,8 +115,8 @@
           </div>
         </swiper-slide>
       </swiper>
-      <div class="swiper-button-prev" id="popular-slide-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" id="popular-slide-next" slot="button-next"></div>
+      <div class="swiper-button-prev" id="popular-slide-prev" slot="button-prev"/>
+      <div slot="button-next" class="swiper-button-next" id="popular-slide-next"/>
     </div>
   </section>
 </template>

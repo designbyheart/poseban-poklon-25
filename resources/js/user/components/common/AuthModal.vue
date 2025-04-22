@@ -71,7 +71,7 @@
                             <span class="error" v-if="$v.form.privacyPolicy.$anyError && $v.form.privacyPolicy.$dirty">Polje je obavezno.</span>
                         </div>
                         <div class="signin-btn-row">
-                            <div class="signin-btn" @click="submitForm">Registracijae</div>
+                            <div class="signin-btn" @click="submitForm">Registracija</div>
                         </div>
                     </form>
                 </div>
