@@ -1,25 +1,10 @@
 @import "../app/mixin.scss";
 @import "../app/default-style-values.scss";
-@import "./swiper.scss";
 
 .home-carousel-container,
 .home-products-carousel-container {
     margin: 40px auto;
     width: 100%;
-    padding: 0 50px;
-
-    @include mq("tablet", max) {
-        padding: 0 15px;
-        margin: 20px auto;
-    }
-
-    .swiper-container {
-        overflow: visible;
-
-        @include mq("tablet", max) {
-            overflow: hidden;
-        }
-    }
 
     .home-carousel-row {
         display: flex;
@@ -32,38 +17,31 @@
 
     .swiper-button-prev {
         background-image: url("/images/icons/slider_arrow_left.png") !important;
-        background-size: 24px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
         outline: none;
-        width: 40px;
-        height: 40px;
-        transition: all 0.3s ease;
-
-        &:hover {
-            transform: translateX(-3px);
+        @include mq(768px, min) {
+            left: -30px !important;
+        }
+        @include mq(768, max) {
+            display: none;
         }
     }
 
     .swiper-button-next {
+        background: transparent;
         background-image: url("/images/icons/slider_arrow_right.png") !important;
-        background-size: 24px !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
         outline: none;
-        width: 40px;
-        height: 40px;
-        transition: all 0.3s ease;
-
-        &:hover {
-            transform: translateX(3px);
+        @include mq(768px, min) {
+            right: -30px !important;
+        }
+        @include mq(768, max) {
+            display: none;
         }
     }
 }
 
 .home-carousel-item {
     margin: auto 10px;
-    flex: 1 1 auto;
+    flex: 1 1 0;
     display: flex;
     align-items: flex-end;
     height: 250px;
@@ -71,19 +49,12 @@
     border-radius: 4px;
     background-position: center;
     background-size: cover;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-
-    @include mq("tablet", max) {
-        margin: 10px 0;
+    @include mq(768px, min) {
+        min-width: 250px;
     }
 
     &:first-child {
         margin-left: 0;
-    }
-
-    &:hover {
-        transform: translateY(-5px);
     }
 
     .carousel-bg-image {
