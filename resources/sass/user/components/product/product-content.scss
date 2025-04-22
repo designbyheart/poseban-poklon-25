@@ -135,7 +135,8 @@
             right: 5px;
             width: 16px;
             height: 16px;
-            background: url("../images/product_select_arrow.svg");
+            // Fix: Update the path to match your project's image structure
+            background: url("/images/icons/product_select_arrow.svg");
             background-color: #fff;
             background-size: contain;
             background-repeat: no-repeat;
