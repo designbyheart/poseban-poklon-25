@@ -14,5 +14,5 @@
             </div>
         </div>
     </section>
-    <recommended-products title="PREPORUČUJEMO"></recommended-products>
+    <recommended-products title="PREPORUČUJEMO1"></recommended-products>
 @endsection
