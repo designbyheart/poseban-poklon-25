@@ -299,7 +299,7 @@ class VoucherController extends Controller
             'voucher_date' => $voucher->end_date
         ],
             [[
-                'email' => 'designbyheart@gmail.com', //  $company->email,
+                'email' => $company->email,
                 'name' => $company->title
             ]],
             'New voucher for product: ' . $order_item->product->title
