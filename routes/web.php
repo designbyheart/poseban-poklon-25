@@ -374,7 +374,7 @@ Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.'], function () {
     ]);
 
     /** ORDERS */
-    //Update order status ['order_id', 'status_id']
+    // Update order status ['order_id', 'status_id']
     Route::post('/order/status/update', [
         'uses' => 'OrderController@updateOrderStatus',
         'as' => 'order.status.update'

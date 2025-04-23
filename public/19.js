@@ -175,10 +175,10 @@ __webpack_require__.r(__webpack_exports__);
         params: {
           start_date: startDate,
           end_date: endDate,
-          type: type.slug
+          type: type === null || type === void 0 ? void 0 : type.slug
         }
       };
-      if (type.slug === 'product') {
+      if ((type === null || type === void 0 ? void 0 : type.slug) === 'product') {
         requestParams.params.product_id = this.filter.productSearch;
       }
       axios__WEBPACK_IMPORTED_MODULE_0__["default"].get('/dashboard/statistic/get', requestParams).then(function (response) {
@@ -195,9 +195,9 @@ __webpack_require__.r(__webpack_exports__);
         from: startDate,
         to: endDate
       };
-      if (type.slug === 'product') {
+      if ((type === null || type === void 0 ? void 0 : type.slug) === 'product') {
         requestParams.product_id = this.filter.productSearch;
-      } else if (type.slug === 'producent') {
+      } else if ((type === null || type === void 0 ? void 0 : type.slug) === 'producent') {
         requestParams.producent_id = this.filter.producentSearch;
       }
       var requestUrl = '/dashboard/order-items/download';
@@ -333,6 +333,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function render() {
+  var _vm$type;
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
@@ -352,7 +353,7 @@ var render = function render() {
     return _c("li", {
       key: typeIndex
     }, [_vm._v("\n                        " + _vm._s(statType) + "\n                    ")]);
-  }), _vm._v('\n                    :key="index" @click="changeStatis`ticType(type)">\n                    ' + _vm._s(_vm.type.label) + "\n                ")], 2)], 1)], 1)], 1), _vm._v(" "), _c("div", {
+  }), _vm._v('\n                    :key="index" @click="changeStatis`ticType(type)">\n                    ' + _vm._s((_vm$type = _vm.type) === null || _vm$type === void 0 ? void 0 : _vm$type.label) + "\n                ")], 2)], 1)], 1)], 1), _vm._v(" "), _c("div", {
     staticClass: "vx-col w-full mb-6"
   }, [_c("vx-card", [_c("div", {
     staticClass: "vx-row"

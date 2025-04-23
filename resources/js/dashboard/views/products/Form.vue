@@ -1,414 +1,597 @@
 <template>
-
-    <vx-card :title="getFormTitle(isEditForm)" noShadow cardBorder>
-
-        <vs-tabs class="px-0">
-
-            <!-- General -->
-            <vs-tab :label="getFormSectionTitle('general')">
-                <div class="con-tab pt-3">
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('title') }}
-                            </p>
-                            <vs-input type="text" class="w-full" v-model="product.title" />
-                            <span class="text-danger text-xs" v-show="$v.product.description.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('description') }}
-                            </p>
-                            <!-- <vs-textarea v-model="product.description" class="mb-0" /> -->
-                            <quill-editor
-                                v-model="product.description"
-                                :options="editorOption"
-                                ref="pageQuillEditor"
-                            ></quill-editor>
-                            <span class="text-danger text-xs" v-show="$v.product.description.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('short_description') }}
-                            </p>
-                            <!-- <vs-textarea v-model="product.short_description" class="mb-0" /> -->
-                            <quill-editor
-                                v-model="product.short_description"
-                                :options="editorOption"
-                                ref="pageQuillEditor"
-                            ></quill-editor>
-                            <span class="text-danger text-xs" v-show="$v.product.short_description.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('voucher_description') }}
-                            </p>
-                            <vs-textarea v-model="product.voucher_description" class="mb-0" />
-                            <span class="text-danger text-xs" v-show="$v.product.voucher_description.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('za_koga') }}
-                            </p>
-                            <vs-input type="text" class="w-full" v-model="product.za_koga" />
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('slug') }}
-                            </p>
-                            <vs-input type="text" class="w-full" v-model="product.slug" />
-                            <span class="text-danger text-xs" v-show="$v.product.slug.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('status') }}
-                            </p>
-                            <vs-select
-                                    class="w-full"
-                                    v-model="product.status"
-                            >
-                                <vs-select-item :key="index" :value="item.value" :text="item.title" v-for="item,index in statuses" />
-                            </vs-select>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-
-
-
-            <!-- Price -->
-            <vs-tab :label="getFormSectionTitle('price')">
-                <div class="con-tab pt-3">
-                    <div class="vx-row mb-6">
-                        <div class="vx-col">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('price') }}
-                            </p>
-                            <vs-input
-                                    type="number"
-                                    class="w-full"
-                                    v-model="product.price"
-                                    :danger="$v.product.price.$invalid"
-                                    val-icon-danger="close"
-                            />
-                            <span class="text-danger text-xs" v-show="$v.product.price.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                        <div class="vx-col">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('company_price') }}
-                            </p>
-                            <vs-input
-                                    type="number"
-                                    class="w-full"
-                                    v-model="product.company_price"
-                                    :danger="$v.product.company_price.$invalid"
-                                    val-icon-danger="close"
-                            />
-                            <span class="text-danger text-xs" v-show="$v.product.company_price.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-
-
-
-            <!-- Connections -->
-            <vs-tab :label="getFormSectionTitle('connections')">
-                <div class="con-tab pt-3">
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('producentId') }}
-                            </p>
-                            <vs-select
-                                    class="w-full"
-                                    v-model="product.producent_id"
-                            >
-                                <vs-select-item :key="index" :value="item.id" :text="item.title" v-for="item,index in producents" />
-                            </vs-select>
-                            <span class="text-danger text-xs" v-show="$v.product.producent_id.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                    <div class="vx-row mb-6">
-                        <div class="vx-col w-full">
-                            <p class="font-bold text-sm mb-2">
-                                {{ getPropertyTitle('categories') }}
-                            </p>
-                            <v-select v-model="selectedCategories" label="title" multiple :options="categories" :reduce="category => category.id" @search="searchCategories"></v-select>
-                            <span class="text-danger text-xs" v-show="$v.selectedCategories.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                        </div>
-                    </div>
-                </div>
-
-
-            </vs-tab>
-
-
-
-            <!-- Attributes -->
-            <vs-tab :label="getFormSectionTitle('attributes')">
-                <div class="con-tab pt-3">
-                    <div class="vx-row mb-6">
-
-                        <div class="vx-col w-full" v-show="productFilters.length > 0">
-                            <div class="vx-row mb-3">
-                                <div class="vx-col w-1/6">
-                                    <p class="font-bold text-sm">{{ getPropertyTitle('filter.title') }}</p>
-                                </div>
-                                <div class="vx-col w-2/3">
-                                    <p class="font-bold text-sm">{{ getPropertyTitle('filter.attributes') }}</p>
-                                </div>
-                            </div>
-                            <div class="vx-row mb-3" :key="index" v-for="filter,index in productFilters">
-                                <div class="vx-col w-1/6">
-                                    <p class="font-bold text-sm">{{ filter.name }}</p>
-                                </div>
-                                <div class="vx-col w-2/3">
-
-                                    <v-select v-model="filter.selected"
-                                              label="name"
-                                              multiple
-                                              :key="filter.name"
-                                              :options="filter.attributes"
-                                              :reduce="attribute => ({id: attribute.id, name: attribute.name})"
-                                    ></v-select>
-
-                                </div>
-                                <div class="vx-col w-1/6">
-                                    <vs-button color="danger" icon="delete" @click="removeFilter(index)"></vs-button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="vx-col w-full">
-                            <div class="vx-row">
-                                <div class="vx-col w-2/3 mb-3">
-                                    <p class="font-bold text-sm mb-3">{{ getPropertyTitle('filter.search') }}</p>
-                                    <v-select v-model="selectedFilter" label="name" :options="filters" :reduce="filter => ({id: filter.id, name: filter.name, attributes: filter.attributes})" @search="searchFilters"></v-select>
-                                </div>
-                                <div class="vx-col w-1/3 mb-3 flex items-end">
-                                    <vs-button @click="addFilter()">{{ $t('actions.addNew') }}</vs-button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </vs-tab>
-
-            <!-- Properties -->
-            <vs-tab :label="getFormSectionTitle('properties')">
-                <div class="con-tab pt-3">
-                    <div class="vx-col w-full">
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('visitors') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.properties.visitors" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('location') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.properties.location" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('duration') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.properties.duration" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('weather') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.properties.weather" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('zaGledaoce') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.properties.za_gledaoce" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('dressCode') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.properties.dress_code" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('additionalInformation') }}
-                                </p>
-                                <vs-textarea class="w-full" v-model="product.properties.additional_info"></vs-textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-
-            <!-- Images -->
-            <vs-tab :label="getFormSectionTitle('images')">
-                <div class="con-tab pt-3">
-                    <div class="vx-row mb-0">
-                        <div class="vx-col w-full">
-                            <image-upload multiple v-model="selectedImages"></image-upload>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-
-
-
-            <!-- SEO -->
-            <vs-tab :label="getFormSectionTitle('seo')">
-                <div class="con-tab pt-3">
-                    <div class="vx-col w-full">
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('seoTitle') }}
-                                </p>
-                                <vs-input type="text" class="w-full" v-model="product.seo_title" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('seoDescription') }}
-                                </p>
-                                <vs-textarea v-model="product.seo_description" class="mb-0" />
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('seoKeywords') }}
-                                </p>
-                                <vs-textarea v-model="product.seo_keywords" class="mb-0" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-
-            <!-- Product versions -->
-            <vs-tab :label="getFormSectionTitle('versions')">
-                <div class="con-tab pt-3">
-                    <div class="vx-col w-full">
-                        <div class="vx-row mb-3" v-show="versions.length > 0">
-                            <div class="vx-col w-2/3">
-                                <p class="font-bold text-sm">{{ getPropertyTitle('version.title') }}</p>
-                            </div>
-                            <div class="vx-col w-1/6">
-                                <p class="font-bold text-sm">{{ getPropertyTitle('version.price') }}</p>
-                            </div>
-                            <div class="vx-col w-1/6">
-                                <p class="font-bold text-sm">{{ getPropertyTitle('version.actions') }}</p>
-                            </div>
-                        </div>
-                        <div class="vx-row mb-3 items-center" :key="index" v-for="version,index in versions">
-                            <div class="vx-col w-2/3">
-                                <p>{{ version.title }}</p>
-                            </div>
-                            <div class="vx-col w-1/6">
-                                <p>{{ version.price + ' ' + defaultCurrency }}</p>
-                            </div>
-                            <div class="vx-col w-1/6">
-                                <vs-button color="danger" icon="delete" @click="removeVersion(version.id)"></vs-button>
-                            </div>
-                        </div>
-                        <div class="vx-row">
-                            <div class="vx-col w-2/3 mb-3">
-                                <p class="font-bold text-sm mb-3">{{ getPropertyTitle('version.search') }}</p>
-                                <v-select v-model="selectedVersion" label="title" :options="products" :reduce="version => ({id: version.id, title: version.title, price: version.price})" @search="searchProducts"></v-select>
-                            </div>
-                            <div class="vx-col w-1/3 mb-3 flex items-end">
-                                <vs-button @click="addVersion()">{{ $t('actions.addNew') }}</vs-button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-
-            <!-- Settings -->
-            <vs-tab :label="getFormSectionTitle('settings')">
-                <div class="con-tab pt-3">
-                    <div class="vx-col w-full">
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-1/4">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('viewCount') }}
-                                </p>
-                                <div class="w-2/3">
-                                    <vs-input-number min="0" v-model="product.view_count"/>
-                                </div>
-                                <span class="text-danger text-xs" v-show="$v.product.view_count.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                            </div>
-                            <div class="vx-col w-1/4">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('likeCount') }}
-                                </p>
-                                <div class="w-2/3">
-                                    <vs-input-number min="0" v-model="product.like_count"/>
-                                </div>
-                                <span class="text-danger text-xs" v-show="$v.product.like_count.$invalid">{{ $t('messages.validation.invalidField') }}</span>
-                            </div>
-                        </div>
-                        <div class="vx-row mb-6">
-                            <div class="vx-col w-full">
-                                <p class="font-bold text-sm mb-2">
-                                    {{ getPropertyTitle('type') }}
-                                </p>
-                                <vs-select
-                                        class="w-full"
-                                        v-model="product.type"
-                                >
-                                    <vs-select-item :key="index" :value="item.slug" :text="item.title" v-for="item,index in types" />
-                                </vs-select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </vs-tab>
-        </vs-tabs>
-
-        <!-- Actions -->
-        <div class="vx-row">
+  <vx-card
+    :title="getFormTitle(isEditForm)"
+    no-shadow
+    card-border
+  >
+    <vs-tabs class="px-0">
+      <!-- General -->
+      <vs-tab :label="getFormSectionTitle('general')">
+        <div class="con-tab pt-3">
+          <div class="vx-row mb-6">
             <div class="vx-col w-full">
-                <vs-button color="primary" class="mr-3 mb-2" @click="submitForm()" v-if="!isEditForm">{{ $t('actions.create') }}</vs-button>
-                <vs-button color="primary" class="mr-3 mb-2" @click="submitForm()" v-if="isEditForm">{{ $t('actions.update') }}</vs-button>
-                <vs-button color="danger" type="border" class="mb-2" :to="{ name: indexRoute }">{{ $t('actions.cancel') }}</vs-button>
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('title') }}
+              </p>
+              <vs-input
+                v-model="product.title"
+                type="text"
+                class="w-full"
+              />
+              <span
+                v-show="$v.product.description.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
             </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('description') }}
+              </p>
+              <!-- <vs-textarea v-model="product.description" class="mb-0" /> -->
+              <quill-editor
+                ref="pageQuillEditor"
+                v-model="product.description"
+                :options="editorOption"
+              />
+              <span
+                v-show="$v.product.description.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('short_description') }}
+              </p>
+              <!-- <vs-textarea v-model="product.short_description" class="mb-0" /> -->
+              <quill-editor
+                ref="pageQuillEditor"
+                v-model="product.short_description"
+                :options="editorOption"
+              />
+              <span
+                v-show="$v.product.short_description.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('voucher_description') }}
+              </p>
+              <vs-textarea
+                v-model="product.voucher_description"
+                class="mb-0"
+              />
+              <span
+                v-show="$v.product.voucher_description.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('za_koga') }}
+              </p>
+              <vs-input
+                v-model="product.za_koga"
+                type="text"
+                class="w-full"
+              />
+            </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('slug') }}
+              </p>
+              <vs-input
+                v-model="product.slug"
+                type="text"
+                class="w-full"
+              />
+              <span
+                v-show="$v.product.slug.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('status') }}
+              </p>
+              <vs-select
+                v-model="product.status"
+                class="w-full"
+              >
+                <vs-select-item
+                  v-for="item,index in statuses"
+                  :key="index"
+                  :value="item.value"
+                  :text="item.title"
+                />
+              </vs-select>
+            </div>
+          </div>
         </div>
+      </vs-tab>
 
-    </vx-card>
 
+
+      <!-- Price -->
+      <vs-tab :label="getFormSectionTitle('price')">
+        <div class="con-tab pt-3">
+          <div class="vx-row mb-6">
+            <div class="vx-col">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('price') }}
+              </p>
+              <vs-input
+                v-model="product.price"
+                type="number"
+                class="w-full"
+                :danger="$v.product.price.$invalid"
+                val-icon-danger="close"
+              />
+              <span
+                v-show="$v.product.price.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+            <div class="vx-col">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('company_price') }}
+              </p>
+              <vs-input
+                v-model="product.company_price"
+                type="number"
+                class="w-full"
+                :danger="$v.product.company_price.$invalid"
+                val-icon-danger="close"
+              />
+              <span
+                v-show="$v.product.company_price.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+      <!-- Connections -->
+      <vs-tab :label="getFormSectionTitle('connections')">
+        <div class="con-tab pt-3">
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('producentId') }}
+              </p>
+              <vs-select
+                v-model="product.producent_id"
+                class="w-full"
+              >
+                <vs-select-item
+                  v-for="item,index in producents"
+                  :key="index"
+                  :value="item.id"
+                  :text="item.title"
+                />
+              </vs-select>
+              <span
+                v-show="$v.product.producent_id.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+          <div class="vx-row mb-6">
+            <div class="vx-col w-full">
+              <p class="font-bold text-sm mb-2">
+                {{ getPropertyTitle('categories') }}
+              </p>
+              <v-select
+                v-model="selectedCategories"
+                label="title"
+                multiple
+                :options="categories"
+                :reduce="category => category.id"
+                @search="searchCategories"
+              />
+              <span
+                v-show="$v.selectedCategories.$invalid"
+                class="text-danger text-xs"
+              >{{ $t('messages.validation.invalidField') }}</span>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+
+
+      <!-- Attributes -->
+      <vs-tab :label="getFormSectionTitle('attributes')">
+        <div class="con-tab pt-3">
+          <div class="vx-row mb-6">
+            <div
+              v-show="productFilters.length > 0"
+              class="vx-col w-full"
+            >
+              <div class="vx-row mb-3">
+                <div class="vx-col w-1/6">
+                  <p class="font-bold text-sm">
+                    {{ getPropertyTitle('filter.title') }}
+                  </p>
+                </div>
+                <div class="vx-col w-2/3">
+                  <p class="font-bold text-sm">
+                    {{ getPropertyTitle('filter.attributes') }}
+                  </p>
+                </div>
+              </div>
+              <div
+                v-for="filter,index in productFilters"
+                :key="index"
+                class="vx-row mb-3"
+              >
+                <div class="vx-col w-1/6">
+                  <p class="font-bold text-sm">
+                    {{ filter.name }}
+                  </p>
+                </div>
+                <div class="vx-col w-2/3">
+                  <v-select
+                    :key="filter.name"
+                    v-model="filter.selected"
+                    label="name"
+                    multiple
+                    :options="filter.attributes"
+                    :reduce="attribute => ({id: attribute.id, name: attribute.name})"
+                  />
+                </div>
+                <div class="vx-col w-1/6">
+                  <vs-button
+                    color="danger"
+                    icon="delete"
+                    @click="removeFilter(index)"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="vx-col w-full">
+              <div class="vx-row">
+                <div class="vx-col w-2/3 mb-3">
+                  <p class="font-bold text-sm mb-3">
+                    {{ getPropertyTitle('filter.search') }}
+                  </p>
+                  <v-select
+                    v-model="selectedFilter"
+                    label="name"
+                    :options="filters"
+                    :reduce="filter => ({id: filter.id, name: filter.name, attributes: filter.attributes})"
+                    @search="searchFilters"
+                  />
+                </div>
+                <div class="vx-col w-1/3 mb-3 flex items-end">
+                  <vs-button @click="addFilter()">
+                    {{ $t('actions.addNew') }}
+                  </vs-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+      <!-- Properties -->
+      <vs-tab :label="getFormSectionTitle('properties')">
+        <div class="con-tab pt-3">
+          <div class="vx-col w-full">
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('visitors') }}
+                </p>
+                <vs-input
+                  v-model="product.properties.visitors"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('location') }}
+                </p>
+                <vs-input
+                  v-model="product.properties.location"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('duration') }}
+                </p>
+                <vs-input
+                  v-model="product.properties.duration"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('weather') }}
+                </p>
+                <vs-input
+                  v-model="product.properties.weather"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('zaGledaoce') }}
+                </p>
+                <vs-input
+                  v-model="product.properties.za_gledaoce"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('dressCode') }}
+                </p>
+                <vs-input
+                  v-model="product.properties.dress_code"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('additionalInformation') }}
+                </p>
+                <vs-textarea
+                  v-model="product.properties.additional_info"
+                  class="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+      <!-- Images -->
+      <vs-tab :label="getFormSectionTitle('images')">
+        <div class="con-tab pt-3">
+          <div class="vx-row mb-0">
+            <div class="vx-col w-full">
+              <image-upload
+                v-model="selectedImages"
+                multiple
+              />
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+
+
+      <!-- SEO -->
+      <vs-tab :label="getFormSectionTitle('seo')">
+        <div class="con-tab pt-3">
+          <div class="vx-col w-full">
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('seoTitle') }}
+                </p>
+                <vs-input
+                  v-model="product.seo_title"
+                  type="text"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('seoDescription') }}
+                </p>
+                <vs-textarea
+                  v-model="product.seo_description"
+                  class="mb-0"
+                />
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('seoKeywords') }}
+                </p>
+                <vs-textarea
+                  v-model="product.seo_keywords"
+                  class="mb-0"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+      <!-- Product versions -->
+      <vs-tab :label="getFormSectionTitle('versions')">
+        <div class="con-tab pt-3">
+          <div class="vx-col w-full">
+            <div
+              v-show="versions.length > 0"
+              class="vx-row mb-3"
+            >
+              <div class="vx-col w-2/3">
+                <p class="font-bold text-sm">
+                  {{ getPropertyTitle('version.title') }}
+                </p>
+              </div>
+              <div class="vx-col w-1/6">
+                <p class="font-bold text-sm">
+                  {{ getPropertyTitle('version.price') }}
+                </p>
+              </div>
+              <div class="vx-col w-1/6">
+                <p class="font-bold text-sm">
+                  {{ getPropertyTitle('version.actions') }}
+                </p>
+              </div>
+            </div>
+            <div
+              v-for="version,index in versions"
+              :key="index"
+              class="vx-row mb-3 items-center"
+            >
+              <div class="vx-col w-2/3">
+                <p>{{ version.title }}</p>
+              </div>
+              <div class="vx-col w-1/6">
+                <p>{{ version.price + ' ' + defaultCurrency }}</p>
+              </div>
+              <div class="vx-col w-1/6">
+                <vs-button
+                  color="danger"
+                  icon="delete"
+                  @click="removeVersion(version.id)"
+                />
+              </div>
+            </div>
+            <div class="vx-row">
+              <div class="vx-col w-2/3 mb-3">
+                <p class="font-bold text-sm mb-3">
+                  {{ getPropertyTitle('version.search') }}
+                </p>
+                <v-select
+                  v-model="selectedVersion"
+                  label="title"
+                  :options="products"
+                  :reduce="version => ({id: version.id, title: version.title, price: version.price})"
+                  @search="searchProducts"
+                />
+              </div>
+              <div class="vx-col w-1/3 mb-3 flex items-end">
+                <vs-button @click="addVersion()">
+                  {{ $t('actions.addNew') }}
+                </vs-button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+
+      <!-- Settings -->
+      <vs-tab :label="getFormSectionTitle('settings')">
+        <div class="con-tab pt-3">
+          <div class="vx-col w-full">
+            <div class="vx-row mb-6">
+              <div class="vx-col w-1/4">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('viewCount') }}
+                </p>
+                <div class="w-2/3">
+                  <vs-input-number
+                    v-model="product.view_count"
+                    min="0"
+                  />
+                </div>
+                <span
+                  v-show="$v.product.view_count.$invalid"
+                  class="text-danger text-xs"
+                >{{ $t('messages.validation.invalidField') }}</span>
+              </div>
+              <div class="vx-col w-1/4">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('likeCount') }}
+                </p>
+                <div class="w-2/3">
+                  <vs-input-number
+                    v-model="product.like_count"
+                    min="0"
+                  />
+                </div>
+                <span
+                  v-show="$v.product.like_count.$invalid"
+                  class="text-danger text-xs"
+                >{{ $t('messages.validation.invalidField') }}</span>
+              </div>
+            </div>
+            <div class="vx-row mb-6">
+              <div class="vx-col w-full">
+                <p class="font-bold text-sm mb-2">
+                  {{ getPropertyTitle('type') }}
+                </p>
+                <vs-select
+                  v-model="product.type"
+                  class="w-full"
+                >
+                  <vs-select-item
+                    v-for="item,index in types"
+                    :key="index"
+                    :value="item.slug"
+                    :text="item.title"
+                  />
+                </vs-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </vs-tab>
+    </vs-tabs>
+
+    <!-- Actions -->
+    <div class="vx-row">
+      <div class="vx-col w-full">
+        <vs-button
+          v-if="!isEditForm"
+          color="primary"
+          class="mr-3 mb-2"
+          @click="submitForm()"
+        >
+          {{ $t('actions.create') }}
+        </vs-button>
+        <vs-button
+          v-if="isEditForm"
+          color="primary"
+          class="mr-3 mb-2"
+          @click="submitForm()"
+        >
+          {{ $t('actions.update') }}
+        </vs-button>
+        <vs-button
+          color="danger"
+          type="border"
+          class="mb-2"
+          :to="{ name: indexRoute }"
+        >
+          {{ $t('actions.cancel') }}
+        </vs-button>
+      </div>
+    </div>
+  </vx-card>
 </template>
 <script>
 
@@ -566,6 +749,21 @@
           }
         },
         validations: validations,
+        mounted() {
+
+            //Load necessary data
+            this.loadData();
+
+        },
+        created: function () {
+
+            //Set an instance for the form rendering
+            this.setInstance(this.formModel);
+
+            //Listen to the events
+            this.listenEvents();
+
+        },
         methods: {
             //Products
             createProduct(){
@@ -984,21 +1182,6 @@
 
                 EventBus.$emit('open-image-uploader');
             }
-        },
-        mounted() {
-
-            //Load necessary data
-            this.loadData();
-
-        },
-        created: function () {
-
-            //Set an instance for the form rendering
-            this.setInstance(this.formModel);
-
-            //Listen to the events
-            this.listenEvents();
-
         }
 
     }

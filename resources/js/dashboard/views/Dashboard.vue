@@ -19,7 +19,7 @@
                             {{ statType }}
                         </li>
                         :key="index" @click="changeStatis`ticType(type)">
-                        {{ type.label }}
+                        {{ type?.label }}
                     </vs-dropdown-item>
 
                 </vs-dropdown-menu>
@@ -275,11 +275,11 @@ export default {
                 params: {
                     start_date: startDate,
                     end_date: endDate,
-                    type: type.slug
+                    type: type?.slug
                 }
             };
 
-            if (type.slug === 'product') {
+            if (type?.slug === 'product') {
 
                 requestParams.params.product_id = this.filter.productSearch;
 
@@ -307,11 +307,11 @@ export default {
                 to: endDate
             };
 
-            if (type.slug === 'product') {
+            if (type?.slug === 'product') {
 
                 requestParams.product_id = this.filter.productSearch;
 
-            } else if (type.slug === 'producent') {
+            } else if (type?.slug === 'producent') {
 
                 requestParams.producent_id = this.filter.producentSearch;
 

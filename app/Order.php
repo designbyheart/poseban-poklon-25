@@ -2,19 +2,13 @@
 
 namespace App;
 
-use App\Coupon;
-use App\Jobs\SendOrderStatusChangedEmail;
 use App\Jobs\SendNewOrderUserEmail;
+use App\Jobs\SendOrderStatusChangedEmail;
 use App\Jobs\SendVoucherEmail;
-use App\Services\EmailService;
 use App\Utilities\VoucherUtility;
 use Auth;
-use App\Product;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
-use App\OrderStatus;
-use App\Promotion;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
@@ -81,20 +75,29 @@ class Order extends Model
      */
     public function setStatus($status, $message = null)
     {
-        // Update order status relationship
-        $this->status()->associate($status);
+        try {
+            // Update order status relationship
+            $this->status()->associate($status);
 
-        // Save the order and send email notification
-        if ($this->update()) {
-            $this->sendStatusEmail($status, $message);
+            // Save the order and send email notification
+            if ($this->update()) {
+                $this->sendStatusEmail($status, $message);
 
-            // For paid status, generate vouchers
-            if ($status->id === 2) { // 2 = Paid
-                Log::info('Order marked as paid, generating vouchers', ['order_id' => $this->id]);
-                $this->generateVouchers();
+                // For paid status, generate vouchers
+                if ($status->id === 2) { // 2 = Paid
+                    Log::info('Order marked as paid, generating vouchers', ['order_id' => $this->id]);
+                    $this->generateVouchers();
+                }
+
+                return response()->json('success', 200);
             }
-
-            return response()->json('success', 200);
+        } catch (\Exception $e) {
+            Log::error('Exception in setStatus', [
+                'order_id' => $this->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json('error', 500);
         }
     }
 
@@ -157,7 +160,7 @@ class Order extends Model
             $this->subtotal += $bundle_price;
         };
 
-        $this->total =  $this->subtotal;
+        $this->total = $this->subtotal;
 
         //Find all promotions available for order products or categories, returns discount value
         $promotion_discount = Promotion::process($this->items, $check_price);
@@ -230,12 +233,12 @@ class Order extends Model
         $installment = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgInstallment));
         $rnd = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgRnd));
         $currency = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgCurrency));
-        $storeKey =  env('NESTPAY_KEY');
+        $storeKey = env('NESTPAY_KEY');
         $plainText = $clientId . "|" . $oid . "|" . $amount . "|" . $okUrl . "|" . $failUrl . "|" . $transactionType . "|" . $installment . "|" . $rnd . "||||" . $currency . "|" . $storeKey;
         $hashValue = hash('sha512', $plainText);
         $hash = base64_encode(pack('H*', $hashValue));
         $lang = "sr";
-        return (object) [
+        return (object)[
             'clientid' => $orgClientId,
             'description' => 'Porudžbina ' . $orgOid,
             'amount' => $orgAmount,

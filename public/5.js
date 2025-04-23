@@ -178,6 +178,17 @@ function openImageUploader() {
     }
   },
   validations: _static_product_product__WEBPACK_IMPORTED_MODULE_2__["validations"],
+  mounted: function mounted() {
+    //Load necessary data
+    this.loadData();
+  },
+  created: function created() {
+    //Set an instance for the form rendering
+    this.setInstance(this.formModel);
+
+    //Listen to the events
+    this.listenEvents();
+  },
   methods: {
     //Products
     createProduct: function createProduct() {
@@ -441,17 +452,6 @@ function openImageUploader() {
     openImageUploader: function openImageUploader() {
       _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('open-image-uploader');
     }
-  },
-  mounted: function mounted() {
-    //Load necessary data
-    this.loadData();
-  },
-  created: function created() {
-    //Set an instance for the form rendering
-    this.setInstance(this.formModel);
-
-    //Listen to the events
-    this.listenEvents();
   }
 });
 
@@ -474,8 +474,8 @@ var render = function render() {
   return _c("vx-card", {
     attrs: {
       title: _vm.getFormTitle(_vm.isEditForm),
-      noShadow: "",
-      cardBorder: ""
+      "no-shadow": "",
+      "card-border": ""
     }
   }, [_c("vs-tabs", {
     staticClass: "px-0"
@@ -491,7 +491,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("title")) + "\n                        ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("title")) + "\n            ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -517,7 +517,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("description")) + "\n                        ")]), _vm._v(" "), _c("quill-editor", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("description")) + "\n            ")]), _vm._v(" "), _c("quill-editor", {
     ref: "pageQuillEditor",
     attrs: {
       options: _vm.editorOption
@@ -543,7 +543,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("short_description")) + "\n                        ")]), _vm._v(" "), _c("quill-editor", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("short_description")) + "\n            ")]), _vm._v(" "), _c("quill-editor", {
     ref: "pageQuillEditor",
     attrs: {
       options: _vm.editorOption
@@ -569,7 +569,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("voucher_description")) + "\n                        ")]), _vm._v(" "), _c("vs-textarea", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("voucher_description")) + "\n            ")]), _vm._v(" "), _c("vs-textarea", {
     staticClass: "mb-0",
     model: {
       value: _vm.product.voucher_description,
@@ -592,7 +592,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("za_koga")) + "\n                        ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("za_koga")) + "\n            ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -610,7 +610,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("slug")) + "\n                        ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("slug")) + "\n            ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -636,7 +636,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("status")) + "\n                        ")]), _vm._v(" "), _c("vs-select", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("status")) + "\n            ")]), _vm._v(" "), _c("vs-select", {
     staticClass: "w-full",
     model: {
       value: _vm.product.status,
@@ -665,7 +665,7 @@ var render = function render() {
     staticClass: "vx-col"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("price")) + "\n                        ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("price")) + "\n            ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "number",
@@ -691,7 +691,7 @@ var render = function render() {
     staticClass: "vx-col"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("company_price")) + "\n                        ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("company_price")) + "\n            ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "number",
@@ -725,7 +725,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("producentId")) + "\n                        ")]), _vm._v(" "), _c("vs-select", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("producentId")) + "\n            ")]), _vm._v(" "), _c("vs-select", {
     staticClass: "w-full",
     model: {
       value: _vm.product.producent_id,
@@ -756,7 +756,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                            " + _vm._s(_vm.getPropertyTitle("categories")) + "\n                        ")]), _vm._v(" "), _c("v-select", {
+  }, [_vm._v("\n              " + _vm._s(_vm.getPropertyTitle("categories")) + "\n            ")]), _vm._v(" "), _c("v-select", {
     attrs: {
       label: "title",
       multiple: "",
@@ -805,11 +805,11 @@ var render = function render() {
     staticClass: "vx-col w-1/6"
   }, [_c("p", {
     staticClass: "font-bold text-sm"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("filter.title")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                  " + _vm._s(_vm.getPropertyTitle("filter.title")) + "\n                ")])]), _vm._v(" "), _c("div", {
     staticClass: "vx-col w-2/3"
   }, [_c("p", {
     staticClass: "font-bold text-sm"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("filter.attributes")))])])]), _vm._v(" "), _vm._l(_vm.productFilters, function (filter, index) {
+  }, [_vm._v("\n                  " + _vm._s(_vm.getPropertyTitle("filter.attributes")) + "\n                ")])])]), _vm._v(" "), _vm._l(_vm.productFilters, function (filter, index) {
     return _c("div", {
       key: index,
       staticClass: "vx-row mb-3"
@@ -817,7 +817,7 @@ var render = function render() {
       staticClass: "vx-col w-1/6"
     }, [_c("p", {
       staticClass: "font-bold text-sm"
-    }, [_vm._v(_vm._s(filter.name))])]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                  " + _vm._s(filter.name) + "\n                ")])]), _vm._v(" "), _c("div", {
       staticClass: "vx-col w-2/3"
     }, [_c("v-select", {
       key: filter.name,
@@ -860,7 +860,7 @@ var render = function render() {
     staticClass: "vx-col w-2/3 mb-3"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-3"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("filter.search")))]), _vm._v(" "), _c("v-select", {
+  }, [_vm._v("\n                  " + _vm._s(_vm.getPropertyTitle("filter.search")) + "\n                ")]), _vm._v(" "), _c("v-select", {
     attrs: {
       label: "name",
       options: _vm.filters,
@@ -890,7 +890,7 @@ var render = function render() {
         return _vm.addFilter();
       }
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.addNew")))])], 1)])])])])]), _vm._v(" "), _c("vs-tab", {
+  }, [_vm._v("\n                  " + _vm._s(_vm.$t("actions.addNew")) + "\n                ")])], 1)])])])])]), _vm._v(" "), _c("vs-tab", {
     attrs: {
       label: _vm.getFormSectionTitle("properties")
     }
@@ -904,7 +904,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("visitors")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("visitors")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -922,7 +922,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("location")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("location")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -940,7 +940,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("duration")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("duration")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -958,7 +958,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("weather")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("weather")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -976,7 +976,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("zaGledaoce")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("zaGledaoce")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -994,7 +994,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("dressCode")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("dressCode")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -1012,7 +1012,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("additionalInformation")) + "\n                            ")]), _vm._v(" "), _c("vs-textarea", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("additionalInformation")) + "\n              ")]), _vm._v(" "), _c("vs-textarea", {
     staticClass: "w-full",
     model: {
       value: _vm.product.properties.additional_info,
@@ -1056,7 +1056,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("seoTitle")) + "\n                            ")]), _vm._v(" "), _c("vs-input", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("seoTitle")) + "\n              ")]), _vm._v(" "), _c("vs-input", {
     staticClass: "w-full",
     attrs: {
       type: "text"
@@ -1074,7 +1074,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("seoDescription")) + "\n                            ")]), _vm._v(" "), _c("vs-textarea", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("seoDescription")) + "\n              ")]), _vm._v(" "), _c("vs-textarea", {
     staticClass: "mb-0",
     model: {
       value: _vm.product.seo_description,
@@ -1089,7 +1089,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("seoKeywords")) + "\n                            ")]), _vm._v(" "), _c("vs-textarea", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("seoKeywords")) + "\n              ")]), _vm._v(" "), _c("vs-textarea", {
     staticClass: "mb-0",
     model: {
       value: _vm.product.seo_keywords,
@@ -1118,15 +1118,15 @@ var render = function render() {
     staticClass: "vx-col w-2/3"
   }, [_c("p", {
     staticClass: "font-bold text-sm"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("version.title")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("version.title")) + "\n              ")])]), _vm._v(" "), _c("div", {
     staticClass: "vx-col w-1/6"
   }, [_c("p", {
     staticClass: "font-bold text-sm"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("version.price")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("version.price")) + "\n              ")])]), _vm._v(" "), _c("div", {
     staticClass: "vx-col w-1/6"
   }, [_c("p", {
     staticClass: "font-bold text-sm"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("version.actions")))])])]), _vm._v(" "), _vm._l(_vm.versions, function (version, index) {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("version.actions")) + "\n              ")])])]), _vm._v(" "), _vm._l(_vm.versions, function (version, index) {
     return _c("div", {
       key: index,
       staticClass: "vx-row mb-3 items-center"
@@ -1153,7 +1153,7 @@ var render = function render() {
     staticClass: "vx-col w-2/3 mb-3"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-3"
-  }, [_vm._v(_vm._s(_vm.getPropertyTitle("version.search")))]), _vm._v(" "), _c("v-select", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("version.search")) + "\n              ")]), _vm._v(" "), _c("v-select", {
     attrs: {
       label: "title",
       options: _vm.products,
@@ -1183,7 +1183,7 @@ var render = function render() {
         return _vm.addVersion();
       }
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.addNew")))])], 1)])], 2)])]), _vm._v(" "), _c("vs-tab", {
+  }, [_vm._v("\n                " + _vm._s(_vm.$t("actions.addNew")) + "\n              ")])], 1)])], 2)])]), _vm._v(" "), _c("vs-tab", {
     attrs: {
       label: _vm.getFormSectionTitle("settings")
     }
@@ -1197,7 +1197,7 @@ var render = function render() {
     staticClass: "vx-col w-1/4"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("viewCount")) + "\n                            ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("viewCount")) + "\n              ")]), _vm._v(" "), _c("div", {
     staticClass: "w-2/3"
   }, [_c("vs-input-number", {
     attrs: {
@@ -1222,7 +1222,7 @@ var render = function render() {
     staticClass: "vx-col w-1/4"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("likeCount")) + "\n                            ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("likeCount")) + "\n              ")]), _vm._v(" "), _c("div", {
     staticClass: "w-2/3"
   }, [_c("vs-input-number", {
     attrs: {
@@ -1249,7 +1249,7 @@ var render = function render() {
     staticClass: "vx-col w-full"
   }, [_c("p", {
     staticClass: "font-bold text-sm mb-2"
-  }, [_vm._v("\n                                " + _vm._s(_vm.getPropertyTitle("type")) + "\n                            ")]), _vm._v(" "), _c("vs-select", {
+  }, [_vm._v("\n                " + _vm._s(_vm.getPropertyTitle("type")) + "\n              ")]), _vm._v(" "), _c("vs-select", {
     staticClass: "w-full",
     model: {
       value: _vm.product.type,
@@ -1280,7 +1280,7 @@ var render = function render() {
         return _vm.submitForm();
       }
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.create")))]) : _vm._e(), _vm._v(" "), _vm.isEditForm ? _c("vs-button", {
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("actions.create")) + "\n      ")]) : _vm._e(), _vm._v(" "), _vm.isEditForm ? _c("vs-button", {
     staticClass: "mr-3 mb-2",
     attrs: {
       color: "primary"
@@ -1290,7 +1290,7 @@ var render = function render() {
         return _vm.submitForm();
       }
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.update")))]) : _vm._e(), _vm._v(" "), _c("vs-button", {
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("actions.update")) + "\n      ")]) : _vm._e(), _vm._v(" "), _c("vs-button", {
     staticClass: "mb-2",
     attrs: {
       color: "danger",
@@ -1299,7 +1299,7 @@ var render = function render() {
         name: _vm.indexRoute
       }
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.cancel")))])], 1)])], 1);
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("actions.cancel")) + "\n      ")])], 1)])], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
