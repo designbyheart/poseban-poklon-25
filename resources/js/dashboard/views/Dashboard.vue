@@ -1,150 +1,188 @@
 <template>
-    <div class="vx-row">
+  <div class="vx-row">
+    <div class="vx-col w-full mb-6">
+      <h3 class="mb-3">
+        {{ $t('statistics.pageTitle') }}
+      </h3>
+      <!-- Dropdown menu -->
+      <vs-dropdown>
+        <a
+          class="flex items-center"
+          href="#"
+        >
+          {{ statisticType?.label }}
+          <i class="material-icons"> expand_more </i>
+        </a>
 
-        <div class="vx-col w-full mb-6">
-
-            <h3 class="mb-3">{{ $t('statistics.pageTitle') }}</h3>
-            <!-- Dropdown menu -->
-            <vs-dropdown>
-
-                <a class="flex items-center" href="#">
-                    {{ statisticType.label }}
-                    <i class="material-icons"> expand_more </i>
-                </a>
-
-                <vs-dropdown-menu>
-
-                    <vs-dropdown-item>
-                        <li v-for="(statType, typeIndex) in statisticTypes" :key="typeIndex">
-                            {{ statType }}
-                        </li>
-                        :key="index" @click="changeStatis`ticType(type)">
-                        {{ type?.label }}
-                    </vs-dropdown-item>
-
-                </vs-dropdown-menu>
-            </vs-dropdown>
-
-        </div>
-
-        <div class="vx-col w-full mb-6">
-
-            <vx-card>
-
-                <div class="vx-row">
-
-                    <div class="vx-col flex items-center">
-                        <!-- Datepicker component -->
-                        <datepicker placeholder="Select date" v-model="filter.date.start"
-                                    format="dd.MM.yyyy"></datepicker>
-                    </div>
-
-                    <div class="vx-col flex items-center px-1">
-                        <i class="material-icons"> remove </i>
-                    </div>
-
-                    <div class="vx-col flex items-center">
-                        <!-- Datepicker component -->
-                        <datepicker placeholder="Select date" v-model="filter.date.end"
-                                    format="dd.MM.yyyy"></datepicker>
-                    </div>
-
-                    <div class="vx-col flex flex-1 items-center" v-if="statisticType.slug === 'product'">
-
-                        <v-select v-model="filter.productSearch" label="title" :options="products"
-                                  :reduce="product => product.id" :placeholder="$t('statistics.searchPlaceholder')"
-                                  class="w-full" @search="searchProducts"></v-select>
-
-                    </div>
-
-                    <div class="vx-col flex flex-1 items-center" v-if="statisticType.slug === 'producent'">
-
-                        <v-select v-model="filter.producentSearch" label="title" :options="producents"
-                                  :reduce="producent => producent.id" :placeholder="$t('statistics.searchPlaceholder')"
-                                  class="w-full" @search="searchProducents"></v-select>
-
-                    </div>
-
-                    <div class="vx-col">
-
-                        <vs-button class="mr-6" @click="fetchData">{{ $t('actions.filter') }}</vs-button>
-                        <vs-button type="border" @click="downloadStatistics">{{ $t('actions.download') }}</vs-button>
-
-                    </div>
-
-                </div>
-
-            </vx-card>
-
-        </div>
-
-        <!--Display statistic cards-->
-        <div class="vx-col w-1/4 mb-6" :key="index" v-for="statistic,index in statisticData">
-            <statistics-card-number
-                :icon="statistic.icon"
-                :statistic="statistic.value"
-                :statisticTitle="getStatisticLabel(statistic.labelSlug)"
-                v-if="!isHidden(statistic.onlyGeneral)"
-            />
-        </div>
-
-        <!--Products sold table-->
-        <div class="vx-col w-full mb-6" v-if="statisticType.slug === 'general'">
-
-            <vx-card>
-
-                <vs-table search :data="productsList" :noDataText="$t('messages.notFound')">
-
-                    <template slot="header">
-                        <div class="vx-row w-full pb-3 m-0">
-                            <div class="vx-col flex items-center w-1/2 p-0">
-                                <h3 class="mb-0 mr-3">
-                                    Products sold in the period
-                                </h3>
-                            </div>
-                        </div>
-                    </template>
-
-                    <template slot="thead">
-                        <vs-th sort-key="title">Product</vs-th>
-                        <vs-th>Producent</vs-th>
-                        <vs-th sort-key="sold_quantity">Items sold</vs-th>
-                        <vs-th sort-key="sold_total">Total</vs-th>
-                    </template>
-
-                    <template slot-scope="{data}">
-                        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
-
-                            <vs-td :data="data[indextr].title">
-                                <a :href="API.product.show + data[indextr].slug">
-                                    {{ data[indextr].title }}
-                                </a>
-                            </vs-td>
-
-                            <vs-td :data="data[indextr].producent.title">
-                                <router-link
-                                    :to="{ name: 'producents_edit', params: {id: data[indextr].producent.id} }">
-                                    {{ data[indextr].producent.title }}
-                                </router-link>
-                            </vs-td>
-
-                            <vs-td :data="data[indextr].sold_quantity">
-                                {{ data[indextr].sold_quantity }}
-                            </vs-td>
-
-                            <vs-td :data="data[indextr].sold_total">
-                                {{ data[indextr].sold_total + ' ' + applicationParams.defaultCurrency }}
-                            </vs-td>
-
-                        </vs-tr>
-                    </template>
-                </vs-table>
-
-            </vx-card>
-
-        </div>
-
+        <vs-dropdown-menu>
+          <vs-dropdown-item>
+            <li
+              v-for="(statType, typeIndex) in statisticTypes"
+              :key="typeIndex"
+            >
+              {{ statType }}
+            </li>
+            :key="index" @click="changeStatis`ticType(type)">
+            {{ type?.label }}
+          </vs-dropdown-item>
+        </vs-dropdown-menu>
+      </vs-dropdown>
     </div>
+
+    <div class="vx-col w-full mb-6">
+      <vx-card>
+        <div class="vx-row">
+          <div class="vx-col flex items-center">
+            <!-- Datepicker component -->
+            <datepicker
+              v-model="filter.date.start"
+              placeholder="Select date"
+              format="dd.MM.yyyy"
+            />
+          </div>
+
+          <div class="vx-col flex items-center px-1">
+            <i class="material-icons"> remove </i>
+          </div>
+
+          <div class="vx-col flex items-center">
+            <!-- Datepicker component -->
+            <datepicker
+              v-model="filter.date.end"
+              placeholder="Select date"
+              format="dd.MM.yyyy"
+            />
+          </div>
+
+          <div
+            v-if="statisticType.slug === 'product'"
+            class="vx-col flex flex-1 items-center"
+          >
+            <v-select
+              v-model="filter.productSearch"
+              label="title"
+              :options="products"
+              :reduce="product => product.id"
+              :placeholder="$t('statistics.searchPlaceholder')"
+              class="w-full"
+              @search="searchProducts"
+            />
+          </div>
+
+          <div
+            v-if="statisticType.slug === 'producent'"
+            class="vx-col flex flex-1 items-center"
+          >
+            <v-select
+              v-model="filter.producentSearch"
+              label="title"
+              :options="producents"
+              :reduce="producent => producent.id"
+              :placeholder="$t('statistics.searchPlaceholder')"
+              class="w-full"
+              @search="searchProducents"
+            />
+          </div>
+
+          <div class="vx-col">
+            <vs-button
+              class="mr-6"
+              @click="fetchData"
+            >
+              {{ $t('actions.filter') }}
+            </vs-button>
+            <vs-button
+              type="border"
+              @click="downloadStatistics"
+            >
+              {{ $t('actions.download') }}
+            </vs-button>
+          </div>
+        </div>
+      </vx-card>
+    </div>
+
+    <!--Display statistic cards-->
+    <div
+      v-for="statistic,index in statisticData"
+      :key="index"
+      class="vx-col w-1/4 mb-6"
+    >
+      <statistics-card-number
+        v-if="!isHidden(statistic.onlyGeneral)"
+        :icon="statistic.icon"
+        :statistic="statistic.value"
+        :statistic-title="getStatisticLabel(statistic?.labelSlug)"
+      />
+    </div>
+
+    <!--Products sold table-->
+    <div
+      v-if="statisticType.slug === 'general'"
+      class="vx-col w-full mb-6"
+    >
+      <vx-card>
+        <vs-table
+          search
+          :data="productsList"
+          :no-data-text="$t('messages.notFound')"
+        >
+          <template slot="header">
+            <div class="vx-row w-full pb-3 m-0">
+              <div class="vx-col flex items-center w-1/2 p-0">
+                <h3 class="mb-0 mr-3">
+                  Products sold in the period
+                </h3>
+              </div>
+            </div>
+          </template>
+
+          <template slot="thead">
+            <vs-th sort-key="title">
+              Product
+            </vs-th>
+            <vs-th>Producent</vs-th>
+            <vs-th sort-key="sold_quantity">
+              Items sold
+            </vs-th>
+            <vs-th sort-key="sold_total">
+              Total
+            </vs-th>
+          </template>
+
+          <template slot-scope="{data}">
+            <vs-tr
+              v-for="(tr, indextr) in data"
+              :key="indextr"
+              :data="tr"
+            >
+              <vs-td :data="data[indextr].title">
+                <a :href="API.product.show + data[indextr].slug">
+                  {{ data[indextr].title }}
+                </a>
+              </vs-td>
+
+              <vs-td :data="data[indextr].producent.title">
+                <router-link
+                  :to="{ name: 'producents_edit', params: {id: data[indextr].producent.id} }"
+                >
+                  {{ data[indextr].producent.title }}
+                </router-link>
+              </vs-td>
+
+              <vs-td :data="data[indextr].sold_quantity">
+                {{ data[indextr].sold_quantity }}
+              </vs-td>
+
+              <vs-td :data="data[indextr].sold_total">
+                {{ data[indextr].sold_total + ' ' + applicationParams.defaultCurrency }}
+              </vs-td>
+            </vs-tr>
+          </template>
+        </vs-table>
+      </vx-card>
+    </div>
+  </div>
 </template>
 <script>
 
@@ -168,6 +206,12 @@ import Datepicker from 'vuejs-datepicker';
 import StatisticsCardNumber from '@/components/statistics-cards/StatisticsCardNumber.vue'
 
 export default {
+    components: {
+        VxCard,
+        Datepicker,
+        StatisticsCardNumber,
+        vSelect
+    },
     props: {
         statisticTypes: {
             type: Array,
@@ -188,12 +232,6 @@ export default {
                 ]
             }
         }
-    },
-    components: {
-        VxCard,
-        Datepicker,
-        StatisticsCardNumber,
-        vSelect
     },
     data() {
         return {
@@ -261,6 +299,16 @@ export default {
             producents: [],
             API
         }
+    },
+    created() {
+
+        //Set default dates
+        this.setDefaultDates();
+
+    },
+    mounted() {
+        //Fetch statistics data
+        this.fetchData();
     },
     methods: {
         fetchData() {
@@ -409,16 +457,6 @@ export default {
             this.producents = this.loadItems('producent', requestParams);
 
         }
-    },
-    created() {
-
-        //Set default dates
-        this.setDefaultDates();
-
-    },
-    mounted() {
-        //Fetch statistics data
-        this.fetchData();
     }
 }
 </script>
