@@ -19,7 +19,6 @@ modules:
         - REST:
             depends: Laravel5
             part: Json
-        - \Helper\Functional
-        - Mockery
         - Asserts
-    step_decorators: ~        
+        - Mockery
+    step_decorators: ~

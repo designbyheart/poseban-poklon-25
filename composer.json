@@ -17,6 +17,7 @@
         "laravel/framework": "^5.8.0",
         "laravel/horizon": "^3.7",
         "laravel/tinker": "^1.0",
+        "moontoast/math": "^1.2",
         "sendinblue/api-v3-sdk": "*",
         "simplesoftwareio/simple-qrcode": "^2.0"
     },

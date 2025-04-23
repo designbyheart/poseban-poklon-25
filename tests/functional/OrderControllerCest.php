@@ -3,7 +3,7 @@
 use App\Enums\InvoiceType;
 use App\InvoiceItem;
 use App\Order;
-use App\Product;
+use Tests\Support\FunctionalTester;
 
 /**
  * Test-friendly version of InvoiceItem that skips the foreach loop
@@ -21,7 +21,7 @@ class OrderControllerCest
 {
     /**
      * Test that InvoiceItem accepts TRAINING type for tests
-     * 
+     *
      * @param FunctionalTester $I
      */
     public function testInvoiceItemAcceptsTrainingType(FunctionalTester $I)

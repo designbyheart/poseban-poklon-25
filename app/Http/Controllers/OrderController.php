@@ -552,7 +552,7 @@ class OrderController extends Controller
 
         $order->countPrice();
 
-        if ((!empty($request->order_status_id)) && ($order->status->id != $request->order_status_id)) {
+        if ((!empty($request->order_status_id)) && ($order->order_status_id != $request->order_status_id)) {
             $this->updateOrderStatus($request, $order->id);
         }
 
@@ -860,7 +860,7 @@ class OrderController extends Controller
                         return [
                             'success' => true,
                             'message' => 'Order updated to paid status',
-                            'status_id' => 2
+                            'order_status_id' => 2
                         ];
                     }
                 }
@@ -868,14 +868,14 @@ class OrderController extends Controller
                 return [
                     'success' => false,
                     'message' => 'Order is not paid',
-                    'status_id' => $order->order_status_id
+                    'order_status_id' => $order->order_status_id
                 ];
             }
 
             return [
                 'success' => true,
                 'message' => 'Order is paid',
-                'status_id' => $order->order_status_id
+                'order_status_id' => $order->order_status_id
             ];
 
         } catch (Exception $e) {
@@ -887,7 +887,7 @@ class OrderController extends Controller
             return [
                 'success' => false,
                 'message' => 'Error validating order status: ' . $e->getMessage(),
-                'status_id' => $order->order_status_id
+                'order_status_id' => $order->order_status_id
             ];
         }
     }

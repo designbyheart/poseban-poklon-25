@@ -7,6 +7,7 @@ use App\Order;
 use App\Voucher;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Config;
+use Tests\Support\FunctionalTester;
 
 /**
  * Simplified email test that doesn't require database access

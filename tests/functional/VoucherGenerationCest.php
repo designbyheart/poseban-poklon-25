@@ -1,13 +1,12 @@
 <?php
 
+namespace Tests\Functional;
+
 use Mockery;
 use App\Order;
-use App\OrderItem;
-use App\Product;
 use App\Voucher;
-use App\Services\EmailService;
-use App\Utilities\VoucherUtility;
 use Illuminate\Support\Collection;
+use Tests\Support\FunctionalTester;
 
 class VoucherGenerationCest
 {
@@ -118,8 +117,8 @@ class VoucherGenerationCest
 
         // Mock order methods
         $order->shouldReceive('getAttribute')
-            ->andReturn(1)
-            ->byDefault();
+            ->withAnyArgs()
+            ->andReturn(1);
         $order->shouldReceive('getAttribute')
             ->with('customer_email')
             ->andReturn('test@example.com');
