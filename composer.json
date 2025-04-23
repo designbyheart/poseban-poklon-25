@@ -75,6 +75,7 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ],
-        "tunnel": "php tunnel.php"
+        "tunnel": "php tunnel.php",
+        "test": "vendor/bin/codecept run unit"
     }
 }

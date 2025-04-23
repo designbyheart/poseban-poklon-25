@@ -52,7 +52,7 @@ class EmailControllerTest extends TestCase
         // Assert
         $this->assertTrue($responseData['success']);
         $this->assertEquals('Email sent successfully', $responseData['message']);
-        $this->assertEquals($expectedResponse, $responseData['data']);
+        $this->assertEquals((array)$expectedResponse, $responseData['data']);
     }
 
     public function testSendTransactionalEmailFailure()
