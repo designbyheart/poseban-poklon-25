@@ -75,6 +75,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VxCard: _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"],
+    StatisticsCardNumber: _components_statistics_cards_StatisticsCardNumber_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    vSelect: vue_select__WEBPACK_IMPORTED_MODULE_3___default.a
+  },
   props: {
     statisticTypes: {
       type: Array,
@@ -91,12 +97,6 @@ __webpack_require__.r(__webpack_exports__);
         }];
       }
     }
-  },
-  components: {
-    VxCard: _components_vx_card_VxCard__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_4__["default"],
-    StatisticsCardNumber: _components_statistics_cards_StatisticsCardNumber_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
-    vSelect: vue_select__WEBPACK_IMPORTED_MODULE_3___default.a
   },
   data: function data() {
     return {
@@ -164,6 +164,14 @@ __webpack_require__.r(__webpack_exports__);
       producents: [],
       API: _mixins_api_api__WEBPACK_IMPORTED_MODULE_1__["API"]
     };
+  },
+  created: function created() {
+    //Set default dates
+    this.setDefaultDates();
+  },
+  mounted: function mounted() {
+    //Fetch statistics data
+    this.fetchData();
   },
   methods: {
     fetchData: function fetchData() {
@@ -261,14 +269,6 @@ __webpack_require__.r(__webpack_exports__);
       //Search products
       this.producents = this.loadItems('producent', requestParams);
     }
-  },
-  created: function created() {
-    //Set default dates
-    this.setDefaultDates();
-  },
-  mounted: function mounted() {
-    //Fetch statistics data
-    this.fetchData();
   }
 });
 
@@ -333,7 +333,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 var render = function render() {
-  var _vm$type;
+  var _vm$statisticType, _vm$type;
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
@@ -342,18 +342,18 @@ var render = function render() {
     staticClass: "vx-col w-full mb-6"
   }, [_c("h3", {
     staticClass: "mb-3"
-  }, [_vm._v(_vm._s(_vm.$t("statistics.pageTitle")))]), _vm._v(" "), _c("vs-dropdown", [_c("a", {
+  }, [_vm._v("\n      " + _vm._s(_vm.$t("statistics.pageTitle")) + "\n    ")]), _vm._v(" "), _c("vs-dropdown", [_c("a", {
     staticClass: "flex items-center",
     attrs: {
       href: "#"
     }
-  }, [_vm._v("\n                " + _vm._s(_vm.statisticType.label) + "\n                "), _c("i", {
+  }, [_vm._v("\n        " + _vm._s((_vm$statisticType = _vm.statisticType) === null || _vm$statisticType === void 0 ? void 0 : _vm$statisticType.label) + "\n        "), _c("i", {
     staticClass: "material-icons"
   }, [_vm._v(" expand_more ")])]), _vm._v(" "), _c("vs-dropdown-menu", [_c("vs-dropdown-item", [_vm._l(_vm.statisticTypes, function (statType, typeIndex) {
     return _c("li", {
       key: typeIndex
-    }, [_vm._v("\n                        " + _vm._s(statType) + "\n                    ")]);
-  }), _vm._v('\n                    :key="index" @click="changeStatis`ticType(type)">\n                    ' + _vm._s((_vm$type = _vm.type) === null || _vm$type === void 0 ? void 0 : _vm$type.label) + "\n                ")], 2)], 1)], 1)], 1), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n            " + _vm._s(statType) + "\n          ")]);
+  }), _vm._v('\n          :key="index" @click="changeStatis`ticType(type)">\n          ' + _vm._s((_vm$type = _vm.type) === null || _vm$type === void 0 ? void 0 : _vm$type.label) + "\n        ")], 2)], 1)], 1)], 1), _vm._v(" "), _c("div", {
     staticClass: "vx-col w-full mb-6"
   }, [_c("vx-card", [_c("div", {
     staticClass: "vx-row"
@@ -440,14 +440,14 @@ var render = function render() {
     on: {
       click: _vm.fetchData
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.filter")))]), _vm._v(" "), _c("vs-button", {
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("actions.filter")) + "\n          ")]), _vm._v(" "), _c("vs-button", {
     attrs: {
       type: "border"
     },
     on: {
       click: _vm.downloadStatistics
     }
-  }, [_vm._v(_vm._s(_vm.$t("actions.download")))])], 1)])])], 1), _vm._v(" "), _vm._l(_vm.statisticData, function (statistic, index) {
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("actions.download")) + "\n          ")])], 1)])])], 1), _vm._v(" "), _vm._l(_vm.statisticData, function (statistic, index) {
     return _c("div", {
       key: index,
       staticClass: "vx-col w-1/4 mb-6"
@@ -455,7 +455,7 @@ var render = function render() {
       attrs: {
         icon: statistic.icon,
         statistic: statistic.value,
-        statisticTitle: _vm.getStatisticLabel(statistic.labelSlug)
+        "statistic-title": _vm.getStatisticLabel(statistic === null || statistic === void 0 ? void 0 : statistic.labelSlug)
       }
     }) : _vm._e()], 1);
   }), _vm._v(" "), _vm.statisticType.slug === "general" ? _c("div", {
@@ -464,7 +464,7 @@ var render = function render() {
     attrs: {
       search: "",
       data: _vm.productsList,
-      noDataText: _vm.$t("messages.notFound")
+      "no-data-text": _vm.$t("messages.notFound")
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -484,7 +484,7 @@ var render = function render() {
             attrs: {
               href: _vm.API.product.show + data[indextr].slug
             }
-          }, [_vm._v("\n                                " + _vm._s(data[indextr].title) + "\n                            ")])]), _vm._v(" "), _c("vs-td", {
+          }, [_vm._v("\n                " + _vm._s(data[indextr].title) + "\n              ")])]), _vm._v(" "), _c("vs-td", {
             attrs: {
               data: data[indextr].producent.title
             }
@@ -497,18 +497,18 @@ var render = function render() {
                 }
               }
             }
-          }, [_vm._v("\n                                " + _vm._s(data[indextr].producent.title) + "\n                            ")])], 1), _vm._v(" "), _c("vs-td", {
+          }, [_vm._v("\n                " + _vm._s(data[indextr].producent.title) + "\n              ")])], 1), _vm._v(" "), _c("vs-td", {
             attrs: {
               data: data[indextr].sold_quantity
             }
-          }, [_vm._v("\n                            " + _vm._s(data[indextr].sold_quantity) + "\n                        ")]), _vm._v(" "), _c("vs-td", {
+          }, [_vm._v("\n              " + _vm._s(data[indextr].sold_quantity) + "\n            ")]), _vm._v(" "), _c("vs-td", {
             attrs: {
               data: data[indextr].sold_total
             }
-          }, [_vm._v("\n                            " + _vm._s(data[indextr].sold_total + " " + _vm.applicationParams.defaultCurrency) + "\n                        ")])], 1);
+          }, [_vm._v("\n              " + _vm._s(data[indextr].sold_total + " " + _vm.applicationParams.defaultCurrency) + "\n            ")])], 1);
         });
       }
-    }], null, false, 3797329382)
+    }], null, false, 460500326)
   }, [_c("template", {
     slot: "header"
   }, [_c("div", {
@@ -517,21 +517,21 @@ var render = function render() {
     staticClass: "vx-col flex items-center w-1/2 p-0"
   }, [_c("h3", {
     staticClass: "mb-0 mr-3"
-  }, [_vm._v("\n                                Products sold in the period\n                            ")])])])]), _vm._v(" "), _c("template", {
+  }, [_vm._v("\n                Products sold in the period\n              ")])])])]), _vm._v(" "), _c("template", {
     slot: "thead"
   }, [_c("vs-th", {
     attrs: {
       "sort-key": "title"
     }
-  }, [_vm._v("Product")]), _vm._v(" "), _c("vs-th", [_vm._v("Producent")]), _vm._v(" "), _c("vs-th", {
+  }, [_vm._v("\n            Product\n          ")]), _vm._v(" "), _c("vs-th", [_vm._v("Producent")]), _vm._v(" "), _c("vs-th", {
     attrs: {
       "sort-key": "sold_quantity"
     }
-  }, [_vm._v("Items sold")]), _vm._v(" "), _c("vs-th", {
+  }, [_vm._v("\n            Items sold\n          ")]), _vm._v(" "), _c("vs-th", {
     attrs: {
       "sort-key": "sold_total"
     }
-  }, [_vm._v("Total")])], 1)], 2)], 1)], 1) : _vm._e()], 2);
+  }, [_vm._v("\n            Total\n          ")])], 1)], 2)], 1)], 1) : _vm._e()], 2);
 };
 var staticRenderFns = [];
 render._withStripped = true;

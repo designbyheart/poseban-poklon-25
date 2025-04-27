@@ -153,4 +153,60 @@ class VoucherUtility
             return null;
         }
     }
+
+    /**
+     * Generate vouchers for all items in an order
+     *
+     * @param \App\Order $order The order to generate vouchers for
+     * @return array Array of generated vouchers
+     */
+    public function generateVouchersForOrder($order)
+    {
+        $vouchers = [];
+        $alreadyGenerated = 0;
+
+        try {
+            Log::info('Generating vouchers for order', ['order_id' => $order->id]);
+
+            // Get personal messages if any
+            $personalMessages = json_decode($order->personal_message ?? '[]');
+
+            // Loop through each order item
+            foreach ($order->orderItems as $orderItem) {
+                $product = $orderItem->product;
+
+                // Skip if product doesn't exist
+                if (!$product) {
+                    Log::warning('Product not found for order item', ['order_item_id' => $orderItem->id]);
+                    continue;
+                }
+
+                // Generate the requested quantity of vouchers for this item
+                for ($i = 0; $i < $orderItem->quantity; $i++) {
+                    $voucher = self::createVoucher($order, $orderItem, $i, $alreadyGenerated, $personalMessages);
+
+                    if ($voucher) {
+                        $vouchers[] = $voucher;
+                        $alreadyGenerated++;
+                    }
+                }
+            }
+
+            Log::info('Voucher generation completed', [
+                'order_id' => $order->id,
+                'vouchers_generated' => count($vouchers)
+            ]);
+
+            return $vouchers;
+
+        } catch (\Exception $e) {
+            Log::error('Error generating vouchers for order', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return $vouchers; // Return any vouchers that were successfully generated
+        }
+    }
 }

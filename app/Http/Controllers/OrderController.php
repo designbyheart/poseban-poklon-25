@@ -43,7 +43,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('admin.order.index');
+        return response()->view('admin.order.index');
     }
 
     /**
@@ -400,6 +400,10 @@ class OrderController extends Controller
                 'order_id' => $order->id,
                 'result' => $result
             ]);
+
+            // After successful fiscal billing, generate and send vouchers
+            $this->generateAndSendVouchers($order);
+
         } catch (Exception $e) {
             Log::error('Failed to send invoice to fiscal cash register', [
                 'order_id' => $order->id,
@@ -413,17 +417,6 @@ class OrderController extends Controller
         // Send order confirmation email immediately
         \App\Jobs\SendNewOrderUserEmail::dispatch($order);
         Log::info('Order confirmation email dispatched', ['order_id' => $order->id]);
-
-        // Generate and send eVouchers if needed
-        try {
-            $this->processVouchers($order);
-        } catch (Exception $e) {
-            Log::error('Exception during voucher generation process', [
-                'order_id' => $order->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-        }
 
         return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
     }
@@ -722,6 +715,53 @@ class OrderController extends Controller
 
         } catch (Exception $e) {
             Log::error('Error processing vouchers', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
+    }
+
+    /**
+     * Generate and send vouchers to customer, partner and admin
+     *
+     * @param Order $order
+     * @return void
+     */
+    private function generateAndSendVouchers(Order $order)
+    {
+        try {
+            Log::info('Starting voucher generation and distribution process', ['order_id' => $order->id]);
+
+            // Use VoucherUtility to generate vouchers for the order
+            $voucherUtility = new VoucherUtility();
+            $vouchers = $voucherUtility->generateVouchersForOrder($order);
+
+            if (empty($vouchers)) {
+                Log::info('No vouchers to generate for this order', ['order_id' => $order->id]);
+                return;
+            }
+
+            Log::info('Vouchers generated successfully', [
+                'order_id' => $order->id,
+                'voucher_count' => count($vouchers)
+            ]);
+
+            // Send vouchers to customer
+            SendVoucherEmail::dispatch($order->id, 'customer');
+
+            // Send vouchers to partner if applicable
+            if ($order->partner_id) {
+                SendVoucherEmail::dispatch($order->id, 'partner');
+            }
+
+            // Send vouchers to admin
+            SendVoucherEmail::dispatch($order->id, 'admin');
+
+            Log::info('Voucher emails dispatched to all recipients', ['order_id' => $order->id]);
+
+        } catch (Exception $e) {
+            Log::error('Exception during voucher generation and distribution process', [
                 'order_id' => $order->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
