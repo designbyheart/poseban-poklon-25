@@ -76,6 +76,7 @@
             "@php artisan key:generate --ansi"
         ],
         "tunnel": "php tunnel.php",
-        "test": "vendor/bin/codecept run unit"
+        "test": "vendor/bin/codecept run unit",
+        "start": "./start.sh"
     }
 }

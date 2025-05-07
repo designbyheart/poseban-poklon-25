@@ -307,7 +307,8 @@ class OrderController extends Controller
             SendNewOrderAdminEmail::dispatch($order)->delay(now()->addSeconds(2));
 
             //Send order confirmation email to user immediately
-            SendNewOrderUserEmail::dispatch($order);
+            SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
+            Log::info('Order confirmation email dispatched', ['order_id' => $order->id]);
 
             $order->setStatus($default_status);
         }
@@ -415,7 +416,7 @@ class OrderController extends Controller
         $success = true;
 
         // Send order confirmation email immediately
-        \App\Jobs\SendNewOrderUserEmail::dispatch($order);
+        \App\Jobs\SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
         Log::info('Order confirmation email dispatched', ['order_id' => $order->id]);
 
         return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
@@ -621,7 +622,7 @@ class OrderController extends Controller
                     ];
                 }
 
-                Log::info('Vouchers generated successfully', ['order_id' => $order->id]);
+                Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
             }
 
             // Send email with vouchers
@@ -716,8 +717,7 @@ class OrderController extends Controller
         } catch (Exception $e) {
             Log::error('Error processing vouchers', [
                 'order_id' => $order->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'error' => $e->getMessage()
             ]);
         }
     }
@@ -769,9 +769,6 @@ class OrderController extends Controller
         }
     }
 
-    /**
-     * Process a single voucher PDF generation
-     */
     protected function processSingleVoucher($voucher): bool
     {
         $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
@@ -982,8 +979,7 @@ class OrderController extends Controller
                         $pdf->save($pdfPath);
                         Log::info('Generated/Updated PDF for voucher', [
                             'voucher_id' => $voucher->id,
-                            'voucher_code' => $voucher->voucher_code,
-                            'path' => $pdfPath
+                            'voucher_code' => $voucher->voucher_code
                         ]);
                     }
                 } catch (Exception $e) {

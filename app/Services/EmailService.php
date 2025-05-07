@@ -116,12 +116,23 @@ class EmailService
                 return false;
             }
 
+            // Convert any complex objects to arrays to prevent serialization issues
+            $processedParams = [];
+            foreach ($dataParams as $key => $value) {
+                if (is_object($value) && method_exists($value, 'toArray')) {
+                    $processedParams[$key] = $value->toArray();
+                } else {
+                    $processedParams[$key] = $value;
+                }
+            }
+
+            // Render the HTML content first to avoid passing objects to SendSmtpEmail
+            $htmlContent = view($template, $dataParams)->render();
+
             $emailParams = [
                 'to' => $to,
                 'sender' => $this->sender,
-                // 'templateId' => config('services.brevo.voucher_template_id'), // Make sure to set this in your config
-                'htmlContent' => view($template, $dataParams)->render(),
-                'params' => $dataParams,
+                'htmlContent' => $htmlContent,
                 'subject' => $subject,
             ];
 
