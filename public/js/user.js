@@ -6244,11 +6244,11 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
       } else if (this.paymentMethod.id === 2 || this.paymentMethod.id === 3) {
         if (this.shippingMethod.id === 2) {
           var _shippingMethod = null;
-          if (this.subtotal < 9900) {
+          if (this.totalPrice() < 9900) {
             _shippingMethod = this.shippingMethods.find(function (item) {
               return item.id === 9;
             });
-          } else if (this.subtotal >= 9900) {
+          } else if (this.totalPrice() >= 9900) {
             _shippingMethod = this.shippingMethods.find(function (item) {
               return item.id === 10;
             });
@@ -6275,7 +6275,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
     handleSubtotalChange: function handleSubtotalChange(newVal, oldVal) {
       if (this.totalPrice() >= 9900) {
         var freeShipping = this.shippingMethods.find(function (method) {
-          return method.is_free === true;
+          return method.id === 10;
         });
         if (freeShipping !== undefined) {
           this.selectShippingMethod(freeShipping);
@@ -6377,38 +6377,34 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
           order.rec_phone = this.address.customer_phone;
         }
       }
-
-      /*if(this.shippingMethod.virtual){
-           order.customer_name = this.address.customer_name;
+      if (this.shippingMethod.virtual) {
+        order.customer_name = this.address.customer_name;
+        order.customer_surname = this.address.customer_surname;
+        order.customer_email = this.address.customer_email;
+        order.customer_phone = this.address.customer_phone;
+      } else {
+        if (this.address.sendToPerson) {
+          order.customer_name = this.address.recepient.customer_name;
+          order.customer_surname = this.address.recepient.customer_surname;
+          order.customer_email = this.address.customer_email;
+          order.customer_phone = this.address.recepient.customer_phone;
+          order.address_one = this.address.recepient.address_one;
+          order.address_two = this.address.recepient.address_two;
+          order.country = this.address.recepient.country;
+          order.city = this.address.recepient.city;
+          order.zip_code = this.address.recepient.zip_code;
+        } else {
+          order.customer_name = this.address.customer_name;
           order.customer_surname = this.address.customer_surname;
           order.customer_email = this.address.customer_email;
           order.customer_phone = this.address.customer_phone;
-       }
-      else{
-           if(this.address.sendToPerson){
-               order.customer_name = this.address.recepient.customer_name;
-              order.customer_surname = this.address.recepient.customer_surname;
-              order.customer_email = this.address.customer_email;
-              order.customer_phone = this.address.recepient.customer_phone;
-              order.address_one = this.address.recepient.address_one;
-              order.address_two = this.address.recepient.address_two;
-              order.country = this.address.recepient.country;
-              order.city = this.address.recepient.city;
-              order.zip_code = this.address.recepient.zip_code;
-           }
-          else{
-               order.customer_name = this.address.customer_name;
-              order.customer_surname = this.address.customer_surname;
-              order.customer_email = this.address.customer_email;
-              order.customer_phone = this.address.customer_phone;
-              order.address_one = this.address.address_one;
-              order.address_two = this.address.address_two;
-              order.country = this.address.country;
-              order.city = this.address.city;
-              order.zip_code = this.address.zip_code;
-           }
-       }*/
-
+          order.address_one = this.address.address_one;
+          order.address_two = this.address.address_two;
+          order.country = this.address.country;
+          order.city = this.address.city;
+          order.zip_code = this.address.zip_code;
+        }
+      }
       if (((_this$applicationPara = this.applicationParams) === null || _this$applicationPara === void 0 ? void 0 : _this$applicationPara.user) !== null) {
         var _this$applicationPara2;
         order.user_id = (_this$applicationPara2 = this.applicationParams) === null || _this$applicationPara2 === void 0 || (_this$applicationPara2 = _this$applicationPara2.user) === null || _this$applicationPara2 === void 0 ? void 0 : _this$applicationPara2.id;
@@ -6427,10 +6423,10 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
           _this6.redirectToUrl(_this6.API.order.success);
         } else if (response.data.payment_params) {
           //Clear the cart
-          //this.EventBus.$emit('order-placed', true);
+          _this6.EventBus.$emit('order-placed', true);
 
           //Redirect to order success page
-          //this.redirectToUrl(this.API.order.success);
+          _this6.redirectToUrl(_this6.API.order.success);
           _this6.paymentParams = response.data.payment_params;
           _this6.$nextTick(function () {
             _this6.submitPayment();
@@ -6460,7 +6456,7 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
             case 6:
               isAgreementsValid = _context.sent;
               // Check if we're in local development environment
-              isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+              isLocalhost = _this7.isLocalhost();
               if (!isAddressValid) {
                 errors.push('address');
               }
@@ -6581,6 +6577,9 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
     },
     productUrl: function productUrl(slug) {
       return this.API.product.show + slug;
+    },
+    isLocalhost: function isLocalhost() {
+      return typeof window !== 'undefined' && window.location && window.location.hostname && window.location.hostname.includes('localhost');
     },
     phoneNumberMask: function phoneNumberMask() {
       var im = new inputmask__WEBPACK_IMPORTED_MODULE_3___default.a("+999999999999");
@@ -6946,6 +6945,10 @@ __webpack_require__.r(__webpack_exports__);
           767: {
             slidesPerView: 1.5,
             spaceBetween: 5
+          },
+          400: {
+            slidesPerView: 2,
+            spaceBetween: 3
           }
         }
       },
@@ -7071,6 +7074,17 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  computed: {
+    safeSlides: function safeSlides() {
+      // Filter out any invalid slides and ensure all properties exist
+      return (this.slides || []).map(function (slide) {
+        return {
+          url: slide && typeof slide.url === 'string' ? slide.url : '/images/default/product/posebanpoklon_product.jpg',
+          alt: slide && typeof slide.alt === 'string' ? slide.alt : ''
+        };
+      });
+    }
+  },
   methods: {
     sliderTo: function sliderTo(index) {
       this.$refs.swiperTop.swiper.slideTo(index);
@@ -7079,10 +7093,13 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
     this.$nextTick(function () {
-      var swiperTop = _this.$refs.swiperTop.swiper;
-      var swiperThumbs = _this.$refs.swiperThumbs.swiper;
-      swiperTop.controller.control = swiperThumbs;
-      swiperThumbs.controller.control = swiperTop;
+      var _this$$refs$swiperTop, _this$$refs$swiperThu;
+      var swiperTop = (_this$$refs$swiperTop = _this.$refs.swiperTop) === null || _this$$refs$swiperTop === void 0 ? void 0 : _this$$refs$swiperTop.swiper;
+      var swiperThumbs = (_this$$refs$swiperThu = _this.$refs.swiperThumbs) === null || _this$$refs$swiperThu === void 0 ? void 0 : _this$$refs$swiperThu.swiper;
+      if (swiperTop && swiperThumbs && swiperTop.controller && swiperThumbs.controller) {
+        swiperTop.controller.control = swiperThumbs;
+        swiperThumbs.controller.control = swiperTop;
+      }
     });
   }
 });
@@ -11016,14 +11033,14 @@ var render = function render() {
       }
     }, [_c("h4", {
       staticClass: "product-item-title"
-    }, [_vm._v("\n                                            " + _vm._s(product.title) + "\n                                        ")])]), _vm._v(" "), _c("label", {
+    }, [_vm._v("\n                      " + _vm._s(product.title) + "\n                    ")])]), _vm._v(" "), _c("label", {
       staticClass: "product-item-label"
     }, [_c("input", {
       directives: [{
         name: "model",
         rawName: "v-model",
         value: _vm.personalMessages.showForm,
-        expression: "\n                                                personalMessages.showForm\n                                            "
+        expression: "\n                        personalMessages.showForm\n                      "
       }],
       staticClass: "product-item-checkbox",
       attrs: {
@@ -11052,7 +11069,7 @@ var render = function render() {
       }
     }), _vm._v(" "), _c("span", {
       staticClass: "product-item-check"
-    }), _vm._v("\n                                        Dodaj poruku/čestitku\n                                    ")])])]), _vm._v(" "), _c("div", {
+    }), _vm._v("\n                    Dodaj poruku/čestitku\n                  ")])])]), _vm._v(" "), _c("div", {
       staticClass: "product-item-col-2"
     }, [product.discountPrice === 0 ? _c("div", {
       staticClass: "product-item-col-2_1 product-list-item-price"
@@ -11074,7 +11091,7 @@ var render = function render() {
       staticClass: "price-promo"
     }, [_c("span", {
       staticClass: "item-price-number"
-    }, [_vm._v("\n                                            " + _vm._s(product.discountPrice))]), _vm._v(" "), _c("span", {
+    }, [_vm._v("\n                      " + _vm._s(product.discountPrice))]), _vm._v(" "), _c("span", {
       staticClass: "item-price-currency"
     }, [_vm._v(_vm._s(_vm.selectedCurrency))])])]), _vm._v(" "), _c("div", {
       staticClass: "product-item-col-2_2 product-counter product-list-item-counter"
@@ -11087,7 +11104,7 @@ var render = function render() {
           return _vm.decrementQuantity(index);
         }
       }
-    }, [_vm._v("\n                                            —\n                                        ")]), _vm._v(" "), _c("input", {
+    }, [_vm._v("\n                      —\n                    ")]), _vm._v(" "), _c("input", {
       staticClass: "item-counter",
       attrs: {
         type: "text",
@@ -11103,7 +11120,7 @@ var render = function render() {
           return _vm.incrementQuantity(index);
         }
       }
-    }, [_vm._v("\n                                            ＋\n                                        ")])])]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                      ＋\n                    ")])])]), _vm._v(" "), _c("div", {
       staticClass: "product-item-col-2_3 product-list-order-price"
     }, [_c("div", [_c("span", {
       staticClass: "order-price-number"
@@ -11138,7 +11155,7 @@ var render = function render() {
           return _vm.decrementBoxQuantity(index);
         }
       }
-    }, [_vm._v("\n                                            —\n                                        ")]), _vm._v(" "), _c("input", {
+    }, [_vm._v("\n                      —\n                    ")]), _vm._v(" "), _c("input", {
       staticClass: "item-counter",
       attrs: {
         type: "text",
@@ -11154,7 +11171,7 @@ var render = function render() {
           return _vm.incrementBoxQuantity(index);
         }
       }
-    }, [_vm._v("\n                                            ＋\n                                        ")])])]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                      ＋\n                    ")])])]), _vm._v(" "), _c("div", {
       staticClass: "product-item-col-2_3 product-list-order-price"
     })])]), _vm._v(" "), _c("div", {
       directives: [{
@@ -11166,7 +11183,7 @@ var render = function render() {
       staticClass: "product-list-item-comment"
     }, [_c("p", {
       staticClass: "product-comment-label product-message-label"
-    }, [_vm._v("\n                                Dodaj poruku/čestitku\n                            ")]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n                Dodaj poruku/čestitku\n              ")]), _vm._v(" "), _c("div", {
       staticClass: "product-comment-number"
     }, _vm._l(product.personalMessages, function (item, index) {
       return _c("div", {
@@ -11180,14 +11197,14 @@ var render = function render() {
             return _vm.changeActiveMessage(index);
           }
         }
-      }, [_vm._v("\n                                    " + _vm._s(_vm.getItemNumber(index)) + "\n                                ")]);
+      }, [_vm._v("\n                  " + _vm._s(_vm.getItemNumber(index)) + "\n                ")]);
     }), 0), _vm._v(" "), _vm._l(product.personalMessages, function (message, index) {
       return _c("div", {
         directives: [{
           name: "show",
           rawName: "v-show",
           value: index === _vm.personalMessages.activeIndex,
-          expression: "\n                                    index === personalMessages.activeIndex\n                                "
+          expression: "\n                  index === personalMessages.activeIndex\n                "
         }],
         key: index,
         staticClass: "message-tab"
@@ -11245,7 +11262,7 @@ var render = function render() {
     on: {
       click: _vm.guestCheckout
     }
-  }, [_vm._v("\n                                Bez registracije\n                            ")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                Bez registracije\n              ")])]), _vm._v(" "), _c("div", {
     staticClass: "cart-login-btn-container"
   }, [_c("button", {
     staticClass: "login-btn",
@@ -11254,11 +11271,11 @@ var render = function render() {
         return _vm.openAuthModal("login");
       }
     }
-  }, [_vm._v("\n                                Uloguj se\n                            ")])])])]) : _vm._e(), _vm._v(" "), _vm.isGuestCheckout || _vm.isLoginCheckout ? _c("div", {
+  }, [_vm._v("\n                Uloguj se\n              ")])])])]) : _vm._e(), _vm._v(" "), _vm.isGuestCheckout || _vm.isLoginCheckout ? _c("div", {
     staticClass: "col-lg-9 cart-order-active-code"
   }, [_c("h3", {
     staticClass: "order-active-title"
-  }, [_vm._v("\n                        Imate li kod za popust ili poklon karticu\n                    ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n            Imate li kod za popust ili poklon karticu\n          ")]), _vm._v(" "), _c("div", {
     staticClass: "order-active-form"
   }, [_c("div", {
     staticClass: "order-active-checkbox"
@@ -11298,7 +11315,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "product-item-check"
-  }), _vm._v("\n                                Kod za popust\n                            ")]), _vm._v(" "), _c("label", {
+  }), _vm._v("\n                Kod za popust\n              ")]), _vm._v(" "), _c("label", {
     staticClass: "product-item-label"
   }, [_c("input", {
     directives: [{
@@ -11334,7 +11351,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "product-item-check"
-  }), _vm._v("\n                                Kod za gift card\n                            ")])]), _vm._v(" "), _c("div", {
+  }), _vm._v("\n                Kod za gift card\n              ")])]), _vm._v(" "), _c("div", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -11368,7 +11385,7 @@ var render = function render() {
     on: {
       click: _vm.updateDiscount
     }
-  }, [_vm._v("\n                                Iskoristi\n                            ")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                Iskoristi\n              ")])]), _vm._v(" "), _c("div", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -11402,7 +11419,7 @@ var render = function render() {
     on: {
       click: _vm.updateDiscount
     }
-  }, [_vm._v("\n                                Iskoristi\n                            ")])])])]) : _vm._e()])]), _vm._v(" "), _vm.isGuestCheckout || _vm.isLoginCheckout ? _c("section", {
+  }, [_vm._v("\n                Iskoristi\n              ")])])])]) : _vm._e()])]), _vm._v(" "), _vm.isGuestCheckout || _vm.isLoginCheckout ? _c("section", {
     staticClass: "cart-order-information container"
   }, [_c("div", {
     staticClass: "row"
@@ -11410,7 +11427,7 @@ var render = function render() {
     staticClass: "cart-type-tabs col-lg-9"
   }, [_c("h3", {
     staticClass: "cart-type-title"
-  }, [_vm._v("Odaberite način dostave")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n            Odaberite način dostave\n          ")]), _vm._v(" "), _c("div", {
     staticClass: "cart-type-tabs-row"
   }, _vm._l(_vm.shippingMethods, function (method, index) {
     return _vm.showShippingMethod(method) ? _c("button", {
@@ -11437,9 +11454,9 @@ var render = function render() {
       staticClass: "type-tabs-btn"
     }, [_c("span", {
       staticClass: "type-tabs-btn-title"
-    }, [_vm._v("\n                                    " + _vm._s(method.name) + "\n                                ")]), _vm._v(" "), _c("span", {
+    }, [_vm._v("\n                  " + _vm._s(method.name) + "\n                ")]), _vm._v(" "), _c("span", {
       staticClass: "type-tabs-btn-desc"
-    }, [_vm._v("\n                                    " + _vm._s(method.cost + " " + _vm.selectedCurrency) + "\n                                ")])])]) : _vm._e();
+    }, [_vm._v("\n                  " + _vm._s(method.cost + " " + _vm.selectedCurrency) + "\n                ")])])]) : _vm._e();
   }), 0), _vm._v(" "), _c("div", {
     staticClass: "cart-type-tabs-content"
   }, [_c("div", {
@@ -11473,7 +11490,7 @@ var render = function render() {
     staticClass: "email-checkbox-check"
   }), _vm._v(" "), _c("span", {
     staticClass: "email-checkbox-text"
-  }, [_vm._v("\n                                        Pošalji na moju adresu\n                                    ")])]), _vm._v(" "), _c("label", {
+  }, [_vm._v("\n                    Pošalji na moju adresu\n                  ")])]), _vm._v(" "), _c("label", {
     staticClass: "tabs-email-checkbox"
   }, [_c("input", {
     directives: [{
@@ -11500,7 +11517,7 @@ var render = function render() {
     staticClass: "email-checkbox-check"
   }), _vm._v(" "), _c("span", {
     staticClass: "email-checkbox-text"
-  }, [_vm._v("\n                                        Pošalji na adresu primaoca\n                                    ")])])]), _vm._v(" "), _vm.shippingMethod.virtual ? _c("div", {
+  }, [_vm._v("\n                    Pošalji na adresu primaoca\n                  ")])])]), _vm._v(" "), _vm.shippingMethod.virtual ? _c("div", {
     staticClass: "tabs-email-form-container"
   }, [!_vm.address.sendToPerson ? _c("div", {
     staticClass: "tabs-email-form-wrapper"
@@ -11508,7 +11525,7 @@ var render = function render() {
     staticClass: "tabs-email-form-row"
   }, [_c("h3", {
     staticClass: "tabs-post-title"
-  }, [_vm._v("\n                                            Lični podaci:\n                                        ")]), _vm._v(" "), _vm._m(3), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                      Lični podaci:\n                    ")]), _vm._v(" "), _vm._m(3), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
   }, [_c("ValidationObserver", {
     ref: "addressObserver",
@@ -11534,7 +11551,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_name,
-                  expression: "\n                                                            address.customer_name\n                                                        "
+                  expression: "\n                              address.customer_name\n                            "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11569,7 +11586,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_surname,
-                  expression: "\n                                                            address.customer_surname\n                                                        "
+                  expression: "\n                              address.customer_surname\n                            "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11604,7 +11621,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_phone,
-                  expression: "\n                                                            address.customer_phone\n                                                        "
+                  expression: "\n                              address.customer_phone\n                            "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11640,7 +11657,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_email,
-                  expression: "\n                                                            address.customer_email\n                                                        "
+                  expression: "\n                              address.customer_email\n                            "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11662,7 +11679,7 @@ var render = function render() {
           }], null, true)
         })];
       }
-    }], null, false, 1957098217)
+    }], null, false, 574409705)
   })], 1)])]) : _vm._e(), _vm._v(" "), _vm.address.sendToPerson ? _c("div", {
     staticClass: "tabs-email-form-wrapper"
   }, [_c("ValidationObserver", {
@@ -11675,17 +11692,17 @@ var render = function render() {
           staticClass: "tabs-email-form-row"
         }, [_c("h3", {
           staticClass: "tabs-post-title"
-        }, [_vm._v("\n                                                Lični podaci:\n                                            ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                        Lični podaci:\n                      ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col-title"
         }, [_c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Ime *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Ime *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Prezime *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Prezime *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Broj telefona *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Broj telefona *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Email *\n                                                ")])]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Email *\n                        ")])]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col"
         }, [_c("form", [_c("validation-provider", {
           attrs: {
@@ -11702,7 +11719,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_name,
-                  expression: "\n                                                                address.customer_name\n                                                            "
+                  expression: "\n                                address.customer_name\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11737,7 +11754,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_surname,
-                  expression: "\n                                                                address.customer_surname\n                                                            "
+                  expression: "\n                                address.customer_surname\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11772,7 +11789,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_phone,
-                  expression: "\n                                                                address.customer_phone\n                                                            "
+                  expression: "\n                                address.customer_phone\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11808,7 +11825,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_email,
-                  expression: "\n                                                                address.customer_email\n                                                            "
+                  expression: "\n                                address.customer_email\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11832,11 +11849,11 @@ var render = function render() {
           staticClass: "tabs-email-form-row"
         }, [_c("h3", {
           staticClass: "tabs-post-title"
-        }, [_vm._v("\n                                                Podaci primaoca:\n                                            ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                        Podaci primaoca:\n                      ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col-title"
         }, [_c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Email *\n                                                ")])]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Email *\n                        ")])]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col"
         }, [_c("form", {
           attrs: {
@@ -11857,7 +11874,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.recepient.customer_email,
-                  expression: "\n                                                                address\n                                                                    .recepient\n                                                                    .customer_email\n                                                            "
+                  expression: "\n                                address\n                                  .recepient\n                                  .customer_email\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11879,7 +11896,7 @@ var render = function render() {
           }], null, true)
         })], 1)])])];
       }
-    }], null, false, 1652156436)
+    }], null, false, 381891732)
   })], 1) : _vm._e()]) : _vm._e(), _vm._v(" "), _vm.shippingMethod.virtual === false ? _c("div", {
     staticClass: "tabs-email-form-container"
   }, [!_vm.address.sendToPerson ? _c("div", {
@@ -11888,7 +11905,7 @@ var render = function render() {
     staticClass: "tabs-email-form-row"
   }, [_c("h3", {
     staticClass: "tabs-post-title"
-  }, [_vm._v("\n                                            Izaberite adresu:\n                                        ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                      Izaberite adresu:\n                    ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-form-row"
   }, [_vm._m(4), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
@@ -11897,7 +11914,7 @@ var render = function render() {
       name: "model",
       rawName: "v-model",
       value: _vm.selectedAddress,
-      expression: "\n                                                            selectedAddress\n                                                        "
+      expression: "\n                              selectedAddress\n                            "
     }],
     staticClass: "tabs-email-input",
     on: {
@@ -11916,18 +11933,18 @@ var render = function render() {
       selected: "",
       value: ""
     }
-  }, [_vm._v("\n                                                            Izaberite adresu\n                                                        ")]), _vm._v(" "), _vm._l(_vm.applicationParams.user.addresses, function (address, index) {
+  }, [_vm._v("\n                              Izaberite adresu\n                            ")]), _vm._v(" "), _vm._l(_vm.applicationParams.user.addresses, function (address, index) {
     return _c("option", {
       key: index,
       domProps: {
         value: address
       }
-    }, [_vm._v("\n                                                            " + _vm._s(_vm.addressLabel(address)) + "\n                                                        ")]);
+    }, [_vm._v("\n                              " + _vm._s(_vm.addressLabel(address)) + "\n                            ")]);
   })], 2)])])])]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-form-row"
   }, [_c("h3", {
     staticClass: "tabs-post-title"
-  }, [_vm._v("\n                                            Lični podaci:\n                                        ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                      Lični podaci:\n                    ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-form-row"
   }, [_vm._m(5), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
@@ -11955,7 +11972,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_name,
-                  expression: "\n                                                                address.customer_name\n                                                            "
+                  expression: "\n                                address.customer_name\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -11990,7 +12007,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_surname,
-                  expression: "\n                                                                address.customer_surname\n                                                            "
+                  expression: "\n                                address.customer_surname\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12025,7 +12042,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_phone,
-                  expression: "\n                                                                address.customer_phone\n                                                            "
+                  expression: "\n                                address.customer_phone\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12061,7 +12078,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_email,
-                  expression: "\n                                                                address.customer_email\n                                                            "
+                  expression: "\n                                address.customer_email\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12096,7 +12113,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.address_one,
-                  expression: "\n                                                                address.address_one\n                                                            "
+                  expression: "\n                                address.address_one\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12121,7 +12138,7 @@ var render = function render() {
             name: "model",
             rawName: "v-model",
             value: _vm.address.address_two,
-            expression: "\n                                                            address.address_two\n                                                        "
+            expression: "\n                              address.address_two\n                            "
           }],
           staticClass: "tabs-email-input",
           attrs: {
@@ -12142,7 +12159,7 @@ var render = function render() {
             name: "model",
             rawName: "v-model",
             value: _vm.address.country,
-            expression: "\n                                                            address.country\n                                                        "
+            expression: "\n                              address.country\n                            "
           }],
           staticClass: "tabs-email-input",
           "class": _vm.classes,
@@ -12173,7 +12190,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.city,
-                  expression: "\n                                                                address.city\n                                                            "
+                  expression: "\n                                address.city\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12208,7 +12225,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.zip_code,
-                  expression: "\n                                                                address.zip_code\n                                                            "
+                  expression: "\n                                address.zip_code\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12230,7 +12247,7 @@ var render = function render() {
           }], null, true)
         })];
       }
-    }], null, false, 195464957)
+    }], null, false, 609457917)
   })], 1)])])]) : _vm._e(), _vm._v(" "), _vm.address.sendToPerson ? _c("div", {
     staticClass: "tabs-email-form-wrapper"
   }, [_c("ValidationObserver", {
@@ -12243,17 +12260,17 @@ var render = function render() {
           staticClass: "tabs-email-form-row"
         }, [_c("h3", {
           staticClass: "tabs-post-title"
-        }, [_vm._v("\n                                                Lični podaci:\n                                            ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                        Lični podaci:\n                      ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col-title"
         }, [_c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Ime *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Ime *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Prezime *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Prezime *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Broj telefona *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Broj telefona *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Email *\n                                                ")])]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Email *\n                        ")])]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col"
         }, [_c("form", {
           attrs: {
@@ -12274,7 +12291,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_name,
-                  expression: "\n                                                                address.customer_name\n                                                            "
+                  expression: "\n                                address.customer_name\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12309,7 +12326,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_surname,
-                  expression: "\n                                                                address.customer_surname\n                                                            "
+                  expression: "\n                                address.customer_surname\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12344,7 +12361,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_phone,
-                  expression: "\n                                                                address.customer_phone\n                                                            "
+                  expression: "\n                                address.customer_phone\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12380,7 +12397,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.customer_email,
-                  expression: "\n                                                                address.customer_email\n                                                            "
+                  expression: "\n                                address.customer_email\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12404,27 +12421,27 @@ var render = function render() {
           staticClass: "tabs-email-form-row"
         }, [_c("h3", {
           staticClass: "tabs-post-title"
-        }, [_vm._v("\n                                                Podaci primaoca:\n                                            ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                        Podaci primaoca:\n                      ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col-title"
         }, [_c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Ime *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Ime *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Prezime *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Prezime *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Broj telefona *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Broj telefona *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Email *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Email *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Ulica I broj *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Ulica I broj *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Opis adrese *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Opis adrese *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Država *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Država *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Grad *\n                                                ")]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Grad *\n                        ")]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-title"
-        }, [_vm._v("\n                                                    Poštanski broj *\n                                                ")])]), _vm._v(" "), _c("div", {
+        }, [_vm._v("\n                          Poštanski broj *\n                        ")])]), _vm._v(" "), _c("div", {
           staticClass: "tabs-email-col"
         }, [_c("form", [_c("validation-provider", {
           attrs: {
@@ -12441,7 +12458,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.recepient.customer_name,
-                  expression: "\n                                                                address\n                                                                    .recepient\n                                                                    .customer_name\n                                                            "
+                  expression: "\n                                address\n                                  .recepient\n                                  .customer_name\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12476,7 +12493,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.recepient.customer_surname,
-                  expression: "\n                                                                address\n                                                                    .recepient\n                                                                    .customer_surname\n                                                            "
+                  expression: "\n                                address\n                                  .recepient\n                                  .customer_surname\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12511,7 +12528,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.recepient.customer_phone,
-                  expression: "\n                                                                address\n                                                                    .recepient\n                                                                    .customer_phone\n                                                            "
+                  expression: "\n                                address\n                                  .recepient\n                                  .customer_phone\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12547,7 +12564,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.recepient.customer_email,
-                  expression: "\n                                                                address\n                                                                    .recepient\n                                                                    .customer_email\n                                                            "
+                  expression: "\n                                address\n                                  .recepient\n                                  .customer_email\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12582,7 +12599,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.address_one,
-                  expression: "\n                                                                address.address_one\n                                                            "
+                  expression: "\n                                address.address_one\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12607,7 +12624,7 @@ var render = function render() {
             name: "model",
             rawName: "v-model",
             value: _vm.address.address_two,
-            expression: "\n                                                            address.address_two\n                                                        "
+            expression: "\n                              address.address_two\n                            "
           }],
           staticClass: "tabs-email-input",
           attrs: {
@@ -12628,7 +12645,7 @@ var render = function render() {
             name: "model",
             rawName: "v-model",
             value: _vm.address.country,
-            expression: "\n                                                            address.country\n                                                        "
+            expression: "\n                              address.country\n                            "
           }],
           staticClass: "tabs-email-input",
           "class": _vm.classes,
@@ -12659,7 +12676,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.city,
-                  expression: "\n                                                                address.city\n                                                            "
+                  expression: "\n                                address.city\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12694,7 +12711,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.address.zip_code,
-                  expression: "\n                                                                address.zip_code\n                                                            "
+                  expression: "\n                                address.zip_code\n                              "
                 }],
                 staticClass: "tabs-email-input",
                 "class": classes,
@@ -12716,7 +12733,7 @@ var render = function render() {
           }], null, true)
         })], 1)])])];
       }
-    }], null, false, 3859963921)
+    }], null, false, 517729425)
   })], 1) : _vm._e()]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-form-wrapper"
   }, [_c("div", {
@@ -12772,7 +12789,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.agreements.privacyPolicy,
-                  expression: "\n                                                        agreements.privacyPolicy\n                                                    "
+                  expression: "\n                            agreements.privacyPolicy\n                          "
                 }],
                 staticClass: "tabs-email-checkbox",
                 attrs: {
@@ -12802,12 +12819,12 @@ var render = function render() {
               }), _vm._v(" "), _c("span", {
                 staticClass: "tabs-email-check",
                 "class": classes
-              }), _vm._v("\n                                                Slažem se sa\n                                                "), _c("a", {
+              }), _vm._v("\n                        Slažem se sa\n                        "), _c("a", {
                 attrs: {
                   href: "https://posebanpoklon.rs/politika-privatnosti",
                   target: "_blank"
                 }
-              }, [_vm._v("pravilima\n                                                    privatnosti")]), _vm._v(".\n                                            ")];
+              }, [_vm._v("pravilima\n                          privatnosti")]), _vm._v(".\n                      ")];
             }
           }], null, true)
         })], 1), _vm._v(" "), _c("label", {
@@ -12827,7 +12844,7 @@ var render = function render() {
                   name: "model",
                   rawName: "v-model",
                   value: _vm.agreements.termsOfUse,
-                  expression: "\n                                                        agreements.termsOfUse\n                                                    "
+                  expression: "\n                            agreements.termsOfUse\n                          "
                 }],
                 staticClass: "tabs-email-checkbox",
                 attrs: {
@@ -12857,22 +12874,22 @@ var render = function render() {
               }), _vm._v(" "), _c("span", {
                 staticClass: "tabs-email-check",
                 "class": classes
-              }), _vm._v("\n                                                Slažem se sa\n                                                "), _c("a", {
+              }), _vm._v("\n                        Slažem se sa\n                        "), _c("a", {
                 attrs: {
                   href: "https://posebanpoklon.rs/uslovi-prodaje",
                   target: "_blank"
                 }
-              }, [_vm._v("uslovima prodaje")]), _vm._v(".\n                                            ")];
+              }, [_vm._v("uslovima prodaje")]), _vm._v(".\n                      ")];
             }
           }], null, true)
         })], 1)])];
       }
-    }], null, false, 1202571791)
+    }], null, false, 3631180559)
   })], 1)])])]), _vm._v(" "), _c("div", {
     staticClass: "cart-type-tabs col-lg-9"
   }, [_c("h3", {
     staticClass: "cart-type-title"
-  }, [_vm._v("Izaberi način plaćanja")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n            Izaberi način plaćanja\n          ")]), _vm._v(" "), _c("div", {
     staticClass: "cart-payment-tabs-row"
   }, _vm._l(_vm.paymentMethods, function (method, index) {
     return _vm.showPaymentMethod(method) ? _c("button", {
@@ -12899,7 +12916,7 @@ var render = function render() {
       staticClass: "type-tabs-btn"
     }, [_c("span", {
       staticClass: "type-tabs-btn-title"
-    }, [_vm._v("\n                                    " + _vm._s(method.name) + "\n                                ")])])]) : _vm._e();
+    }, [_vm._v("\n                  " + _vm._s(method.name) + "\n                ")])])]) : _vm._e();
   }), 0), _vm._v(" "), _c("div", {
     staticClass: "cart-payment-tabs-content"
   }, _vm._l(_vm.paymentMethods, function (method, index) {
@@ -12912,7 +12929,7 @@ var render = function render() {
       }],
       key: index,
       staticClass: "payment-tabs-content tabs-bank-container tabs-cart-content"
-    }, [_c("div", {
+    }, [!_vm.isLocalhost() ? _c("div", {
       staticClass: "tabs-payment-btn-row recaptcha-row"
     }, [!_vm.isLoggedIn ? _c("vue-recaptcha", {
       ref: "reCaptcha",
@@ -12926,7 +12943,7 @@ var render = function render() {
         verify: _vm.setCaptchaVerified,
         expired: _vm.setCaptchaExpired
       }
-    }) : _vm._e()], 1), _vm._v(" "), _c("div", {
+    }) : _vm._e()], 1) : _vm._e(), _vm._v(" "), _c("div", {
       staticClass: "tabs-payment-btn-row"
     }, [_vm.paymentParams && method.id === 3 ? _c("form", {
       attrs: {
@@ -13061,7 +13078,7 @@ var render = function render() {
       on: {
         click: _vm.validateForm
       }
-    }, [_vm._v("\n                                    Poruči\n                                ")])])]);
+    }, [_vm._v("\n                  Poruči\n                ")])])]);
   }), 0)]), _vm._v(" "), _vm._m(7)])]) : _vm._e(), _vm._v(" "), _c("recommended-products", {
     attrs: {
       title: "PREPORUČUJEMO"
@@ -13077,13 +13094,13 @@ var staticRenderFns = [function () {
     staticClass: "cart-product-list"
   }, [_c("div", {
     staticClass: "product-list-col-1 product-list-title"
-  }, [_vm._v("\n                            Naziv ponude\n                        ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n              Naziv ponude\n            ")]), _vm._v(" "), _c("div", {
     staticClass: "product-list-col-2 product-list-title"
-  }, [_vm._v("\n                            Cena\n                        ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n              Cena\n            ")]), _vm._v(" "), _c("div", {
     staticClass: "product-list-col-3 product-list-title"
-  }, [_vm._v("\n                            Količina\n                        ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n              Količina\n            ")]), _vm._v(" "), _c("div", {
     staticClass: "product-list-col-4 product-list-title"
-  }, [_vm._v("\n                            Ukupna cena\n                        ")])])]);
+  }, [_vm._v("\n              Ukupna cena\n            ")])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -13103,7 +13120,7 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "order-vat-notice"
-  }, [_c("span", [_vm._v("Virtual Media Team doo nije u sistemu\n                            PDV-a")])]);
+  }, [_c("span", [_vm._v("Virtual Media Team doo nije u sistemu\n              PDV-a")])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -13111,13 +13128,13 @@ var staticRenderFns = [function () {
     staticClass: "tabs-email-col-title"
   }, [_c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                Ime *\n                                            ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                        Ime *\n                      ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                Prezime *\n                                            ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                        Prezime *\n                      ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                Broj telefona *\n                                            ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                        Broj telefona *\n                      ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                Email *\n                                            ")])]);
+  }, [_vm._v("\n                        Email *\n                      ")])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -13125,7 +13142,7 @@ var staticRenderFns = [function () {
     staticClass: "tabs-email-col-title"
   }, [_c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Adrese\n                                                ")])]);
+  }, [_vm._v("\n                          Adrese\n                        ")])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -13133,23 +13150,23 @@ var staticRenderFns = [function () {
     staticClass: "tabs-email-col-title"
   }, [_c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Ime *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Ime *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Prezime *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Prezime *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Broj telefona *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Broj telefona *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Email *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Email *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Ulica I broj *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Ulica I broj *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Opis adrese *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Opis adrese *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Država *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Država *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Grad *\n                                                ")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                          Grad *\n                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                                    Poštanski broj *\n                                                ")])]);
+  }, [_vm._v("\n                          Poštanski broj *\n                        ")])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -13157,7 +13174,7 @@ var staticRenderFns = [function () {
     staticClass: "tabs-email-col-title"
   }, [_c("div", {
     staticClass: "tabs-email-title"
-  }, [_vm._v("\n                                            Napomene\n                                        ")])]);
+  }, [_vm._v("\n                      Napomene\n                    ")])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -14170,19 +14187,19 @@ var render = function render() {
       staticClass: "product-carousel-city"
     }, [_vm._v(_vm._s(product.location))]), _vm._v(" "), product.discount_price === 0 ? _c("p", {
       staticClass: "product-carousel-price"
-    }, [_vm._v("\n                " + _vm._s(product.price) + "\n                "), _c("span", {
+    }, [_vm._v("\n                                " + _vm._s(product.price) + "\n                                "), _c("span", {
       staticClass: "price-currency"
     }, [_vm._v(_vm._s(_vm.applicationParams.currency))])]) : _c("p", {
       staticClass: "product-carousel-price product-carousel-price-sale"
     }, [_c("span", {
       staticClass: "price-regular"
-    }, [_vm._v("\n                  " + _vm._s(product.price) + "\n                  "), _c("span", {
+    }, [_vm._v("\n                " + _vm._s(product.price) + "\n                "), _c("span", {
       staticClass: "price-currency"
     }, [_vm._v(_vm._s(_vm.applicationParams.currency))])]), _vm._v(" "), _c("span", {
       staticClass: "price-line"
     }, [_vm._v("-")]), _vm._v(" "), _c("span", {
       staticClass: "price-promo"
-    }, [_vm._v("\n                  " + _vm._s(product.discount_price) + "\n                  "), _c("span", {
+    }, [_vm._v("\n                " + _vm._s(product.discount_price) + "\n                "), _c("span", {
       staticClass: "price-currency"
     }, [_vm._v(_vm._s(_vm.applicationParams.currency))])])]), _vm._v(" "), _c("p", {
       staticClass: "product-carousel-btn"
@@ -14231,14 +14248,14 @@ var render = function render() {
     attrs: {
       options: _vm.swiperOptionTop
     }
-  }, [_vm._l(_vm.slides, function (slide, index) {
+  }, [_vm._l(_vm.safeSlides, function (slide, index) {
     return _c("swiper-slide", {
       key: index,
       staticClass: "slide"
     }, [_c("img", {
       attrs: {
         src: slide.url,
-        alt: slide.alt
+        alt: slide.alt || ""
       }
     })]);
   }), _vm._v(" "), _c("div", {
@@ -14259,14 +14276,14 @@ var render = function render() {
     attrs: {
       options: _vm.swiperOptionThumbs
     }
-  }, _vm._l(_vm.slides, function (slide, index) {
+  }, _vm._l(_vm.safeSlides, function (slide, index) {
     return _c("swiper-slide", {
       key: index,
       staticClass: "slide"
     }, [_c("img", {
       attrs: {
         src: slide.url,
-        alt: slide.alt
+        alt: slide.alt || ""
       }
     })]);
   }), 1)], 1);
@@ -17302,7 +17319,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 
 // module
-exports.push([module.i, "\n.product-carousel-row {\n  position: relative;\n}\n.product-carousel-row .swiper-slide {\n  padding-top: 10px;\n}\n.product-carousel-item {\n  box-sizing: border-box;\n  padding: 0 10px 10px;\n}\n.product-carousel-item .product-carousel-icon-row-left {\n  position: absolute;\n  top: -10px;\n  left: 0;\n  z-index: 1;\n}\n.product-carousel-item .product-carousel-icon-row {\n  right: 0;\n}\n", ""]);
+exports.push([module.i, "\n.product-carousel-row {\n    position: relative;\n}\n.product-carousel-row .swiper-slide {\n    padding-top: 10px;\n}\n.product-carousel-item {\n    box-sizing: border-box;\n    padding: 0 10px 10px;\n}\n.product-carousel-item .product-carousel-icon-row-left {\n    position: absolute;\n    top: -10px;\n    left: 0;\n    z-index: 1;\n}\n.product-carousel-item .product-carousel-icon-row {\n    right: 0;\n}\n", ""]);
 
 // exports
 

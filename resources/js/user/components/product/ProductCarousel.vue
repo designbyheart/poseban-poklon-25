@@ -2,16 +2,16 @@
 
     <div class="product-carousel-container">
         <swiper :options="swiperOptionTop" class="gallery-top" ref="swiperTop">
-            <swiper-slide class="slide" :key="index" v-for="slide,index in slides">
-                <img :src="slide.url" :alt="slide.alt" />
+            <swiper-slide class="slide" :key="index" v-for="slide,index in safeSlides">
+                <img :src="slide.url" :alt="slide.alt || ''" />
             </swiper-slide>
             <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
             <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
         </swiper>
         <!-- swiper2 Thumbs -->
         <swiper :options="swiperOptionThumbs" class="gallery-thumbs" ref="swiperThumbs">
-            <swiper-slide class="slide" :key="index" v-for="slide,index in slides">
-                <img :src="slide.url" :alt="slide.alt" />
+            <swiper-slide class="slide" :key="index" v-for="slide,index in safeSlides">
+                <img :src="slide.url" :alt="slide.alt || ''" />
             </swiper-slide>
         </swiper>
     </div>
@@ -56,6 +56,17 @@
                 }
             }
         },
+        computed: {
+            safeSlides() {
+                // Filter out any invalid slides and ensure all properties exist
+                return (this.slides || []).map(slide => {
+                    return {
+                        url: slide && typeof slide.url === 'string' ? slide.url : '/images/default/product/posebanpoklon_product.jpg',
+                        alt: slide && typeof slide.alt === 'string' ? slide.alt : ''
+                    };
+                });
+            }
+        },
         methods: {
             sliderTo(index) {
                 this.$refs.swiperTop.swiper.slideTo(index);
@@ -64,10 +75,13 @@
         mounted() {
 
             this.$nextTick(() => {
-                const swiperTop = this.$refs.swiperTop.swiper;
-                const swiperThumbs = this.$refs.swiperThumbs.swiper;
-                swiperTop.controller.control = swiperThumbs;
-                swiperThumbs.controller.control = swiperTop;
+                const swiperTop = this.$refs.swiperTop?.swiper;
+                const swiperThumbs = this.$refs.swiperThumbs?.swiper;
+                
+                if (swiperTop && swiperThumbs && swiperTop.controller && swiperThumbs.controller) {
+                    swiperTop.controller.control = swiperThumbs;
+                    swiperThumbs.controller.control = swiperTop;
+                }
             })
 
         }

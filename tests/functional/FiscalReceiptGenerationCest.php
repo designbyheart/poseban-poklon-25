@@ -23,7 +23,7 @@ class FiscalReceiptGenerationCest
     public function testGenerateFiscalReceiptWithOrderId(FunctionalTester $I)
     {
         // Arrange
-        $orderId = 2012; // Replace with a valid test order ID
+        $orderId = null; //2012; // Replace with a valid test order ID
         $order = Order::findOrFail($orderId);
 
         // Act
@@ -45,7 +45,7 @@ class FiscalReceiptGenerationCest
     public function testFiscalReceiptFailsWithInvalidUrl(FunctionalTester $I)
     {
         // Arrange
-        $orderId = 2012; // Replace with a valid test order ID
+        $orderId = null; //2012; // Replace with a valid test order ID
         $order = Order::findOrFail($orderId);
 
         // Clear the FISCAL_URL env variable temporarily
@@ -69,7 +69,7 @@ class FiscalReceiptGenerationCest
     public function testFiscalReceiptNotGeneratedForTrainingType(FunctionalTester $I)
     {
         // Arrange
-        $orderId = 2012; // Replace with a valid test order ID
+        $orderId = null; //2012; // Replace with a valid test order ID
         $order = Order::findOrFail($orderId);
 
         // Create a mock FiscalCashRegister using Mockery
@@ -99,7 +99,7 @@ class FiscalReceiptGenerationCest
     public function testErrorLoggingOnFiscalServiceFailure(FunctionalTester $I)
     {
         // Arrange
-        $orderId = 2012; // Replace with a valid test order ID
+        $orderId = null;//2012; // Replace with a valid test order ID
         $order = Order::findOrFail($orderId);
 
         // Mock Log facade
