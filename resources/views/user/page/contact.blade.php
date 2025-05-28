@@ -25,10 +25,10 @@
                     </p>
                     <div class="contact-info-icons">
                         <div class="contact-company-info">
-                            <p>Virtual Media Team doo</p>
+                            <p>Turistička agencija Republika 031</p>
                             <p>Delatnost: Trgovina na malo posredstvom pošte ili preko interneta (šifra 4791)</p>
-                            <p>Matični broj: 21132110</p>
-                            <p>Poreski broj broj: 109144593</p>
+                            <p>Matični broj: 65380366</p>
+                            <p>Poreski broj broj: 111394404</p>
                         </div>
                         <div class="info-icon-number">
                             <a href="#" class="info-icon-link">
@@ -86,7 +86,7 @@
                                 <textarea name="message" id="" cols="30" rows="10" class="form-textarea"
                                     placeholder="Dodaj poruku" required></textarea>
                                 <div class="form-btn-row">
-                                    <button class="form-btn" type="submit">Posalijte</button>
+                                    <button class="form-btn" type="submit">Pošaljite</button>
                                 </div>
                             </form>
                         </div>

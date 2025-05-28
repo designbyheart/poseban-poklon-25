@@ -253,7 +253,7 @@
                                     </td>
                                     <td width="250"
                                         style="padding: 15px; border: 1px solid #fdeaf0; font-family: Rubik, sans-serif; color: grey;">
-                                        Virtual Media Team doo <br>Svetozara Lazovića Gonga 4, 31000 Užice, Srbija
+                                        Turistička agencija Republika 031 <br>Svetozara Lazovića Gonga 4, 31000 Užice, Srbija
                                     </td>
                                 </tr>
                                 <tr>
@@ -263,7 +263,7 @@
                                     </td>
                                     <td width="250"
                                         style="padding: 15px; border: 1px solid #fdeaf0; font-family: Rubik, sans-serif; color: grey;">
-                                        160-0000000492792-77
+                                        160-6000002025893-02
                                     </td>
                                 </tr>
                                 <tr>

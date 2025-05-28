@@ -1,1643 +1,1639 @@
 <template>
-  <div>
-    <section
-      v-if="products.length"
-      class="checkout-page"
-    >
-      <!-- Cart Page Top -->
-      <section class="cart-content container">
-        <!--<div class="row">
-                            <div class="col-lg-12 cart-order-title">
-                                <h2 class="order-title">
-                                    Odjava
-                                </h2>
+    <div>
+        <section
+            v-if="products.length"
+            class="checkout-page"
+        >
+            <!-- Cart Page Top -->
+            <section class="cart-content container">
+                <!--<div class="row">
+                                    <div class="col-lg-12 cart-order-title">
+                                        <h2 class="order-title">
+                                            Odjava
+                                        </h2>
+                                    </div>
+                                </div>-->
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="cart-product-list">
+                            <div class="product-list-col-1 product-list-title">
+                                Naziv ponude
                             </div>
-                        </div>-->
-        <div class="row">
-          <div class="col-lg-9">
-            <div class="cart-product-list">
-              <div class="product-list-col-1 product-list-title">
-                Naziv ponude
-              </div>
-              <div class="product-list-col-2 product-list-title">
-                Cena
-              </div>
-              <div class="product-list-col-3 product-list-title">
-                Količina
-              </div>
-              <div class="product-list-col-4 product-list-title">
-                Ukupna cena
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-9">
-            <div
-              v-for="(product, index) in products"
-              :key="index"
-              class="cart-product-item"
-            >
-              <div class="cart-product-item-row">
-                <div
-                  class="product-item-col-1 product-list-item"
-                >
-                  <a :href="productUrl(product.slug)">
-                    <img
-                      :src="product.imageUrl"
-                      alt="@product.title"
-                      class="product-item-image"
-                    >
-                  </a>
-                  <div class="product-item-desc">
-                    <a :href="productUrl(product.slug)">
-                      <h4 class="product-item-title">
-                        {{ product.title }}
-                      </h4>
-                    </a>
-                    <!--                                        <label-->
-                    <!--                                            class="product-item-label product-item-add-box"-->
-                    <!--                                            :class="{-->
-                    <!--                                                selected: product.add_box,-->
-                    <!--                                            }"-->
-                    <!--                                        >-->
-                    <!--                                            <input-->
-                    <!--                                                v-model="product.add_box"-->
-                    <!--                                                type="checkbox"-->
-                    <!--                                                class="product-item-checkbox"-->
-                    <!--                                                @change="toggleBox(index)"-->
-                    <!--                                            />-->
-                    <!--                                            <span class="product-item-check"/>-->
-                    <!--                                            Dodaj poklon kutiju-->
-                    <!--                                        </label>-->
-                    <label class="product-item-label">
-                      <input
-                        v-model="
+                            <div class="product-list-col-2 product-list-title">
+                                Cena
+                            </div>
+                            <div class="product-list-col-3 product-list-title">
+                                Količina
+                            </div>
+                            <div class="product-list-col-4 product-list-title">
+                                Ukupna cena
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div
+                            v-for="(product, index) in products"
+                            :key="index"
+                            class="cart-product-item"
+                        >
+                            <div class="cart-product-item-row">
+                                <div
+                                    class="product-item-col-1 product-list-item"
+                                >
+                                    <a :href="productUrl(product.slug)">
+                                        <img
+                                            :src="product.imageUrl"
+                                            alt="@product.title"
+                                            class="product-item-image"
+                                        >
+                                    </a>
+                                    <div class="product-item-desc">
+                                        <a :href="productUrl(product.slug)">
+                                            <h4 class="product-item-title">
+                                                {{ product.title }}
+                                            </h4>
+                                        </a>
+                                        <!--                                        <label-->
+                                        <!--                                            class="product-item-label product-item-add-box"-->
+                                        <!--                                            :class="{-->
+                                        <!--                                                selected: product.add_box,-->
+                                        <!--                                            }"-->
+                                        <!--                                        >-->
+                                        <!--                                            <input-->
+                                        <!--                                                v-model="product.add_box"-->
+                                        <!--                                                type="checkbox"-->
+                                        <!--                                                class="product-item-checkbox"-->
+                                        <!--                                                @change="toggleBox(index)"-->
+                                        <!--                                            />-->
+                                        <!--                                            <span class="product-item-check"/>-->
+                                        <!--                                            Dodaj poklon kutiju-->
+                                        <!--                                        </label>-->
+                                        <label class="product-item-label">
+                                            <input
+                                                v-model="
                           personalMessages.showForm
                         "
-                        type="checkbox"
-                        class="product-item-checkbox"
-                      >
-                      <span class="product-item-check" />
-                      Dodaj poruku/čestitku
-                    </label>
-                  </div>
-                </div>
-                <div class="product-item-col-2">
-                  <div
-                    v-if="product.discountPrice === 0"
-                    class="product-item-col-2_1 product-list-item-price"
-                  >
-                    <div class="price-regular">
+                                                type="checkbox"
+                                                class="product-item-checkbox"
+                                            >
+                                            <span class="product-item-check"/>
+                                            Dodaj poruku/čestitku
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="product-item-col-2">
+                                    <div
+                                        v-if="product.discountPrice === 0"
+                                        class="product-item-col-2_1 product-list-item-price"
+                                    >
+                                        <div class="price-regular">
                       <span class="item-price-number">{{
-                        product.price
-                      }}</span>
-                      <span class="item-price-currency">{{
-                        selectedCurrency
-                      }}</span>
-                    </div>
-                  </div>
-                  <div
-                    v-else
-                    class="product-item-col-2_1 product-list-item-price sale"
-                  >
-                    <div class="price-regular">
+                              product.price
+                          }}</span>
+                                            <span class="item-price-currency">{{
+                                                    selectedCurrency
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        v-else
+                                        class="product-item-col-2_1 product-list-item-price sale"
+                                    >
+                                        <div class="price-regular">
                       <span class="item-price-number">{{
-                        product.price
-                      }}</span>
-                      <span class="item-price-currency">{{
-                        selectedCurrency
-                      }}</span>
-                    </div>
-                    <div class="price-promo">
+                              product.price
+                          }}</span>
+                                            <span class="item-price-currency">{{
+                                                    selectedCurrency
+                                                }}</span>
+                                        </div>
+                                        <div class="price-promo">
                       <span class="item-price-number">
                         {{
-                          product.discountPrice
-                        }}</span>
-                      <span class="item-price-currency">{{
-                        selectedCurrency
-                      }}</span>
-                    </div>
-                  </div>
-                  <div
-                    class="product-item-col-2_2 product-counter product-list-item-counter"
-                  >
-                    <div class="item-counter-container">
-                      <button
-                        class="item-less"
-                        @click="
+                              product.discountPrice
+                          }}</span>
+                                            <span class="item-price-currency">{{
+                                                    selectedCurrency
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="product-item-col-2_2 product-counter product-list-item-counter"
+                                    >
+                                        <div class="item-counter-container">
+                                            <button
+                                                class="item-less"
+                                                @click="
                           decrementQuantity(index)
                         "
-                      >
-                        &mdash;
-                      </button>
-                      <input
-                        type="text"
-                        class="item-counter"
-                        :value="product.quantity"
-                        readonly
-                      >
-                      <button
-                        class="item-more"
-                        @click="
+                                            >
+                                                &mdash;
+                                            </button>
+                                            <input
+                                                type="text"
+                                                class="item-counter"
+                                                :value="product.quantity"
+                                                readonly
+                                            >
+                                            <button
+                                                class="item-more"
+                                                @click="
                           incrementQuantity(index)
                         "
-                      >
-                        &#xff0b;
-                      </button>
-                    </div>
-                  </div>
-                  <div
-                    class="product-item-col-2_3 product-list-order-price"
-                  >
-                    <div>
+                                            >
+                                                &#xff0b;
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="product-item-col-2_3 product-list-order-price"
+                                    >
+                                        <div>
                       <span class="order-price-number">{{
-                        product.total
-                      }}</span>
-                      <span
-                        class="order-price-currency"
-                      >{{ selectedCurrency }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                v-show="product.add_box"
-                class="cart-product-item-row product-box-row"
-              >
-                <div
-                  class="product-item-col-1 product-list-item"
-                >
-                  <div class="product-item-desc">
-                    <div class="box-item-info">
-                      <img
-                        src="/images/present-box-image-1.jpeg"
-                      >
-                      <p>Poklon kutija</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="product-item-col-2">
-                  <div
-                    class="product-item-col-2_1 product-list-item-price"
-                  >
-                    <div
-                      class="price-regular price-regular-box"
-                    >
+                              product.total
+                          }}</span>
+                                            <span
+                                                class="order-price-currency"
+                                            >{{ selectedCurrency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                v-show="product.add_box"
+                                class="cart-product-item-row product-box-row"
+                            >
+                                <div
+                                    class="product-item-col-1 product-list-item"
+                                >
+                                    <div class="product-item-desc">
+                                        <div class="box-item-info">
+                                            <img
+                                                src="/images/present-box-image-1.jpeg"
+                                            >
+                                            <p>Poklon kutija</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-item-col-2">
+                                    <div
+                                        class="product-item-col-2_1 product-list-item-price"
+                                    >
+                                        <div
+                                            class="price-regular price-regular-box"
+                                        >
                       <span class="item-price-number">{{
-                        boxPrice
-                      }}</span>
-                      <span class="item-price-currency">{{
-                        selectedCurrency
-                      }}</span>
-                    </div>
-                  </div>
-                  <div
-                    class="product-item-col-2_2 product-counter product-list-item-counter"
-                  >
-                    <div
-                      class="item-counter-container box-counter-container"
-                    >
-                      <button
-                        class="item-less"
-                        @click="
+                              boxPrice
+                          }}</span>
+                                            <span class="item-price-currency">{{
+                                                    selectedCurrency
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="product-item-col-2_2 product-counter product-list-item-counter"
+                                    >
+                                        <div
+                                            class="item-counter-container box-counter-container"
+                                        >
+                                            <button
+                                                class="item-less"
+                                                @click="
                           decrementBoxQuantity(index)
                         "
-                      >
-                        &mdash;
-                      </button>
-                      <input
-                        type="text"
-                        class="item-counter"
-                        :value="product.box_count"
-                        readonly
-                      >
-                      <button
-                        class="item-more"
-                        @click="
+                                            >
+                                                &mdash;
+                                            </button>
+                                            <input
+                                                type="text"
+                                                class="item-counter"
+                                                :value="product.box_count"
+                                                readonly
+                                            >
+                                            <button
+                                                class="item-more"
+                                                @click="
                           incrementBoxQuantity(index)
                         "
-                      >
-                        &#xff0b;
-                      </button>
-                    </div>
-                  </div>
-                  <div
-                    class="product-item-col-2_3 product-list-order-price"
-                  />
-                </div>
-              </div>
-              <div
-                v-show="personalMessages.showForm"
-                class="product-list-item-comment"
-              >
-                <p
-                  class="product-comment-label product-message-label"
-                >
-                  Dodaj poruku/čestitku
-                </p>
-                <div class="product-comment-number">
-                  <div
-                    v-for="(
+                                            >
+                                                &#xff0b;
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="product-item-col-2_3 product-list-order-price"
+                                    />
+                                </div>
+                            </div>
+                            <div
+                                v-show="personalMessages.showForm"
+                                class="product-list-item-comment"
+                            >
+                                <p
+                                    class="product-comment-label product-message-label"
+                                >
+                                    Dodaj poruku/čestitku
+                                </p>
+                                <div class="product-comment-number">
+                                    <div
+                                        v-for="(
                       item, index
                     ) in product.personalMessages"
-                    :key="index"
-                    class="comment-number-item"
-                    :class="{
+                                        :key="index"
+                                        class="comment-number-item"
+                                        :class="{
                       'number-item-active':
                         index ===
                         personalMessages.activeIndex,
                     }"
-                    @click="changeActiveMessage(index)"
-                  >
-                    {{ getItemNumber(index) }}
-                  </div>
-                </div>
-                <div
-                  v-for="(
+                                        @click="changeActiveMessage(index)"
+                                    >
+                                        {{ getItemNumber(index) }}
+                                    </div>
+                                </div>
+                                <div
+                                    v-for="(
                     message, index
                   ) in product.personalMessages"
-                  v-show="
+                                    v-show="
                     index === personalMessages.activeIndex
                   "
-                  :key="index"
-                  class="message-tab"
-                >
-                  <textarea-with-counter
-                    v-model="message.text"
-                    placeholder="Dodaj poruku"
-                    :limit="340"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-9 cart-order-total">
-            <div class="order-total-price">
+                                    :key="index"
+                                    class="message-tab"
+                                >
+                                    <textarea-with-counter
+                                        v-model="message.text"
+                                        placeholder="Dodaj poruku"
+                                        :limit="340"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 cart-order-total">
+                        <div class="order-total-price">
               <span
-                class="order-total-price-text"
+                  class="order-total-price-text"
               >Ukupna cena:</span>
-              <span class="order-total-price-number">{{
-                subtotal + " " + selectedCurrency
-              }}</span>
-            </div>
-            <div class="order-total-shipping">
+                            <span class="order-total-price-number">{{
+                                    subtotal + " " + selectedCurrency
+                                }}</span>
+                        </div>
+                        <div class="order-total-shipping">
               <span
-                class="order-total-shipping-text"
+                  class="order-total-shipping-text"
               >Troškovi poštarine:</span>
-              <span class="order-total-shipping-number">{{
-                shippingMethod.cost + " " + selectedCurrency
-              }}</span>
-            </div>
-            <div
-              v-if="discount > 0"
-              class="order-total-price"
-            >
-              <span class="order-total-price-text">Popust:</span>
-              <span class="order-total-price-number">{{
-                discount + " " + selectedCurrency
-              }}</span>
-            </div>
-            <div class="order-total-price">
+                            <span class="order-total-shipping-number">{{
+                                    shippingMethod.cost + " " + selectedCurrency
+                                }}</span>
+                        </div>
+                        <div
+                            v-if="discount > 0"
+                            class="order-total-price"
+                        >
+                            <span class="order-total-price-text">Popust:</span>
+                            <span class="order-total-price-number">{{ discount + " " + selectedCurrency }}</span>
+                        </div>
+                        <div class="order-total-price">
               <span
-                class="order-total-price-text"
+                  class="order-total-price-text"
               >Ukupna cena:</span>
-              <span class="order-total-price-number">{{
-                totalPrice() + " " + selectedCurrency
-              }}</span>
-            </div>
-            <div class="order-vat-notice">
-              <span>Virtual Media Team doo nije u sistemu
+                            <span class="order-total-price-number">{{ totalPrice() + " " + selectedCurrency}}</span>
+                        </div>
+                        <div class="order-vat-notice">
+              <span>Turistička agencija Republika 031 nije u sistemu
                 PDV-a</span>
-            </div>
-          </div>
-          <div
-            v-if="!isLoginCheckout"
-            class="cart-type-tabs col-lg-9"
-          >
-            <div class="cart-login-btns-row">
-              <div
-                id="informacije"
-                class="cart-login-btn-container"
-              >
-                <button
-                  class="login-btn"
-                  @click="guestCheckout"
-                >
-                  Bez registracije
-                </button>
-              </div>
-              <div class="cart-login-btn-container">
-                <button
-                  class="login-btn"
-                  @click="openAuthModal('login')"
-                >
-                  Uloguj se
-                </button>
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="isGuestCheckout || isLoginCheckout"
-            class="col-lg-9 cart-order-active-code"
-          >
-            <h3 class="order-active-title">
-              Imate li kod za popust ili poklon karticu
-            </h3>
-            <div class="order-active-form">
-              <div class="order-active-checkbox">
-                <label class="product-item-label">
-                  <input
-                    v-model="coupon.selected"
-                    type="checkbox"
-                    class="product-item-checkbox"
-                  >
-                  <span class="product-item-check" />
-                  Kod za popust
-                </label>
-                <label class="product-item-label">
-                  <input
-                    v-model="giftCard.selected"
-                    type="checkbox"
-                    class="product-item-checkbox"
-                  >
-                  <span class="product-item-check" />
-                  Kod za gift card
-                </label>
-              </div>
-              <div
-                v-show="coupon.selected"
-                class="order-active-input"
-              >
-                <input
-                  v-model="coupon.code"
-                  type="text"
-                  class="order-active-input-text"
-                  placeholder="Kod za popust"
-                >
-                <button
-                  class="order-active-input-btn"
-                  @click="updateDiscount"
-                >
-                  Iskoristi
-                </button>
-              </div>
-              <div
-                v-show="giftCard.selected"
-                class="order-active-input"
-              >
-                <input
-                  v-model="giftCard.code"
-                  type="text"
-                  class="order-active-input-text"
-                  placeholder="Kod za gift card"
-                >
-                <button
-                  class="order-active-input-btn"
-                  @click="updateDiscount"
-                >
-                  Iskoristi
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                        </div>
+                    </div>
+                    <div
+                        v-if="!isLoginCheckout"
+                        class="cart-type-tabs col-lg-9"
+                    >
+                        <div class="cart-login-btns-row">
+                            <div
+                                id="informacije"
+                                class="cart-login-btn-container"
+                            >
+                                <button
+                                    class="login-btn"
+                                    @click="guestCheckout"
+                                >
+                                    Bez registracije
+                                </button>
+                            </div>
+                            <div class="cart-login-btn-container">
+                                <button
+                                    class="login-btn"
+                                    @click="openAuthModal('login')"
+                                >
+                                    Uloguj se
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        v-if="isGuestCheckout || isLoginCheckout"
+                        class="col-lg-9 cart-order-active-code"
+                    >
+                        <h3 class="order-active-title">
+                            Imate li kod za popust ili poklon karticu
+                        </h3>
+                        <div class="order-active-form">
+                            <div class="order-active-checkbox">
+                                <label class="product-item-label">
+                                    <input
+                                        v-model="coupon.selected"
+                                        type="checkbox"
+                                        class="product-item-checkbox"
+                                    >
+                                    <span class="product-item-check"/>
+                                    Kod za popust
+                                </label>
+                                <label class="product-item-label">
+                                    <input
+                                        v-model="giftCard.selected"
+                                        type="checkbox"
+                                        class="product-item-checkbox"
+                                    >
+                                    <span class="product-item-check"/>
+                                    Kod za gift card
+                                </label>
+                            </div>
+                            <div
+                                v-show="coupon.selected"
+                                class="order-active-input"
+                            >
+                                <input
+                                    v-model="coupon.code"
+                                    type="text"
+                                    class="order-active-input-text"
+                                    placeholder="Kod za popust"
+                                >
+                                <button
+                                    class="order-active-input-btn"
+                                    @click="updateDiscount"
+                                >
+                                    Iskoristi
+                                </button>
+                            </div>
+                            <div
+                                v-show="giftCard.selected"
+                                class="order-active-input"
+                            >
+                                <input
+                                    v-model="giftCard.code"
+                                    type="text"
+                                    class="order-active-input-text"
+                                    placeholder="Kod za gift card"
+                                >
+                                <button
+                                    class="order-active-input-btn"
+                                    @click="updateDiscount"
+                                >
+                                    Iskoristi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-      <section
-        v-if="isGuestCheckout || isLoginCheckout"
-        class="cart-order-information container"
-      >
-        <div class="row">
-          <div class="cart-type-tabs col-lg-9">
-            <h3 class="cart-type-title">
-              Odaberite način dostave
-            </h3>
-            <div class="cart-type-tabs-row">
-              <button
-                v-for="(method, index) in shippingMethods"
-                v-if="showShippingMethod(method)"
-                id="defaultOpen"
-                :key="index"
-                class="type-tabs-item"
-                :class="{
+            <section
+                v-if="isGuestCheckout || isLoginCheckout"
+                class="cart-order-information container"
+            >
+                <div class="row">
+                    <div class="cart-type-tabs col-lg-9">
+                        <h3 class="cart-type-title">
+                            Odaberite način dostave
+                        </h3>
+                        <div class="cart-type-tabs-row">
+                            <button
+                                v-for="(method, index) in shippingMethods"
+                                v-if="showShippingMethod(method)"
+                                id="defaultOpen"
+                                :key="index"
+                                class="type-tabs-item"
+                                :class="{
                   'tabs-active':
                     shippingMethod.id === method.id,
                 }"
-                @click="selectShippingMethod(method)"
-              >
-                <img
-                  v-if="method.image !== null"
-                  :src="method.image.url"
-                  alt="PosebanPoklon"
-                  class="type-tabs-icon"
-                >
-                <div class="type-tabs-btn">
+                                @click="selectShippingMethod(method)"
+                            >
+                                <img
+                                    v-if="method.image !== null"
+                                    :src="method.image.url"
+                                    alt="PosebanPoklon"
+                                    class="type-tabs-icon"
+                                >
+                                <div class="type-tabs-btn">
                   <span class="type-tabs-btn-title">
                     {{ method.name }}
                   </span>
-                  <span class="type-tabs-btn-desc">
+                                    <span class="type-tabs-btn-desc">
                     {{
-                      method.cost + " " + selectedCurrency
-                    }}
+                                            method.cost + " " + selectedCurrency
+                                        }}
                   </span>
-                </div>
-              </button>
-            </div>
-            <div class="cart-type-tabs-content">
-              <div class="type-tabs-content tabs-email-container">
-                <div class="tabs-email-checkbox-row">
-                  <label class="tabs-email-checkbox">
-                    <input
-                      v-model="address.sendToPerson"
-                      type="radio"
-                      name="send-to-customer"
-                      :value="false"
-                      class="email-checkbox-input"
-                    >
-                    <span class="email-checkbox-check" />
-                    <span class="email-checkbox-text">
+                                </div>
+                            </button>
+                        </div>
+                        <div class="cart-type-tabs-content">
+                            <div class="type-tabs-content tabs-email-container">
+                                <div class="tabs-email-checkbox-row">
+                                    <label class="tabs-email-checkbox">
+                                        <input
+                                            v-model="address.sendToPerson"
+                                            type="radio"
+                                            name="send-to-customer"
+                                            :value="false"
+                                            class="email-checkbox-input"
+                                        >
+                                        <span class="email-checkbox-check"/>
+                                        <span class="email-checkbox-text">
                       Pošalji na moju adresu
                     </span>
-                  </label>
-                  <label class="tabs-email-checkbox">
-                    <input
-                      v-model="address.sendToPerson"
-                      type="radio"
-                      name="send-to-recepient"
-                      :value="true"
-                      class="email-checkbox-input"
-                    >
-                    <span class="email-checkbox-check" />
-                    <span class="email-checkbox-text">
+                                    </label>
+                                    <label class="tabs-email-checkbox">
+                                        <input
+                                            v-model="address.sendToPerson"
+                                            type="radio"
+                                            name="send-to-recepient"
+                                            :value="true"
+                                            class="email-checkbox-input"
+                                        >
+                                        <span class="email-checkbox-check"/>
+                                        <span class="email-checkbox-text">
                       Pošalji na adresu primaoca
                     </span>
-                  </label>
-                </div>
-                <!--Virtual address -->
-                <div
-                  v-if="shippingMethod.virtual"
-                  class="tabs-email-form-container"
-                >
-                  <!--Send to the current customer-->
-                  <div
-                    v-if="!address.sendToPerson"
-                    class="tabs-email-form-wrapper"
-                  >
-                    <div class="tabs-email-form-row">
-                      <h3 class="tabs-post-title">
-                        Lični podaci:
-                      </h3>
-                      <div class="tabs-email-col-title">
-                        <div class="tabs-email-title">
-                          Ime *
-                        </div>
-                        <div class="tabs-email-title">
-                          Prezime *
-                        </div>
-                        <div class="tabs-email-title">
-                          Broj telefona *
-                        </div>
-                        <div class="tabs-email-title">
-                          Email *
-                        </div>
-                      </div>
-                      <div class="tabs-email-col">
-                        <ValidationObserver
-                          ref="addressObserver"
-                          v-slot="{ validate }"
-                          tag="form"
-                        >
-                          <validation-provider
-                            v-slot="{
+                                    </label>
+                                </div>
+                                <!--Virtual address -->
+                                <div
+                                    v-if="shippingMethod.virtual"
+                                    class="tabs-email-form-container"
+                                >
+                                    <!--Send to the current customer-->
+                                    <div
+                                        v-if="!address.sendToPerson"
+                                        class="tabs-email-form-wrapper"
+                                    >
+                                        <div class="tabs-email-form-row">
+                                            <h3 class="tabs-post-title">
+                                                Lični podaci:
+                                            </h3>
+                                            <div class="tabs-email-col-title">
+                                                <div class="tabs-email-title">
+                                                    Ime *
+                                                </div>
+                                                <div class="tabs-email-title">
+                                                    Prezime *
+                                                </div>
+                                                <div class="tabs-email-title">
+                                                    Broj telefona *
+                                                </div>
+                                                <div class="tabs-email-title">
+                                                    Email *
+                                                </div>
+                                            </div>
+                                            <div class="tabs-email-col">
+                                                <ValidationObserver
+                                                    ref="addressObserver"
+                                                    v-slot="{ validate }"
+                                                    tag="form"
+                                                >
+                                                    <validation-provider
+                                                        v-slot="{
                               classes,
                               errors,
                             }"
-                            name="name"
-                            rules="required"
-                          >
-                            <input
-                              v-model="
+                                                        name="name"
+                                                        rules="required"
+                                                    >
+                                                        <input
+                                                            v-model="
                                 address.customer_name
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              :class="classes"
-                              placeholder="Ime"
-                            >
-                          </validation-provider>
-                          <validation-provider
-                            v-slot="{
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            :class="classes"
+                                                            placeholder="Ime"
+                                                        >
+                                                    </validation-provider>
+                                                    <validation-provider
+                                                        v-slot="{
                               classes,
                               errors,
                             }"
-                            name="surname"
-                            rules="required"
-                          >
-                            <input
-                              v-model="
+                                                        name="surname"
+                                                        rules="required"
+                                                    >
+                                                        <input
+                                                            v-model="
                                 address.customer_surname
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              :class="classes"
-                              placeholder="Prezime"
-                            >
-                          </validation-provider>
-                          <validation-provider
-                            v-slot="{
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            :class="classes"
+                                                            placeholder="Prezime"
+                                                        >
+                                                    </validation-provider>
+                                                    <validation-provider
+                                                        v-slot="{
                               classes,
                               errors,
                             }"
-                            name="number"
-                            :rules="
+                                                        name="number"
+                                                        :rules="
                               phoneValidationRule
                             "
-                          >
-                            <input
-                              v-model="
+                                                    >
+                                                        <input
+                                                            v-model="
                                 address.customer_phone
                               "
-                              type="text"
-                              name="number"
-                              class="tabs-email-input"
-                              :class="classes"
-                              placeholder="Broj telefona"
-                            >
-                          </validation-provider>
-                          <validation-provider
-                            v-slot="{
+                                                            type="text"
+                                                            name="number"
+                                                            class="tabs-email-input"
+                                                            :class="classes"
+                                                            placeholder="Broj telefona"
+                                                        >
+                                                    </validation-provider>
+                                                    <validation-provider
+                                                        v-slot="{
                               classes,
                               errors,
                             }"
-                            name="email"
-                            rules="required|email"
-                          >
-                            <input
-                              v-model="
+                                                        name="email"
+                                                        rules="required|email"
+                                                    >
+                                                        <input
+                                                            v-model="
                                 address.customer_email
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              :class="classes"
-                              placeholder="Email"
-                            >
-                          </validation-provider>
-                        </ValidationObserver>
-                      </div>
-                    </div>
-                  </div>
-                  <!--Send to another person-->
-                  <div
-                    v-if="address.sendToPerson"
-                    class="tabs-email-form-wrapper"
-                  >
-                    <ValidationObserver
-                      ref="addressObserver"
-                      v-slot="{ validate }"
-                    >
-                      <div class="tabs-email-form-row">
-                        <h3 class="tabs-post-title">
-                          Lični podaci:
-                        </h3>
-                        <div
-                          class="tabs-email-col-title"
-                        >
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Ime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Prezime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Broj telefona *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Email *
-                          </div>
-                        </div>
-                        <div class="tabs-email-col">
-                          <form>
-                            <validation-provider
-                              v-slot="{
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            :class="classes"
+                                                            placeholder="Email"
+                                                        >
+                                                    </validation-provider>
+                                                </ValidationObserver>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Send to another person-->
+                                    <div
+                                        v-if="address.sendToPerson"
+                                        class="tabs-email-form-wrapper"
+                                    >
+                                        <ValidationObserver
+                                            ref="addressObserver"
+                                            v-slot="{ validate }"
+                                        >
+                                            <div class="tabs-email-form-row">
+                                                <h3 class="tabs-post-title">
+                                                    Lični podaci:
+                                                </h3>
+                                                <div
+                                                    class="tabs-email-col-title"
+                                                >
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Ime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Prezime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Broj telefona *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Email *
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-email-col">
+                                                    <form>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="name"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="name"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_name
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Ime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Ime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="surname"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="surname"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_surname
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Prezime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Prezime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="number"
-                              :rules="
+                                                            name="number"
+                                                            :rules="
                                 phoneValidationRule
                               "
-                            >
-                              <input
-                                v-model="
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_phone
                                 "
-                                type="text"
-                                name="number"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Broj telefona"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                name="number"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Broj telefona"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="email"
-                              rules="required|email"
-                            >
-                              <input
-                                v-model="
+                                                            name="email"
+                                                            rules="required|email"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_email
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Email"
-                              >
-                            </validation-provider>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="tabs-email-form-row">
-                        <h3 class="tabs-post-title">
-                          Podaci primaoca:
-                        </h3>
-                        <div
-                          class="tabs-email-col-title"
-                        >
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Email *
-                          </div>
-                        </div>
-                        <div class="tabs-email-col">
-                          <form action="">
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Email"
+                                                            >
+                                                        </validation-provider>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-email-form-row">
+                                                <h3 class="tabs-post-title">
+                                                    Podaci primaoca:
+                                                </h3>
+                                                <div
+                                                    class="tabs-email-col-title"
+                                                >
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Email *
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-email-col">
+                                                    <form action="">
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="email"
-                              rules="required|email"
-                            >
-                              <input
-                                v-model="
+                                                            name="email"
+                                                            rules="required|email"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address
                                     .recepient
                                     .customer_email
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Email"
-                              >
-                            </validation-provider>
-                          </form>
-                        </div>
-                      </div>
-                    </ValidationObserver>
-                  </div>
-                </div>
-                <!--Physical-->
-                <div
-                  v-if="shippingMethod.virtual === false"
-                  class="tabs-email-form-container"
-                >
-                  <!--Send to the current customer-->
-                  <div
-                    v-if="!address.sendToPerson"
-                    class="tabs-email-form-wrapper"
-                  >
-                    <div
-                      v-if="
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Email"
+                                                            >
+                                                        </validation-provider>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </ValidationObserver>
+                                    </div>
+                                </div>
+                                <!--Physical-->
+                                <div
+                                    v-if="shippingMethod.virtual === false"
+                                    class="tabs-email-form-container"
+                                >
+                                    <!--Send to the current customer-->
+                                    <div
+                                        v-if="!address.sendToPerson"
+                                        class="tabs-email-form-wrapper"
+                                    >
+                                        <div
+                                            v-if="
                         isLoginCheckout &&
                           applicationParams.user.addresses
                             .length
                       "
-                      class="tabs-email-form-row"
-                    >
-                      <h3 class="tabs-post-title">
-                        Izaberite adresu:
-                      </h3>
-                      <div class="tabs-email-form-row">
-                        <div
-                          class="tabs-email-col-title"
-                        >
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Adrese
-                          </div>
-                        </div>
-                        <div class="tabs-email-col">
-                          <form>
-                            <select
-                              v-model="
+                                            class="tabs-email-form-row"
+                                        >
+                                            <h3 class="tabs-post-title">
+                                                Izaberite adresu:
+                                            </h3>
+                                            <div class="tabs-email-form-row">
+                                                <div
+                                                    class="tabs-email-col-title"
+                                                >
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Adrese
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-email-col">
+                                                    <form>
+                                                        <select
+                                                            v-model="
                                 selectedAddress
                               "
-                              class="tabs-email-input"
-                            >
-                              <option
-                                selected
-                                value
-                              >
-                                Izaberite adresu
-                              </option>
-                              <option
-                                v-for="(
+                                                            class="tabs-email-input"
+                                                        >
+                                                            <option
+                                                                selected
+                                                                value
+                                                            >
+                                                                Izaberite adresu
+                                                            </option>
+                                                            <option
+                                                                v-for="(
                                   address,
                                   index
                                 ) in applicationParams
                                   .user
                                   .addresses"
-                                :key="index"
-                                :value="address"
-                              >
-                                {{
-                                  addressLabel(
-                                    address
-                                  )
-                                }}
-                              </option>
-                            </select>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="tabs-email-form-row">
-                      <h3 class="tabs-post-title">
-                        Lični podaci:
-                      </h3>
-                      <div class="tabs-email-form-row">
-                        <div
-                          class="tabs-email-col-title"
-                        >
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Ime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Prezime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Broj telefona *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Email *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Ulica I broj *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Opis adrese *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Država *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Grad *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Poštanski broj *
-                          </div>
-                        </div>
-                        <div class="tabs-email-col">
-                          <ValidationObserver
-                            ref="addressObserver"
-                            v-slot="{ validate }"
-                            tag="form"
-                          >
-                            <validation-provider
-                              v-slot="{
+                                                                :key="index"
+                                                                :value="address"
+                                                            >
+                                                                {{
+                                                                    addressLabel(
+                                                                        address
+                                                                    )
+                                                                }}
+                                                            </option>
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tabs-email-form-row">
+                                            <h3 class="tabs-post-title">
+                                                Lični podaci:
+                                            </h3>
+                                            <div class="tabs-email-form-row">
+                                                <div
+                                                    class="tabs-email-col-title"
+                                                >
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Ime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Prezime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Broj telefona *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Email *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Ulica I broj *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Opis adrese *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Država *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Grad *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Poštanski broj *
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-email-col">
+                                                    <ValidationObserver
+                                                        ref="addressObserver"
+                                                        v-slot="{ validate }"
+                                                        tag="form"
+                                                    >
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="name"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="name"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_name
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Ime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Ime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="surname"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="surname"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_surname
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Prezime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Prezime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="number"
-                              :rules="
+                                                            name="number"
+                                                            :rules="
                                 phoneValidationRule
                               "
-                            >
-                              <input
-                                v-model="
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_phone
                                 "
-                                type="text"
-                                name="number"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Broj telefona"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                name="number"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Broj telefona"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="email"
-                              rules="required|email"
-                            >
-                              <input
-                                v-model="
+                                                            name="email"
+                                                            rules="required|email"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_email
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Email"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Email"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="address one"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="address one"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.address_one
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Ulica I broj"
-                              >
-                            </validation-provider>
-                            <input
-                              v-model="
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Ulica I broj"
+                                                            >
+                                                        </validation-provider>
+                                                        <input
+                                                            v-model="
                                 address.address_two
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              placeholder="Opis adrese"
-                            >
-                            <input
-                              v-model="
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            placeholder="Opis adrese"
+                                                        >
+                                                        <input
+                                                            v-model="
                                 address.country
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              :class="classes"
-                            >
-                            <validation-provider
-                              v-slot="{
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            :class="classes"
+                                                        >
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="city"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="city"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.city
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Grad"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Grad"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="zip code"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="zip code"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.zip_code
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Poštanski broj"
-                              >
-                            </validation-provider>
-                          </ValidationObserver>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!--Send to another person-->
-                  <div
-                    v-if="address.sendToPerson"
-                    class="tabs-email-form-wrapper"
-                  >
-                    <ValidationObserver
-                      ref="addressObserver"
-                      v-slot="{ validate }"
-                    >
-                      <div class="tabs-email-form-row">
-                        <h3 class="tabs-post-title">
-                          Lični podaci:
-                        </h3>
-                        <div
-                          class="tabs-email-col-title"
-                        >
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Ime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Prezime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Broj telefona *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Email *
-                          </div>
-                        </div>
-                        <div class="tabs-email-col">
-                          <form action="">
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Poštanski broj"
+                                                            >
+                                                        </validation-provider>
+                                                    </ValidationObserver>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Send to another person-->
+                                    <div
+                                        v-if="address.sendToPerson"
+                                        class="tabs-email-form-wrapper"
+                                    >
+                                        <ValidationObserver
+                                            ref="addressObserver"
+                                            v-slot="{ validate }"
+                                        >
+                                            <div class="tabs-email-form-row">
+                                                <h3 class="tabs-post-title">
+                                                    Lični podaci:
+                                                </h3>
+                                                <div
+                                                    class="tabs-email-col-title"
+                                                >
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Ime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Prezime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Broj telefona *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Email *
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-email-col">
+                                                    <form action="">
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="name"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="name"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_name
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Ime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Ime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="surname"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="surname"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_surname
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Prezime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Prezime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="number"
-                              :rules="
+                                                            name="number"
+                                                            :rules="
                                 phoneValidationRule
                               "
-                            >
-                              <input
-                                v-model="
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_phone
                                 "
-                                type="text"
-                                name="number"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Broj telefona"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                name="number"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Broj telefona"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="email"
-                              rules="required|email"
-                            >
-                              <input
-                                v-model="
+                                                            name="email"
+                                                            rules="required|email"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.customer_email
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Email"
-                              >
-                            </validation-provider>
-                          </form>
-                        </div>
-                      </div>
-                      <div class="tabs-email-form-row">
-                        <h3 class="tabs-post-title">
-                          Podaci primaoca:
-                        </h3>
-                        <div
-                          class="tabs-email-col-title"
-                        >
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Ime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Prezime *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Broj telefona *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Email *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Ulica I broj *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Opis adrese *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Država *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Grad *
-                          </div>
-                          <div
-                            class="tabs-email-title"
-                          >
-                            Poštanski broj *
-                          </div>
-                        </div>
-                        <div class="tabs-email-col">
-                          <form>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Email"
+                                                            >
+                                                        </validation-provider>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="tabs-email-form-row">
+                                                <h3 class="tabs-post-title">
+                                                    Podaci primaoca:
+                                                </h3>
+                                                <div
+                                                    class="tabs-email-col-title"
+                                                >
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Ime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Prezime *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Broj telefona *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Email *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Ulica I broj *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Opis adrese *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Država *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Grad *
+                                                    </div>
+                                                    <div
+                                                        class="tabs-email-title"
+                                                    >
+                                                        Poštanski broj *
+                                                    </div>
+                                                </div>
+                                                <div class="tabs-email-col">
+                                                    <form>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="name"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="name"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address
                                     .recepient
                                     .customer_name
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Ime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Ime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="surname"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="surname"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address
                                     .recepient
                                     .customer_surname
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Prezime"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Prezime"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="number"
-                              :rules="
+                                                            name="number"
+                                                            :rules="
                                 phoneValidationRule
                               "
-                            >
-                              <input
-                                v-model="
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address
                                     .recepient
                                     .customer_phone
                                 "
-                                type="text"
-                                name="number"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Broj telefona"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                name="number"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Broj telefona"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="email"
-                              rules="required|email"
-                            >
-                              <input
-                                v-model="
+                                                            name="email"
+                                                            rules="required|email"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address
                                     .recepient
                                     .customer_email
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Email"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Email"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="address one"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="address one"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.address_one
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Ulica I broj"
-                              >
-                            </validation-provider>
-                            <input
-                              v-model="
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Ulica I broj"
+                                                            >
+                                                        </validation-provider>
+                                                        <input
+                                                            v-model="
                                 address.address_two
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              placeholder="Opis adrese"
-                            >
-                            <input
-                              v-model="
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            placeholder="Opis adrese"
+                                                        >
+                                                        <input
+                                                            v-model="
                                 address.country
                               "
-                              type="text"
-                              class="tabs-email-input"
-                              :class="classes"
-                            >
-                            <validation-provider
-                              v-slot="{
+                                                            type="text"
+                                                            class="tabs-email-input"
+                                                            :class="classes"
+                                                        >
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="city"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="city"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.city
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Grad"
-                              >
-                            </validation-provider>
-                            <validation-provider
-                              v-slot="{
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Grad"
+                                                            >
+                                                        </validation-provider>
+                                                        <validation-provider
+                                                            v-slot="{
                                 classes,
                                 errors,
                               }"
-                              name="zip code"
-                              rules="required"
-                            >
-                              <input
-                                v-model="
+                                                            name="zip code"
+                                                            rules="required"
+                                                        >
+                                                            <input
+                                                                v-model="
                                   address.zip_code
                                 "
-                                type="text"
-                                class="tabs-email-input"
-                                :class="classes"
-                                placeholder="Poštanski broj"
-                              >
-                            </validation-provider>
-                          </form>
-                        </div>
-                      </div>
-                    </ValidationObserver>
-                  </div>
-                </div>
-                <div class="tabs-email-form-wrapper">
-                  <div class="tabs-email-form-row">
-                    <div class="tabs-email-col-title">
-                      <div class="tabs-email-title">
-                        Napomene
-                      </div>
-                    </div>
-                    <div class="tabs-email-col">
+                                                                type="text"
+                                                                class="tabs-email-input"
+                                                                :class="classes"
+                                                                placeholder="Poštanski broj"
+                                                            >
+                                                        </validation-provider>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </ValidationObserver>
+                                    </div>
+                                </div>
+                                <div class="tabs-email-form-wrapper">
+                                    <div class="tabs-email-form-row">
+                                        <div class="tabs-email-col-title">
+                                            <div class="tabs-email-title">
+                                                Napomene
+                                            </div>
+                                        </div>
+                                        <div class="tabs-email-col">
                       <textarea
-                        v-model="orderComment"
-                        class="tabs-email-input tabs-email-textarea"
-                        placeholder="Napomene"
+                          v-model="orderComment"
+                          class="tabs-email-input tabs-email-textarea"
+                          placeholder="Napomene"
                       />
-                    </div>
-                  </div>
-                </div>
-                <div class="tabs-email-checkbox-agree">
-                  <ValidationObserver
-                    ref="agreementsObserver"
-                    v-slot="{ validate }"
-                  >
-                    <form action="">
-                      <label class="tabs-email-label">
-                        <validation-provider
-                          v-slot="{ classes, errors }"
-                          name="privacyPolicy"
-                          rules="required|truthy"
-                        >
-                          <input
-                            v-model="
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tabs-email-checkbox-agree">
+                                    <ValidationObserver
+                                        ref="agreementsObserver"
+                                        v-slot="{ validate }"
+                                    >
+                                        <form action="">
+                                            <label class="tabs-email-label">
+                                                <validation-provider
+                                                    v-slot="{ classes, errors }"
+                                                    name="privacyPolicy"
+                                                    rules="required|truthy"
+                                                >
+                                                    <input
+                                                        v-model="
                               agreements.privacyPolicy
                             "
-                            type="checkbox"
-                            class="tabs-email-checkbox"
-                          >
-                          <span
-                            class="tabs-email-check"
-                            :class="classes"
-                          />
-                          Slažem se sa
-                          <a
-                            href="https://posebanpoklon.rs/politika-privatnosti"
-                            target="_blank"
-                          >pravilima
-                            privatnosti</a>.
-                        </validation-provider>
-                      </label>
-                      <label class="tabs-email-label">
-                        <validation-provider
-                          v-slot="{ classes, errors }"
-                          name="termsOfUse"
-                          rules="required|truthy"
-                        >
-                          <input
-                            v-model="
+                                                        type="checkbox"
+                                                        class="tabs-email-checkbox"
+                                                    >
+                                                    <span
+                                                        class="tabs-email-check"
+                                                        :class="classes"
+                                                    />
+                                                    Slažem se sa
+                                                    <a
+                                                        href="https://posebanpoklon.rs/politika-privatnosti"
+                                                        target="_blank"
+                                                    >pravilima
+                                                        privatnosti</a>.
+                                                </validation-provider>
+                                            </label>
+                                            <label class="tabs-email-label">
+                                                <validation-provider
+                                                    v-slot="{ classes, errors }"
+                                                    name="termsOfUse"
+                                                    rules="required|truthy"
+                                                >
+                                                    <input
+                                                        v-model="
                               agreements.termsOfUse
                             "
-                            type="checkbox"
-                            class="tabs-email-checkbox"
-                          >
-                          <span
-                            class="tabs-email-check"
-                            :class="classes"
-                          />
-                          Slažem se sa
-                          <a
-                            href="https://posebanpoklon.rs/uslovi-prodaje"
-                            target="_blank"
-                          >uslovima prodaje</a>.
-                        </validation-provider>
-                      </label>
-                    </form>
-                  </ValidationObserver>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cart-type-tabs col-lg-9">
-            <h3 class="cart-type-title">
-              Izaberi način plaćanja
-            </h3>
-            <div class="cart-payment-tabs-row">
-              <button
-                v-for="(method, index) in paymentMethods"
-                v-if="showPaymentMethod(method)"
-                id="defaultOpenPayment"
-                :key="index"
-                class="payment-tabs-item"
-                :class="{
+                                                        type="checkbox"
+                                                        class="tabs-email-checkbox"
+                                                    >
+                                                    <span
+                                                        class="tabs-email-check"
+                                                        :class="classes"
+                                                    />
+                                                    Slažem se sa
+                                                    <a
+                                                        href="https://posebanpoklon.rs/uslovi-prodaje"
+                                                        target="_blank"
+                                                    >uslovima prodaje</a>.
+                                                </validation-provider>
+                                            </label>
+                                        </form>
+                                    </ValidationObserver>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cart-type-tabs col-lg-9">
+                        <h3 class="cart-type-title">
+                            Izaberi način plaćanja
+                        </h3>
+                        <div class="cart-payment-tabs-row">
+                            <button
+                                v-for="(method, index) in paymentMethods"
+                                v-if="showPaymentMethod(method)"
+                                id="defaultOpenPayment"
+                                :key="index"
+                                class="payment-tabs-item"
+                                :class="{
                   'tabs-active':
                     paymentMethod.id === method.id,
                 }"
-                @click="selectPaymentMethod(method)"
-              >
-                <img
-                  v-if="method.image !== null"
-                  :src="method.image.url"
-                  alt="PosebanPoklon"
-                  class="type-tabs-icon"
-                >
-                <div class="type-tabs-btn">
+                                @click="selectPaymentMethod(method)"
+                            >
+                                <img
+                                    v-if="method.image !== null"
+                                    :src="method.image.url"
+                                    alt="PosebanPoklon"
+                                    class="type-tabs-icon"
+                                >
+                                <div class="type-tabs-btn">
                   <span class="type-tabs-btn-title">
                     {{ method.name }}
                   </span>
-                </div>
-              </button>
-            </div>
-            <div class="cart-payment-tabs-content">
-              <!--<div id="payment-a" class="payment-tabs-content tabs-cart-container">
-                                              <h3 class="cart-type-title">
-                                                  Pojedinosti o kartici
-                                              </h3>
-                                              <div class="tabs-payment-form-row">
-                                                  <div class="tabs-email-col-title">
-                                                      <img src="/images/icons/visa_cart_image.svg" alt="PosebanPoklon" class="tabs-payment-image">
-                                                  </div>
-                                                  <div class="tabs-payment-col">
-                                                      <form action="">
-                                                          <input type="text" name="" id="" class="tabs-payment-input payment-input-full"
-                                                                 placeholder="Cart Holder">
-                                                          <input type="text" name="" id="" class="tabs-payment-input payment-input-full"
-                                                                 placeholder="Cart Number">
-                                                          <input type="text" name="" id="" class="tabs-payment-input payment-input-half"
-                                                                 placeholder="Exp Date">
-                                                          <input type="text" name="" id="" class="tabs-payment-input payment-input-half"
-                                                                 placeholder="CVV">
-                                                      </form>
-                                                  </div>
-                                              </div>
-                                              <div class="tabs-payment-btn-row">
-                                                  <button class="tabs-payment-btn">Placanje</button>
-                                              </div>
-                                          </div>-->
-              <div
-                v-for="(method, index) in paymentMethods"
-                v-show="paymentMethod.id === method.id"
-                :key="index"
-                class="payment-tabs-content tabs-bank-container tabs-cart-content"
-              >
-                <!--<h3 class="tabs-bank-title">
-                                                    {{ method.name }}
-                                                </h3>
-                                                <p class="tabs-bank-desc">{{ method.description }}</p>-->
-                <div
-                  v-if="!isLocalhost()"
-                  class="tabs-payment-btn-row recaptcha-row"
-                >
-                  <vue-recaptcha
-                    v-if="!isLoggedIn"
-                    ref="reCaptcha"
-                    sitekey="6LccCIQcAAAAABVlESQ5bPVyS3k_MUwbGHi-vMfI"
-                    language="sr"
-                    :load-recaptcha-script="true"
-                    @verify="setCaptchaVerified"
-                    @expired="setCaptchaExpired"
-                  />
-                </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="cart-payment-tabs-content">
+                            <!--<div id="payment-a" class="payment-tabs-content tabs-cart-container">
+                                                            <h3 class="cart-type-title">
+                                                                Pojedinosti o kartici
+                                                            </h3>
+                                                            <div class="tabs-payment-form-row">
+                                                                <div class="tabs-email-col-title">
+                                                                    <img src="/images/icons/visa_cart_image.svg" alt="PosebanPoklon" class="tabs-payment-image">
+                                                                </div>
+                                                                <div class="tabs-payment-col">
+                                                                    <form action="">
+                                                                        <input type="text" name="" id="" class="tabs-payment-input payment-input-full"
+                                                                               placeholder="Cart Holder">
+                                                                        <input type="text" name="" id="" class="tabs-payment-input payment-input-full"
+                                                                               placeholder="Cart Number">
+                                                                        <input type="text" name="" id="" class="tabs-payment-input payment-input-half"
+                                                                               placeholder="Exp Date">
+                                                                        <input type="text" name="" id="" class="tabs-payment-input payment-input-half"
+                                                                               placeholder="CVV">
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tabs-payment-btn-row">
+                                                                <button class="tabs-payment-btn">Placanje</button>
+                                                            </div>
+                                                        </div>-->
+                            <div
+                                v-for="(method, index) in paymentMethods"
+                                v-show="paymentMethod.id === method.id"
+                                :key="index"
+                                class="payment-tabs-content tabs-bank-container tabs-cart-content"
+                            >
+                                <!--<h3 class="tabs-bank-title">
+                                                                    {{ method.name }}
+                                                                </h3>
+                                                                <p class="tabs-bank-desc">{{ method.description }}</p>-->
+                                <div
+                                    v-if="!isLocalhost()"
+                                    class="tabs-payment-btn-row recaptcha-row"
+                                >
+                                    <vue-recaptcha
+                                        v-if="!isLoggedIn"
+                                        ref="reCaptcha"
+                                        sitekey="6LccCIQcAAAAABVlESQ5bPVyS3k_MUwbGHi-vMfI"
+                                        language="sr"
+                                        :load-recaptcha-script="true"
+                                        @verify="setCaptchaVerified"
+                                        @expired="setCaptchaExpired"
+                                    />
+                                </div>
 
-                <div class="tabs-payment-btn-row">
-                  <form
-                    v-if="paymentParams && method.id === 3"
-                    id="payment-form"
-                    method="post"
-                    action="https://bib.eway2pay.com/fim/est3Dgate"
-                  >
-                    <input
-                      type="hidden"
-                      name="clientid"
-                      :value="paymentParams.clientid"
-                    >
-                    <input
-                      type="hidden"
-                      name="description"
-                      :value="paymentParams.description"
-                    >
-                    <input
-                      type="hidden"
-                      name="amount"
-                      :value="paymentParams.amount"
-                    >
-                    <input
-                      type="hidden"
-                      name="oid"
-                      :value="paymentParams.oid"
-                    >
-                    <input
-                      type="hidden"
-                      name="okUrl"
-                      :value="paymentParams.okUrl"
-                    >
-                    <input
-                      type="hidden"
-                      name="failUrl"
-                      :value="paymentParams.failUrl"
-                    >
-                    <input
-                      type="hidden"
-                      name="shopurl"
-                      :value="paymentParams.shopurl"
-                    >
-                    <input
-                      type="hidden"
-                      name="trantype"
-                      :value="paymentParams.trantype"
-                    >
-                    <input
-                      type="hidden"
-                      name="currency"
-                      :value="paymentParams.currency"
-                    >
-                    <input
-                      type="hidden"
-                      name="rnd"
-                      :value="paymentParams.rnd"
-                    >
-                    <input
-                      type="hidden"
-                      name="hash"
-                      :value="paymentParams.hash"
-                    >
-                    <input
-                      type="hidden"
-                      name="storetype"
-                      :value="paymentParams.storetype"
-                    >
-                    <input
-                      type="hidden"
-                      name="hashAlgorithm"
-                      :value="paymentParams.hashAlgorithm"
-                    >
-                    <input
-                      type="hidden"
-                      name="lang"
-                      :value="paymentParams.lang"
-                    >
-                    <input
-                      type="hidden"
-                      name="encoding"
-                      :value="paymentParams.encoding"
-                    >
-                  </form>
-                  <!-- <button
-                                                          class="tabs-payment-btn"
-                                                          @click="validateForm"
-                                                          v-show="!paymentParams"
-                                                      >
-                                                          Poruči1
-                                                      </button> -->
+                                <div class="tabs-payment-btn-row">
+                                    <form
+                                        v-if="paymentParams && method.id === 3"
+                                        id="payment-form"
+                                        method="post"
+                                        action="https://bib.eway2pay.com/fim/est3Dgate"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="clientid"
+                                            :value="paymentParams.clientid"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="description"
+                                            :value="paymentParams.description"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="amount"
+                                            :value="paymentParams.amount"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="oid"
+                                            :value="paymentParams.oid"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="okUrl"
+                                            :value="paymentParams.okUrl"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="failUrl"
+                                            :value="paymentParams.failUrl"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="shopurl"
+                                            :value="paymentParams.shopurl"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="trantype"
+                                            :value="paymentParams.trantype"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="currency"
+                                            :value="paymentParams.currency"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="rnd"
+                                            :value="paymentParams.rnd"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="hash"
+                                            :value="paymentParams.hash"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="storetype"
+                                            :value="paymentParams.storetype"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="hashAlgorithm"
+                                            :value="paymentParams.hashAlgorithm"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="lang"
+                                            :value="paymentParams.lang"
+                                        >
+                                        <input
+                                            type="hidden"
+                                            name="encoding"
+                                            :value="paymentParams.encoding"
+                                        >
+                                    </form>
+                                    <!-- <button
+                                                                            class="tabs-payment-btn"
+                                                                            @click="validateForm"
+                                                                            v-show="!paymentParams"
+                                                                        >
+                                                                            Poruči1
+                                                                        </button> -->
+                                </div>
+                                <div class="tabs-payment-btn-row">
+                                    <button
+                                        class="tabs-payment-btn"
+                                        @click="validateForm"
+                                    >
+                                        Poruči
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bank-logo-row checkout">
+                        <a
+                            href="https://www.bancaintesa.rs/"
+                            target="_blank"
+                            class="bank-img"
+                        >
+                            <img src="/images/checkout/logo_intesa.png">
+                        </a>
+                        <img
+                            class="bank-img"
+                            src="/images/checkout/visa.png"
+                        >
+                        <img
+                            class="bank-img"
+                            src="/images/checkout/mastercard.png"
+                        >
+                        <img
+                            class="bank-img"
+                            src="/images/checkout/maestro.png"
+                        >
+                    </div>
                 </div>
-                <div class="tabs-payment-btn-row">
-                  <button
-                    class="tabs-payment-btn"
-                    @click="validateForm"
-                  >
-                    Poruči
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bank-logo-row checkout">
-            <a
-              href="https://www.bancaintesa.rs/"
-              target="_blank"
-              class="bank-img"
-            >
-              <img src="/images/checkout/logo_intesa.png">
-            </a>
-            <img
-              class="bank-img"
-              src="/images/checkout/visa.png"
-            >
-            <img
-              class="bank-img"
-              src="/images/checkout/mastercard.png"
-            >
-            <img
-              class="bank-img"
-              src="/images/checkout/maestro.png"
-            >
-          </div>
-        </div>
-      </section>
+            </section>
 
-      <!--Recommended products block-->
-      <recommended-products title="PREPORUČUJEMO" />
-    </section>
-  </div>
+            <!--Recommended products block-->
+            <recommended-products title="PREPORUČUJEMO"/>
+        </section>
+    </div>
 </template>
 
 <script>
@@ -2165,17 +2161,16 @@ export default {
                 }
             }
 
-            if(this.shippingMethod.virtual){
+            if (this.shippingMethod.virtual) {
 
                 order.customer_name = this.address.customer_name;
                 order.customer_surname = this.address.customer_surname;
                 order.customer_email = this.address.customer_email;
                 order.customer_phone = this.address.customer_phone;
 
-            }
-            else{
+            } else {
 
-                if(this.address.sendToPerson){
+                if (this.address.sendToPerson) {
 
                     order.customer_name = this.address.recepient.customer_name;
                     order.customer_surname = this.address.recepient.customer_surname;
@@ -2187,8 +2182,7 @@ export default {
                     order.city = this.address.recepient.city;
                     order.zip_code = this.address.recepient.zip_code;
 
-                }
-                else{
+                } else {
 
                     order.customer_name = this.address.customer_name;
                     order.customer_surname = this.address.customer_surname;
