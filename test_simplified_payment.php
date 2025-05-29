@@ -1,13 +1,14 @@
 <?php
 
 require_once 'vendor/autoload.php';
+$username = getenv('NESTPAY_USERNAME');
+$pass = getenv('NESTPAY_PASSWORD');
 
 // Bootstrap Laravel
 $app = require_once 'bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 use App\Order;
-use Carbon\Carbon;
 
 echo "=== SIMPLIFIED PAYMENT INTEGRATION TEST ===" . PHP_EOL . PHP_EOL;
 
@@ -28,12 +29,12 @@ try {
     $testOrder = new Order();
     $testOrder->id = 'TEST' . time();
     $testOrder->total = 250.00;
-    
+
     $params = $testOrder->getPaymentParams();
-    
+
     echo "✅ Payment parameters generated successfully" . PHP_EOL;
     echo "- Client ID: " . $params->clientid . PHP_EOL;
-    echo "- Order ID: " . $params->oid . PHP_EOL; 
+    echo "- Order ID: " . $params->oid . PHP_EOL;
     echo "- Amount: " . $params->amount . " RSD" . PHP_EOL;
     echo "- Success URL: " . $params->okUrl . PHP_EOL;
     echo "- Fail URL: " . $params->failUrl . PHP_EOL;
@@ -41,7 +42,7 @@ try {
     echo "- Store Type: " . $params->storetype . PHP_EOL;
     echo "- Language: " . $params->lang . PHP_EOL;
     echo "- Hash Length: " . strlen($params->hash) . " chars" . PHP_EOL;
-    
+
 } catch (Exception $e) {
     echo "❌ Payment parameter generation failed: " . $e->getMessage() . PHP_EOL;
     exit(1);
@@ -59,12 +60,12 @@ echo '</form>' . PHP_EOL;
 echo PHP_EOL . "4. HASH VERIFICATION:" . PHP_EOL;
 if ($nestpayKey) {
     // Manually recreate the hash to verify
-    $plainText = $params->clientid . "|" . $params->oid . "|" . $params->amount . "|" . 
-                 $params->okUrl . "|" . $params->failUrl . "|" . $params->trantype . "||" . 
-                 $params->rnd . "||||" . $params->currency . "|" . $nestpayKey;
-    
+    $plainText = $params->clientid . "|" . $params->oid . "|" . $params->amount . "|" .
+        $params->okUrl . "|" . $params->failUrl . "|" . $params->trantype . "||" .
+        $params->rnd . "||||" . $params->currency . "|" . $nestpayKey;
+
     $manualHash = base64_encode(pack('H*', hash('sha512', $plainText)));
-    
+
     echo "- Generated hash matches manual calculation: " . ($params->hash === $manualHash ? '✅ YES' : '❌ NO') . PHP_EOL;
     echo "- Plain text for hash: " . substr($plainText, 0, 100) . "..." . PHP_EOL;
 } else {
@@ -74,20 +75,20 @@ if ($nestpayKey) {
 echo PHP_EOL . "5. ROUTE VALIDATION:" . PHP_EOL;
 try {
     $routes = [];
-    
+
     // Check if payment routes exist
     if (Route::has('payment.success')) {
         echo "✅ Payment success route: Exists" . PHP_EOL;
     } else {
         echo "❌ Payment success route: Missing" . PHP_EOL;
     }
-    
+
     if (Route::has('payment.fail')) {
-        echo "✅ Payment fail route: Exists" . PHP_EOL;  
+        echo "✅ Payment fail route: Exists" . PHP_EOL;
     } else {
         echo "❌ Payment fail route: Missing" . PHP_EOL;
     }
-    
+
 } catch (Exception $e) {
     echo "ℹ️  Route check skipped (routes not available in CLI)" . PHP_EOL;
 }
@@ -97,8 +98,8 @@ echo "📋 Test Cards (from Documentation):" . PHP_EOL;
 echo "   - Use cards from: Documentation/Primeri testnih case-ova za trgovce sa testnim karticama.xls" . PHP_EOL;
 echo "📋 Merchant Center:" . PHP_EOL;
 echo "   - Login: https://testsecurepay.eway2pay.com/bib/report/user.login" . PHP_EOL;
-echo "   - Username: REPadmin" . PHP_EOL;
-echo "   - Password: Pld20033 (change on first login)" . PHP_EOL;
+echo "   - Username: " . $username . PHP_EOL;
+echo "   - Password: " . $pass . " (change on first login)" . PHP_EOL;
 
 echo PHP_EOL . "7. NEXT STEPS:" . PHP_EOL;
 echo "1️⃣ Copy the HTML form above and test it in a browser" . PHP_EOL;

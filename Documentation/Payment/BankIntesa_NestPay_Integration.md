@@ -7,8 +7,8 @@ This document outlines the integration with Bank Intesa's NestPay payment gatewa
 The following test parameters are used for the NestPay integration:
 
 - **Merchant ID**: 13IN003803
-- **User Name**: REPadmin
-- **Password**: Pld20033
+- **User Name**: REP***
+- **Password**: rep***
 - **Type**: 3D Pay Hosting
 - **Currency**: 941 (Serbian Dinar)
 - **Language**: sr (Serbian)
