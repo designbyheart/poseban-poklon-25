@@ -394,13 +394,13 @@ class OrderController extends Controller
                 'order_id' => $order->id
             ]);
 
-            $cashRegister = new FiscalCashRegister();
-            $result = $cashRegister->sendInvoice($order);
+//            $cashRegister = new FiscalCashRegister();
+//            $result = $cashRegister->sendInvoice($order);
 
-            Log::info('Invoice sent successfully to fiscal cash register', [
-                'order_id' => $order->id,
-                'result' => $result
-            ]);
+//            Log::info('Invoice sent successfully to fiscal cash register', [
+//                'order_id' => $order->id,
+//                'result' => $result
+//            ]);
 
             // After successful fiscal billing, generate and send vouchers
             $this->generateAndSendVouchers($order);
