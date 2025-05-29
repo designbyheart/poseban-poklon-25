@@ -2,6 +2,18 @@
 
 @section('seo_title', 'Poseban Poklon | Thank you for your order')
 
+@section('scripts')
+@if(isset($should_clear_cart) && $should_clear_cart)
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.EventBus) {
+                window.EventBus.$emit('order-placed', true);
+            }
+        });
+    </script>
+@endif
+@endsection
+
 @section('content')
 
 @if(isset($order))
@@ -490,7 +502,7 @@
                 <a href="/" class="success-link">Naslovna</a>
             </div>
             @elseif(isset($payment_params))
-            <form method="post" action="https://bib.eway2pay.com/fim/est3Dgate">
+            <form method="post" action="https://testsecurepay.eway2pay.com/fim/est3Dgate">
                 <input type="hidden" name="clientid" value="{{$payment_params->clientid}}">
                 <input type="hidden" name="amount" value="{{$payment_params->amount}}">
                 <input type="hidden" name="oid" value="{{$payment_params->oid}}">
