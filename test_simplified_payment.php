@@ -99,7 +99,7 @@ echo "   - Use cards from: Documentation/Primeri testnih case-ova za trgovce sa 
 echo "📋 Merchant Center:" . PHP_EOL;
 echo "   - Login: https://testsecurepay.eway2pay.com/bib/report/user.login" . PHP_EOL;
 echo "   - Username: " . $username . PHP_EOL;
-echo "   - Password: " . $pass . " (change on first login)" . PHP_EOL;
+echo "   - Password: " . maskSensitiveData($pass) . " (change on first login)" . PHP_EOL;
 
 echo PHP_EOL . "7. NEXT STEPS:" . PHP_EOL;
 echo "1️⃣ Copy the HTML form above and test it in a browser" . PHP_EOL;
