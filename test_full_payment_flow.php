@@ -187,7 +187,8 @@ echo PHP_EOL . "=== TEST COMPLETED ===" . PHP_EOL;
 
 // Clean up test orders
 try {
-    Order::whereIn('id', [$order->id, $failOrder->id ?? null])->delete();
+    $orderIds = array_filter([$order->id, $failOrder->id ?? null]);
+    Order::whereIn('id', $orderIds)->delete();
     echo "Test orders cleaned up." . PHP_EOL;
 } catch (Exception $e) {
     echo "Note: Test orders may need manual cleanup." . PHP_EOL;
