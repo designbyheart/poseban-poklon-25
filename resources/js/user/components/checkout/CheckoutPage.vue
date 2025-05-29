@@ -1503,13 +1503,13 @@
                                         @expired="setCaptchaExpired"
                                     />
                                 </div>
-
+                                <!-- action="https://bib.eway2pay.com/fim/est3Dgate"-->
                                 <div class="tabs-payment-btn-row">
                                     <form
                                         v-if="paymentParams && method.id === 3"
                                         id="payment-form"
                                         method="post"
-                                        action="https://bib.eway2pay.com/fim/est3Dgate"
+                                        action="https://testsecurepay.eway2pay.com/fim/est3Dgate"
                                     >
                                         <input
                                             type="hidden"
@@ -2213,16 +2213,21 @@ export default {
             let requestUrl = this.API.order.create;
 
             axios.post(requestUrl, order).then(response => {
-                if (response.data === 'success') {
-                    //Clear the cart
-                    this.EventBus.$emit('order-placed', true);
+                if (response.data.success || response.data === 'success') {
+                    // Only clear the cart if the backend instructs us to do so
+                    if (response.data.should_clear_cart) {
+                        this.EventBus.$emit('order-placed', true);
+                    }
 
                     //Redirect to order success page
                     this.redirectToUrl(this.API.order.success);
 
                 } else if (response.data.payment_params) {
-                    //Clear the cart
-                    this.EventBus.$emit('order-placed', true);
+                    // For card payments, don't clear the cart yet
+                    // We'll clear it only after successful payment
+                    if (response.data.should_clear_cart) {
+                        this.EventBus.$emit('order-placed', true);
+                    }
 
                     //Redirect to order success page
                     this.redirectToUrl(this.API.order.success);
@@ -2238,7 +2243,6 @@ export default {
                 });
 
             });
-
         },
         async isFormValid() {
             let errors = [];

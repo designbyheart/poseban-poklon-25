@@ -302,13 +302,16 @@ class OrderController extends Controller
                 $default_status = OrderStatus::where('title', 'New')->first();
             }
 
-
             //Send email to administrator about new order
             SendNewOrderAdminEmail::dispatch($order)->delay(now()->addSeconds(2));
 
-            //Send order confirmation email to user immediately
-            SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
-            Log::info('Order confirmation email dispatched', ['order_id' => $order->id]);
+            // Only send order confirmation email to user immediately if NOT using card payment
+            if ($order->paymentMethod->id !== 3) { // 3 = card payment
+                SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
+                Log::info('Order confirmation email dispatched immediately (non-card payment)', ['order_id' => $order->id]);
+            } else {
+                Log::info('Order confirmation email deferred until payment success (card payment)', ['order_id' => $order->id]);
+            }
 
             $order->setStatus($default_status);
         }
@@ -316,9 +319,9 @@ class OrderController extends Controller
         //Prepare parameters for card payment if it is selected
         if ($order->paymentMethod->id === 3) {
             $payment_params = $order->getPaymentParams();
-            return response()->json(['payment_params' => $payment_params], 200);
+            return response()->json(['payment_params' => $payment_params, 'should_clear_cart' => false], 200);
         } else {
-            return response()->json('success', 200);
+            return response()->json(['success' => true, 'should_clear_cart' => true], 200);
         }
     }
 
@@ -328,7 +331,9 @@ class OrderController extends Controller
     public function paymentSuccess(Request $request)
     {
         if (!isset($request->oid)) {
-            Log::error('Payment success called without order ID');
+            Log::error('Payment success called without order ID', [
+                'request_data' => $request->all()
+            ]);
             return redirect()->route('home')->with('error', 'Invalid payment information');
         }
 
@@ -348,6 +353,7 @@ class OrderController extends Controller
             $payment_params = null;
         }
 
+        // Store all transaction data from NestPay response
         $transaction_data = [
             'order_id' => $request->oid,
             'auth_code' => $request->AuthCode ?? null,
@@ -359,6 +365,14 @@ class OrderController extends Controller
                 Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s') :
                 Carbon::now()->format('Y-m-d H:i:s')
         ];
+
+        // Log successful payment
+        Log::info('Payment successful for order', [
+            'order_id' => $order->id,
+            'payment_method' => $order->paymentMethod->name ?? 'Card',
+            'amount' => $order->total,
+            'transaction_data' => $transaction_data
+        ]);
 
         try {
             DB::beginTransaction();
@@ -415,11 +429,12 @@ class OrderController extends Controller
         $transaction_data = (object)$transaction_data;
         $success = true;
 
-        // Send order confirmation email immediately
+        // Send order confirmation email to customer after successful payment
         \App\Jobs\SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
-        Log::info('Order confirmation email dispatched', ['order_id' => $order->id]);
+        Log::info('Order confirmation email dispatched after successful payment', ['order_id' => $order->id]);
 
-        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+        $should_clear_cart = true;
+        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params', 'should_clear_cart'));
     }
 
     /**
@@ -442,8 +457,9 @@ class OrderController extends Controller
 
         Log::warning('Payment failed for order', [
             'order_id' => $order->id,
-            'payment_method' => $order->paymentMethod->name ?? 'Unknown',
-            'amount' => $order->total
+            'payment_method' => $order->paymentMethod->name ?? 'Card',
+            'amount' => $order->total,
+            'request_data' => $request->all()
         ]);
 
         $transaction_data = [
@@ -491,8 +507,9 @@ class OrderController extends Controller
         $transaction_data = (object)$transaction_data;
         $success = false;
         $payment_params = $order->getPaymentParams();
+        $should_clear_cart = false;
 
-        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params'));
+        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params', 'should_clear_cart'));
     }
 
     /**
@@ -827,108 +844,6 @@ class OrderController extends Controller
         }
     }
 
-    protected function ensureOrderStatus(Order $order)
-    {
-        if (!$order->status) {
-            Log::warning('Order has no status, attempting to fix', [
-                'order_id' => $order->id
-            ]);
-
-            try {
-                // Get the default status (assuming ID 1 is the default/initial status)
-                $defaultStatus = OrderStatus::find(1);
-
-                if (!$defaultStatus) {
-                    Log::error('Default order status not found in database');
-                    throw new Exception('Default order status not found');
-                }
-
-                // Set the status
-                $order->status()->associate($defaultStatus);
-                $order->save();
-
-                // Reload the status relationship
-                $order->load('status');
-
-                Log::info('Successfully set default status for order', [
-                    'order_id' => $order->id,
-                    'order_status_id' => $defaultStatus->id
-                ]);
-
-                return true;
-            } catch (Exception $e) {
-                Log::error('Failed to set default status for order', [
-                    'order_id' => $order->id,
-                    'error' => $e->getMessage()
-                ]);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected function validateOrderStatus(Order $order)
-    {
-        try {
-            Log::info('Validating order status', [
-                'order_id' => $order->id,
-                'current_status' => $order->order_status_id,
-                'has_transaction' => !empty($order->transaction_data)
-            ]);
-
-            // Primary check: Is order paid (order_status_id = 2)?
-            if (!$order->order_status_id || $order->order_status_id !== 2) {
-                // Secondary check: If status is not paid but transaction is successful,
-                // we should update the status to paid
-                if (!empty($order->transaction_data)) {
-                    $transData = json_decode($order->transaction_data);
-                    if (isset($transData->response) &&
-                        strtolower($transData->response) === 'approved' &&
-                        $transData->proc_return_code === '00') {
-
-                        // Update to paid status
-                        $order->order_status_id = 2;
-                        $order->save();
-
-                        Log::info('Updated order to paid status based on transaction data', [
-                            'order_id' => $order->id
-                        ]);
-
-                        return [
-                            'success' => true,
-                            'message' => 'Order updated to paid status',
-                            'order_status_id' => 2
-                        ];
-                    }
-                }
-
-                return [
-                    'success' => false,
-                    'message' => 'Order is not paid',
-                    'order_status_id' => $order->order_status_id
-                ];
-            }
-
-            return [
-                'success' => true,
-                'message' => 'Order is paid',
-                'order_status_id' => $order->order_status_id
-            ];
-
-        } catch (Exception $e) {
-            Log::error('Error validating order status', [
-                'order_id' => $order->id,
-                'error' => $e->getMessage()
-            ]);
-
-            return [
-                'success' => false,
-                'message' => 'Error validating order status: ' . $e->getMessage(),
-                'order_status_id' => $order->order_status_id
-            ];
-        }
-    }
-
     public function testVoucherGeneration($orderId)
     {
         try {
@@ -1069,5 +984,107 @@ class OrderController extends Controller
         return $order->vouchers->every(function ($voucher) {
             return file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
         });
+    }
+    
+    protected function ensureOrderStatus(Order $order)
+    {
+        if (!$order->status) {
+            Log::warning('Order has no status, attempting to fix', [
+                'order_id' => $order->id
+            ]);
+
+            try {
+                // Get the default status (assuming ID 1 is the default/initial status)
+                $defaultStatus = OrderStatus::find(1);
+
+                if (!$defaultStatus) {
+                    Log::error('Default order status not found in database');
+                    throw new Exception('Default order status not found');
+                }
+
+                // Set the status
+                $order->status()->associate($defaultStatus);
+                $order->save();
+
+                // Reload the status relationship
+                $order->load('status');
+
+                Log::info('Successfully set default status for order', [
+                    'order_id' => $order->id,
+                    'order_status_id' => $defaultStatus->id
+                ]);
+
+                return true;
+            } catch (Exception $e) {
+                Log::error('Failed to set default status for order', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage()
+                ]);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected function validateOrderStatus(Order $order)
+    {
+        try {
+            Log::info('Validating order status', [
+                'order_id' => $order->id,
+                'current_status' => $order->order_status_id,
+                'has_transaction' => !empty($order->transaction_data)
+            ]);
+
+            // Primary check: Is order paid (order_status_id = 2)?
+            if (!$order->order_status_id || $order->order_status_id !== 2) {
+                // Secondary check: If status is not paid but transaction is successful,
+                // we should update the status to paid
+                if (!empty($order->transaction_data)) {
+                    $transData = json_decode($order->transaction_data);
+                    if (isset($transData->response) &&
+                        strtolower($transData->response) === 'approved' &&
+                        $transData->proc_return_code === '00') {
+
+                        // Update to paid status
+                        $order->order_status_id = 2;
+                        $order->save();
+
+                        Log::info('Updated order to paid status based on transaction data', [
+                            'order_id' => $order->id
+                        ]);
+
+                        return [
+                            'success' => true,
+                            'message' => 'Order updated to paid status',
+                            'order_status_id' => 2
+                        ];
+                    }
+                }
+
+                return [
+                    'success' => false,
+                    'message' => 'Order is not paid',
+                    'order_status_id' => $order->order_status_id
+                ];
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Order is paid',
+                'order_status_id' => $order->order_status_id
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Error validating order status', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage()
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Error validating order status: ' . $e->getMessage(),
+                'order_status_id' => $order->order_status_id
+            ];
+        }
     }
 }

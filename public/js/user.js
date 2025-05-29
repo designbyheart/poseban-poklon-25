@@ -6415,15 +6415,20 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
       order.user_agreements = JSON.stringify(this.agreements);
       var requestUrl = this.API.order.create;
       axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, order).then(function (response) {
-        if (response.data === 'success') {
-          //Clear the cart
-          _this6.EventBus.$emit('order-placed', true);
+        if (response.data.success || response.data === 'success') {
+          // Only clear the cart if the backend instructs us to do so
+          if (response.data.should_clear_cart) {
+            _this6.EventBus.$emit('order-placed', true);
+          }
 
           //Redirect to order success page
           _this6.redirectToUrl(_this6.API.order.success);
         } else if (response.data.payment_params) {
-          //Clear the cart
-          _this6.EventBus.$emit('order-placed', true);
+          // For card payments, don't clear the cart yet
+          // We'll clear it only after successful payment
+          if (response.data.should_clear_cart) {
+            _this6.EventBus.$emit('order-placed', true);
+          }
 
           //Redirect to order success page
           _this6.redirectToUrl(_this6.API.order.success);
@@ -12949,7 +12954,7 @@ var render = function render() {
       attrs: {
         id: "payment-form",
         method: "post",
-        action: "https://bib.eway2pay.com/fim/est3Dgate"
+        action: "https://testsecurepay.eway2pay.com/fim/est3Dgate"
       }
     }, [_c("input", {
       attrs: {

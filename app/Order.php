@@ -214,7 +214,7 @@ class Order extends Model
      */
     public function getPaymentParams()
     {
-        $orgClientId = env('NESTPAY_ID');
+        $orgClientId = env('NESTPAY_ID', '13IN003803'); // Using test Merchant ID from instructions
         $orgOid = $this->id;
         $orgAmount = number_format((float)$this->total, 2, '.', '');
         $orgOkUrl = "https://posebanpoklon.rs/payment/success";
@@ -223,7 +223,7 @@ class Order extends Model
         $orgTransactionType = "Auth";
         $orgInstallment = "";
         $orgRnd = bin2hex(random_bytes(20));
-        $orgCurrency = "941";
+        $orgCurrency = "941"; // Serbian dinar as specified in instructions
         $clientId = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgClientId));
         $oid = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgOid));
         $amount = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgAmount));
@@ -233,25 +233,25 @@ class Order extends Model
         $installment = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgInstallment));
         $rnd = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgRnd));
         $currency = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgCurrency));
-        $storeKey = env('NESTPAY_KEY');
-        $plainText = $clientId . "|" . $oid . "|" . $amount . "|" . $okUrl . "|" . $failUrl . "|" . $transactionType . "|" . $installment . "|" . $rnd . "||||" . $currency . "|" . $storeKey;
+        $storeKey = env('NESTPAY_KEY'); // This should be set in the Merchant Center admin panel
+        $plainText = $clientId . "|" . $oid . "|" . $amount . "|" . $orgOkUrl . "|" . $orgFailUrl . "|" . $transactionType . "||" . $rnd . "||||" . $currency . "|" . $storeKey;
         $hashValue = hash('sha512', $plainText);
         $hash = base64_encode(pack('H*', $hashValue));
-        $lang = "sr";
+        $lang = "sr"; // Serbian language as specified in instructions
         return (object)[
             'clientid' => $orgClientId,
             'description' => 'Porudžbina ' . $orgOid,
             'amount' => $orgAmount,
             'oid' => $orgOid,
             'rnd' => $orgRnd,
-            'okUrl' => $okUrl,
-            'failUrl' => $failUrl,
+            'okUrl' => $orgOkUrl, // Fixed to use original URL without escaping
+            'failUrl' => $orgFailUrl, // Fixed to use original URL without escaping
             'shopurl' => $shopurl,
             'trantype' => $orgTransactionType,
             'currency' => $orgCurrency,
             'hash' => $hash,
             'storetype' => '3d_pay_hosting',
-            'hashAlgorithm' => 'ver2',
+            'hashAlgorithm' => 'ver2', // As specified in instructions
             'lang' => $lang,
             'encoding' => 'utf-8'
         ];
