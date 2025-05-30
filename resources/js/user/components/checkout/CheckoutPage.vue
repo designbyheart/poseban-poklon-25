@@ -1600,7 +1600,7 @@
                                         class="tabs-payment-btn"
                                         @click="validateForm"
                                     >
-                                        Poruči
+                                        Radovi u toku
                                     </button>
                                 </div>
                             </div>
