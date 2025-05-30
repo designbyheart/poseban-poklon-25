@@ -11008,9 +11008,9 @@ var render = function render() {
     staticClass: "checkout-page"
   }, [_c("section", {
     staticClass: "cart-content container"
-  }, [_c("div", {
-    staticClass: "row"
   }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "row"
+  }, [_vm._m(1), _vm._v(" "), _c("div", {
     staticClass: "col-lg-9"
   }, _vm._l(_vm.products, function (product, index) {
     return _c("div", {
@@ -11139,7 +11139,7 @@ var render = function render() {
         expression: "product.add_box"
       }],
       staticClass: "cart-product-item-row product-box-row"
-    }, [_vm._m(1, true), _vm._v(" "), _c("div", {
+    }, [_vm._m(2, true), _vm._v(" "), _c("div", {
       staticClass: "product-item-col-2"
     }, [_c("div", {
       staticClass: "product-item-col-2_1 product-list-item-price"
@@ -11253,7 +11253,7 @@ var render = function render() {
     staticClass: "order-total-price-text"
   }, [_vm._v("Ukupna cena:")]), _vm._v(" "), _c("span", {
     staticClass: "order-total-price-number"
-  }, [_vm._v(_vm._s(_vm.totalPrice() + " " + _vm.selectedCurrency))])]), _vm._v(" "), _vm._m(2)]), _vm._v(" "), !_vm.isLoginCheckout ? _c("div", {
+  }, [_vm._v(_vm._s(_vm.totalPrice() + " " + _vm.selectedCurrency))])]), _vm._v(" "), _vm._m(3)]), _vm._v(" "), !_vm.isLoginCheckout ? _c("div", {
     staticClass: "cart-type-tabs col-lg-9"
   }, [_c("div", {
     staticClass: "cart-login-btns-row"
@@ -11530,7 +11530,7 @@ var render = function render() {
     staticClass: "tabs-email-form-row"
   }, [_c("h3", {
     staticClass: "tabs-post-title"
-  }, [_vm._v("\n                                            Lični podaci:\n                                        ")]), _vm._v(" "), _vm._m(3), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                            Lični podaci:\n                                        ")]), _vm._v(" "), _vm._m(4), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
   }, [_c("ValidationObserver", {
     ref: "addressObserver",
@@ -11912,7 +11912,7 @@ var render = function render() {
     staticClass: "tabs-post-title"
   }, [_vm._v("\n                                            Izaberite adresu:\n                                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-form-row"
-  }, [_vm._m(4), _vm._v(" "), _c("div", {
+  }, [_vm._m(5), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
   }, [_c("form", [_c("select", {
     directives: [{
@@ -11951,7 +11951,7 @@ var render = function render() {
     staticClass: "tabs-post-title"
   }, [_vm._v("\n                                            Lični podaci:\n                                        ")]), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-form-row"
-  }, [_vm._m(5), _vm._v(" "), _c("div", {
+  }, [_vm._m(6), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
   }, [_c("ValidationObserver", {
     ref: "addressObserver",
@@ -12743,7 +12743,7 @@ var render = function render() {
     staticClass: "tabs-email-form-wrapper"
   }, [_c("div", {
     staticClass: "tabs-email-form-row"
-  }, [_vm._m(6), _vm._v(" "), _c("div", {
+  }, [_vm._m(7), _vm._v(" "), _c("div", {
     staticClass: "tabs-email-col"
   }, [_c("textarea", {
     directives: [{
@@ -13084,13 +13084,23 @@ var render = function render() {
         click: _vm.validateForm
       }
     }, [_vm._v("\n                                    Radovi u toku\n                                ")])])]);
-  }), 0)]), _vm._v(" "), _vm._m(7)])]) : _vm._e(), _vm._v(" "), _c("recommended-products", {
+  }), 0)]), _vm._v(" "), _vm._m(8)])]) : _vm._e(), _vm._v(" "), _c("recommended-products", {
     attrs: {
       title: "PREPORUČUJEMO"
     }
   })], 1) : _vm._e()]);
 };
 var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-lg-12 cart-order-title"
+  }, [_c("h2", {
+    staticClass: "order-title"
+  }, [_vm._v("\n                        Porudžbina\n                    ")])])]);
+}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {

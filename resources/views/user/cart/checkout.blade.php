@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('seo_title', 'Poseban Poklon | Odjava')
+@section('seo_title', 'Poseban Poklon | Porudžbina')
 @section('seo_description', 'Odjavi se sa sajta. Sledeći put možeš se ulogovati sa istim podacima')
-@section('seo_keywords', 'Poseban poklon, odjava, moj profil')
+@section('seo_keywords', 'Poseban poklon, poružbina, moj profil')
 
 @section('content')
 
@@ -14,7 +14,7 @@
                     <div class="breadcrumb-arrow">></div>
                 </a>
                 <a href="/checkout" class="breadcrumb-row-item">
-                    <div class="breadcrumb-item-text">Odjava</div>
+                    <div class="breadcrumb-item-text">Porudžbina</div>
                 </a>
             </div>
         </div>

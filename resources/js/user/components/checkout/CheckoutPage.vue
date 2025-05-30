@@ -6,13 +6,13 @@
         >
             <!-- Cart Page Top -->
             <section class="cart-content container">
-                <!--<div class="row">
-                                    <div class="col-lg-12 cart-order-title">
-                                        <h2 class="order-title">
-                                            Odjava
-                                        </h2>
-                                    </div>
-                                </div>-->
+                <div class="row">
+                    <div class="col-lg-12 cart-order-title">
+                        <h2 class="order-title">
+                            Porudžbina
+                        </h2>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-9">
                         <div class="cart-product-list">
@@ -298,7 +298,7 @@
               <span
                   class="order-total-price-text"
               >Ukupna cena:</span>
-                            <span class="order-total-price-number">{{ totalPrice() + " " + selectedCurrency}}</span>
+                            <span class="order-total-price-number">{{ totalPrice() + " " + selectedCurrency }}</span>
                         </div>
                         <div class="order-vat-notice">
               <span>Turistička agencija Republika 031 nije u sistemu
