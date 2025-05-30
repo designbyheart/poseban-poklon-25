@@ -13083,7 +13083,7 @@ var render = function render() {
       on: {
         click: _vm.validateForm
       }
-    }, [_vm._v("\n                                    Poruči\n                                ")])])]);
+    }, [_vm._v("\n                                    Radovi u toku\n                                ")])])]);
   }), 0)]), _vm._v(" "), _vm._m(7)])]) : _vm._e(), _vm._v(" "), _c("recommended-products", {
     attrs: {
       title: "PREPORUČUJEMO"
