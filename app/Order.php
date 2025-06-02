@@ -214,7 +214,13 @@ class Order extends Model
      */
     public function getPaymentParams()
     {
-        $orgClientId = env('NESTPAY_ID', '13IN003803'); // Using test Merchant ID from instructions
+        // Use production merchant ID for production environment, test ID for others
+        $isProd = app()->environment('production');
+        $orgClientId = env('NESTPAY_ID');
+
+        // Use production store key for production environment, test key for others
+        $storeKey = env('NESTPAY_KEY');
+
         $orgOid = $this->id;
         $orgAmount = number_format((float)$this->total, 2, '.', '');
         $orgOkUrl = "https://posebanpoklon.rs/payment/success";
@@ -233,7 +239,15 @@ class Order extends Model
         $installment = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgInstallment));
         $rnd = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgRnd));
         $currency = str_replace("|", "\\|", str_replace("\\", "\\\\", $orgCurrency));
-        $storeKey = env('NESTPAY_KEY'); // This should be set in the Merchant Center admin panel
+
+        // Log payment parameters for debugging
+        Log::info('Generating payment parameters', [
+            'order_id' => $this->id,
+            'merchant_id' => $orgClientId,
+            'environment' => app()->environment(),
+            'amount' => $orgAmount
+        ]);
+
         $plainText = $clientId . "|" . $oid . "|" . $amount . "|" . $orgOkUrl . "|" . $orgFailUrl . "|" . $transactionType . "||" . $rnd . "||||" . $currency . "|" . $storeKey;
         $hashValue = hash('sha512', $plainText);
         $hash = base64_encode(pack('H*', $hashValue));
