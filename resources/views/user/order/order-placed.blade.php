@@ -44,6 +44,21 @@
                     Detalji porudžbine su već na tvojoj mejl adresi, a ako ih ne nalaziš odmah, za svaki
                     slučaj proveri i SPAM folder.
                 </p>
+                @if(isset($errorMessage))
+                <p class="error-text" style="color: #ed2025; margin-top: 15px; font-weight: bold;">
+                    Razlog: {{ $errorMessage }}
+                </p>
+                <p class="recommendation-text" style="margin-top: 15px;">
+                    Preporučujemo da:
+                    <ul style="margin-top: 10px; list-style-type: disc; padding-left: 20px;">
+                        <li>Proverite da li imate dovoljno sredstava na računu</li>
+                        <li>Proverite da li je kartica aktivirana za online plaćanja</li>
+                        <li>Pokušajte sa drugom karticom</li>
+                        <li>Kontaktirajte svoju banku za više informacija</li>
+                        <li>Izaberite alternativni način plaćanja</li>
+                    </ul>
+                </p>
+                @endif
             </div>
             @endif
 

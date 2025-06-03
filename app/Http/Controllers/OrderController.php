@@ -455,10 +455,73 @@ class OrderController extends Controller
             return redirect()->route('home')->with('error', 'Order not found');
         }
 
+        // Get specific error message based on mdStatus
+        $errorMessage = 'Obrada plaćanja nije uspela';
+        $mdStatus = $request->mdStatus ?? null;
+        $procReturnCode = $request->ProcReturnCode ?? null;
+
+        // Handle specific mdStatus codes
+        if ($mdStatus == '6') {
+            $errorMessage = '3D Secure autentifikacija nije uspela - Kartica nije uključena u 3D Secure sistem';
+            Log::warning('3D Secure authentication failed - The card is not enrolled in 3D Secure', [
+                'order_id' => $order->id,
+                'md_status' => $mdStatus,
+                'md_error_msg' => $request->mdErrorMsg ?? 'No error message'
+            ]);
+        } elseif ($mdStatus == '0') {
+            $errorMessage = 'Plaćanje nije autentifikovano';
+        } elseif ($mdStatus == '2') {
+            $errorMessage = 'Pokušaj autentifikacije je izvršen, ali nije završen';
+        } elseif ($mdStatus == '4') {
+            $errorMessage = 'Pokušaj autentifikacije je izvršen, ali je došlo do tehničke greške';
+        } elseif ($mdStatus == '5') {
+            $errorMessage = 'Autentifikacija nije uspela';
+        } elseif ($mdStatus == '7') {
+            $errorMessage = 'Sistemska greška tokom autentifikacije';
+        } elseif ($mdStatus == '8') {
+            $errorMessage = 'Nepoznat odgovor od sistema za autentifikaciju';
+        }
+
+        // Handle specific processor return codes if mdStatus doesn't provide enough info
+        if ($procReturnCode && $errorMessage == 'Obrada plaćanja nije uspela') {
+            switch ($procReturnCode) {
+                case '05':
+                    $errorMessage = 'Transakcija odbijena od strane banke';
+                    break;
+                case '51':
+                    $errorMessage = 'Nedovoljno sredstava na računu';
+                    break;
+                case '54':
+                    $errorMessage = 'Kartica je istekla';
+                    break;
+                case '57':
+                    $errorMessage = 'Transakcija nije dozvoljena vlasniku kartice';
+                    break;
+                case '62':
+                    $errorMessage = 'Ograničena kartica';
+                    break;
+                case '65':
+                    $errorMessage = 'Prekoračen limit za podizanje sredstava';
+                    break;
+                case '91':
+                    $errorMessage = 'Izdavalac ili prekidač ne radi';
+                    break;
+            }
+        }
+
+        // Log both Serbian and English versions for debugging
+        $logErrorMessage = $errorMessage;
+        if ($mdStatus == '6') {
+            $logErrorMessage .= ' (3D Secure authentication failed - The card is not enrolled in 3D Secure)';
+        }
+
         Log::warning('Payment failed for order', [
             'order_id' => $order->id,
             'payment_method' => $order->paymentMethod->name ?? 'Card',
             'amount' => $order->total,
+            'md_status' => $mdStatus,
+            'proc_return_code' => $procReturnCode,
+            'error_message' => $logErrorMessage ?? $errorMessage,
             'request_data' => $request->all()
         ]);
 
@@ -468,7 +531,8 @@ class OrderController extends Controller
             'trans_id' => $request->TransId ?? null,
             'response' => $request->Response ?? null,
             'proc_return_code' => $request->ProcReturnCode ?? null,
-            'md_status' => $request->mdStatus ?? null,
+            'md_status' => $mdStatus,
+            'md_error_msg' => $request->mdErrorMsg ?? null,
             'extra_trxdate' => isset($request->EXTRA_TRXDATE) ?
                 Carbon::parse($request->EXTRA_TRXDATE)->format('Y-m-d H:i:s') :
                 Carbon::now()->format('Y-m-d H:i:s')
@@ -509,7 +573,8 @@ class OrderController extends Controller
         $payment_params = $order->getPaymentParams();
         $should_clear_cart = false;
 
-        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params', 'should_clear_cart'));
+        // Pass error message to the view
+        return view('user.order.order-placed', compact('order', 'transaction_data', 'success', 'payment_params', 'should_clear_cart', 'errorMessage'));
     }
 
     /**
@@ -985,7 +1050,7 @@ class OrderController extends Controller
             return file_exists(storage_path("app/vouchers/{$voucher->voucher_code}.pdf"));
         });
     }
-    
+
     protected function ensureOrderStatus(Order $order)
     {
         if (!$order->status) {
