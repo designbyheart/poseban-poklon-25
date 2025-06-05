@@ -1701,6 +1701,7 @@ export default {
             hasBox: false,
             boxPrice: 690,
             paymentParams: null,
+            showBankTransferInfo: false,
         };
     },
     computed: {
@@ -2023,6 +2024,11 @@ export default {
                     }
                 }
             }
+            if (method.id === 2) {
+                this.showBankTransferInfo = true;
+            } else {
+                this.showBankTransferInfo = false;
+            }
         },
         selectShippingMethod(method) {
             if (this.paymentMethod.id === 1) {
@@ -2236,6 +2242,9 @@ export default {
                         this.submitPayment();
                     });
                 }
+                if (this.paymentMethod.id === 2 && response.data.order_id) {
+                    this.sendBankPaymentInstructions(response.data.order_id);
+                }
             }).catch(error => {
                 this.$swal({
                     title: 'Desila se greška. Pokušaj ponovo.',
@@ -2375,6 +2384,20 @@ export default {
         },
         onWindowLoad() {
             //this.phoneNumberMask();
+        },
+        sendBankPaymentInstructions(orderId) {
+            if (!orderId) {
+                console.error('Cannot send bank payment instructions: Order ID is missing');
+                return;
+            }
+            
+            axios.post(`/orders/${orderId}/send-payment-instructions`)
+                .then(response => {
+                    console.log('Bank payment instructions sent successfully', response.data);
+                })
+                .catch(error => {
+                    console.error('Failed to send bank payment instructions', error);
+                });
         },
     },
 };

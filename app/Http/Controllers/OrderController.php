@@ -32,7 +32,7 @@ class OrderController extends Controller
     public function __construct()
     {
 
-        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail', 'handleVoucherGeneration', 'testVoucherGeneration']]);
+        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail', 'handleVoucherGeneration', 'testVoucherGeneration', 'sendBankPaymentInstructions']]);
         $this->middleware('auth', ['only' => ['ordersHistory']]);
     }
 
@@ -321,7 +321,7 @@ class OrderController extends Controller
             $payment_params = $order->getPaymentParams();
             return response()->json(['payment_params' => $payment_params, 'should_clear_cart' => false], 200);
         } else {
-            return response()->json(['success' => true, 'should_clear_cart' => true], 200);
+            return response()->json(['success' => true, 'should_clear_cart' => true, 'order_id' => $order->id], 200);
         }
     }
 
@@ -1150,6 +1150,52 @@ class OrderController extends Controller
                 'message' => 'Error validating order status: ' . $e->getMessage(),
                 'order_status_id' => $order->order_status_id
             ];
+        }
+    }
+
+    /**
+     * Send payment instructions email for bank transfer orders
+     *
+     * @param int $orderId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendBankPaymentInstructions($orderId)
+    {
+        try {
+            $order = Order::with(['paymentMethod'])->find($orderId);
+            
+            if (!$order) {
+                Log::error('Order not found when sending bank payment instructions', ['order_id' => $orderId]);
+                return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            }
+            
+            // Check if payment method is bank transfer (ID 2)
+            if ($order->paymentMethod->id !== 2) {
+                Log::info('Payment instructions not sent - not a bank transfer order', [
+                    'order_id' => $orderId,
+                    'payment_method_id' => $order->paymentMethod->id,
+                    'payment_method' => $order->paymentMethod->name
+                ]);
+                return response()->json(['success' => false, 'message' => 'Order does not use bank transfer payment method'], 400);
+            }
+            
+            // Send email with payment instructions
+            SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
+            
+            Log::info('Bank payment instructions email sent', [
+                'order_id' => $order->id,
+                'customer_email' => $order->customer_email
+            ]);
+            
+            return response()->json(['success' => true, 'message' => 'Payment instructions sent successfully'], 200);
+        } catch (Exception $e) {
+            Log::error('Failed to send bank payment instructions', [
+                'order_id' => $orderId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['success' => false, 'message' => 'Failed to send payment instructions'], 500);
         }
     }
 }

@@ -5985,7 +5985,8 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
       countries: _static_address_structures__WEBPACK_IMPORTED_MODULE_1__["countries"],
       hasBox: false,
       boxPrice: 690,
-      paymentParams: null
+      paymentParams: null,
+      showBankTransferInfo: false
     };
   },
   computed: {
@@ -6258,6 +6259,11 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
           }
         }
       }
+      if (method.id === 2) {
+        this.showBankTransferInfo = true;
+      } else {
+        this.showBankTransferInfo = false;
+      }
     },
     selectShippingMethod: function selectShippingMethod(method) {
       if (this.paymentMethod.id === 1) {
@@ -6437,6 +6443,9 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
             _this6.submitPayment();
           });
         }
+        if (_this6.paymentMethod.id === 2 && response.data.order_id) {
+          _this6.sendBankPaymentInstructions(response.data.order_id);
+        }
       })["catch"](function (error) {
         _this6.$swal({
           title: 'Desila se greška. Pokušaj ponovo.',
@@ -6595,6 +6604,17 @@ vee_validate__WEBPACK_IMPORTED_MODULE_2__["Validator"].extend("truthy", {
     },
     onWindowLoad: function onWindowLoad() {
       //this.phoneNumberMask();
+    },
+    sendBankPaymentInstructions: function sendBankPaymentInstructions(orderId) {
+      if (!orderId) {
+        console.error('Cannot send bank payment instructions: Order ID is missing');
+        return;
+      }
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post("/orders/".concat(orderId, "/send-payment-instructions")).then(function (response) {
+        console.log('Bank payment instructions sent successfully', response.data);
+      })["catch"](function (error) {
+        console.error('Failed to send bank payment instructions', error);
+      });
     }
   }
 });

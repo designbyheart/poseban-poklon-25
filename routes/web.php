@@ -53,6 +53,9 @@ Route::post('/payment/success', 'OrderController@paymentSuccess');
 Route::post('/payment/fail', 'OrderController@paymentFail');
 Route::get('/payment/fail', 'OrderController@paymentFail');
 
+//Send bank payment instructions
+Route::post('/orders/{orderId}/send-payment-instructions', 'OrderController@sendBankPaymentInstructions');
+
 Route::get('/emails', 'EmailController@index');
 Route::get('/send-voucher/{id}', 'EmailController@sendVoucher');
 
@@ -346,7 +349,7 @@ Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.'], function () {
 
     /**
      * Statistic
-     */
+ */
 
 
 

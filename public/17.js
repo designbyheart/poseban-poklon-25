@@ -62,10 +62,12 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         if (this.backgroundOverlay && !this.bodyOverlay) this.$store.commit('TOGGLE_CONTENT_OVERLAY', true);
         var exactEle = this.data.data.filter(function (item) {
-          return item.label.toLowerCase().startsWith(_this.searchQuery.toLowerCase());
+          var _item$label, _this$searchQuery;
+          return item === null || item === void 0 || (_item$label = item.label) === null || _item$label === void 0 ? void 0 : _item$label.toLowerCase().startsWith((_this$searchQuery = _this.searchQuery) === null || _this$searchQuery === void 0 ? void 0 : _this$searchQuery.toLowerCase());
         });
         var containEle = this.data.data.filter(function (item) {
-          return !item.label.toLowerCase().startsWith(_this.searchQuery.toLowerCase()) && item.label.toLowerCase().indexOf(_this.searchQuery.toLowerCase()) > -1;
+          var _item$label2, _this$searchQuery2, _item$label3;
+          return !(item !== null && item !== void 0 && (_item$label2 = item.label) !== null && _item$label2 !== void 0 && _item$label2.toLowerCase().startsWith((_this$searchQuery2 = _this.searchQuery) === null || _this$searchQuery2 === void 0 ? void 0 : _this$searchQuery2.toLowerCase())) && (item === null || item === void 0 || (_item$label3 = item.label) === null || _item$label3 === void 0 ? void 0 : _item$label3.toLowerCase().indexOf(_this.searchQuery.toLowerCase())) > -1;
         });
         this.filteredData = exactEle.concat(containEle).slice(0, this.searchLimit);
         if (!this.filteredData[0]) this.currentSelected = -1;

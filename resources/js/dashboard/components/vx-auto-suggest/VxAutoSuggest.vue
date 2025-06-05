@@ -76,10 +76,10 @@ export default{
 			}else {
 				if(this.backgroundOverlay && !this.bodyOverlay) this.$store.commit('TOGGLE_CONTENT_OVERLAY', true);
 				let exactEle = this.data.data.filter((item) => {
-					return item.label.toLowerCase().startsWith(this.searchQuery.toLowerCase())
+					return item?.label?.toLowerCase().startsWith(this.searchQuery?.toLowerCase())
 				});
 				let containEle = this.data.data.filter((item) => {
-					return !item.label.toLowerCase().startsWith(this.searchQuery.toLowerCase()) && item.label.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
+					return !item?.label?.toLowerCase().startsWith(this.searchQuery?.toLowerCase()) && item?.label?.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
 				});
 				this.filteredData = exactEle.concat(containEle).slice(0,this.searchLimit)
 				if(!this.filteredData[0]) this.currentSelected = -1
