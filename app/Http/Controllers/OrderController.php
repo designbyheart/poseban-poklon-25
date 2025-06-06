@@ -945,6 +945,8 @@ class OrderController extends Controller
             // Generate/regenerate PDFs for all vouchers
             foreach ($order->vouchers as $voucher) {
                 $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+                Log::info('PDF Voucher created', $voucher->voucher_code);
+
                 if (!file_exists($pdfPath)) {
                     $pdf = VoucherUtility::generateVoucherPDF($voucher);
                     if ($pdf) {
@@ -1155,7 +1157,7 @@ class OrderController extends Controller
             // Check if payment method is bank transfer (ID 2)
             if ($order->paymentMethod->id !== 2) {
                 Log::info('Payment instructions not sent - not a bank transfer order', [
-                    'order_id' => $orderId,
+                    'order_id' => $order->id,
                     'payment_method_id' => $order->paymentMethod->id,
                     'payment_method' => $order->paymentMethod->name
                 ]);
@@ -1239,47 +1241,64 @@ class OrderController extends Controller
             // Generate and send vouchers if this is an e-voucher order
 //            if ($order->shipping_method_id === 9) { // E-voucher shipping method
 //                $voucherResult = $this->handleVoucherGeneration($order);
-//            $voucherResult = $this->handleVoucherGeneration($order);
             $vouchersGenerated = $order->generateVouchers();
 
             if (!$vouchersGenerated) {
                 Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
-                return [
+                return response()->json([
                     'success' => false,
                     'message' => 'Failed to generate vouchers'
-                ];
+                ], 500);
             }
 
             Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
+
+            // Generate PDFs for all vouchers using the utility method
+            $pdfResults = VoucherUtility::generateAndSavePDFsForOrder($order);
+
+            Log::info('PDF generation completed', [
+                'order_id' => $order->id,
+                'results' => $pdfResults
+            ]);
+
+            // Queue email sending job
+//            SendVoucherEmail::dispatch($order->id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Order vouchers generated and PDF creation completed',
+                'voucher_count' => $pdfResults['total'],
+                'pdfs_generated' => $pdfResults['success']
+            ], 200);
 
 //            Log::info('Vouchers generated for order ' . $order->id, [
 //                'order_id' => $order->id,
 //                'customer_email' => $order->customer_email,
 //                'voucher_result' => $voucherResult
 //            ]);
-
-//                if (!$voucherResult['success']) {
-//                    Log::error('Failed to generate vouchers for bank payment', [
-//                        'order_id' => $order->id,
-//                        'error' => $voucherResult['message']
-//                    ]);
 //
-//                    return response()->json([
-//                        'success' => false,
-//                        'message' => 'Order marked as paid but voucher generation failed: ' . $voucherResult['message']
-//                    ], 500);
-//                }
-//
-//                Log::info('Vouchers generated and email sent for bank payment order', [
+//            if (!$voucherResult['success']) {
+//                Log::error('Failed to generate vouchers for bank payment', [
 //                    'order_id' => $order->id,
-//                    'customer_email' => $order->customer_email
+//                    'error' => $voucherResult['message']
 //                ]);
 //
 //                return response()->json([
-//                    'success' => true,
-//                    'message' => 'Order marked as paid and vouchers generated successfully',
-//                    'voucher_count' => $voucherResult['new_vouchers'] ?? 0
-//                ], 200);
+//                    'success' => false,
+//                    'message' => 'Order marked as paid but voucher generation failed: ' . $voucherResult['message']
+//                ], 500);
+//            }
+//
+//            Log::info('Vouchers generated and email sent for bank payment order', [
+//                'order_id' => $order->id,
+//                'customer_email' => $order->customer_email
+//            ]);
+//
+//            return response()->json([
+//                'success' => true,
+//                'message' => 'Order marked as paid and vouchers generated successfully',
+//                'voucher_count' => $voucherResult['new_vouchers'] ?? 0
+//            ], 200);
 //            }
 
             // For non-e-voucher orders, just mark as paid

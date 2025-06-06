@@ -209,4 +209,176 @@ class VoucherUtility
             return $vouchers; // Return any vouchers that were successfully generated
         }
     }
+
+    /**
+     * Generate and save a PDF for a voucher
+     *
+     * @param Voucher $voucher The voucher to generate a PDF for
+     * @return bool True if PDF was successfully generated and saved, false otherwise
+     */
+    public static function generateAndSaveVoucherPDF(Voucher $voucher)
+    {
+        try {
+            $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
+
+            // Ensure directory exists
+            if (!file_exists(storage_path('app/vouchers'))) {
+                mkdir(storage_path('app/vouchers'), 0755, true);
+            }
+
+            // Generate PDF
+            $pdf = self::generateVoucherPDF($voucher);
+
+            if (!$pdf) {
+                Log::error('Failed to generate PDF for voucher', [
+                    'voucher_id' => $voucher->id,
+                    'voucher_code' => $voucher->voucher_code
+                ]);
+                return false;
+            }
+
+            // Save PDF
+            $pdf->save($pdfPath);
+
+            Log::info('Generated and saved PDF for voucher', [
+                'voucher_id' => $voucher->id,
+                'voucher_code' => $voucher->voucher_code,
+                'path' => $pdfPath
+            ]);
+
+            return true;
+
+        } catch (\Exception $e) {
+            Log::error('Error in generateAndSaveVoucherPDF', [
+                'voucher_id' => $voucher->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return false;
+        }
+    }
+
+    /**
+     * Generate and save PDFs for all vouchers in an order
+     *
+     * @param \App\Order $order The order containing vouchers
+     * @return array Results of the PDF generation process
+     */
+    public static function generateAndSavePDFsForOrder($order)
+    {
+        $results = [
+            'total' => 0,
+            'success' => 0,
+            'failed' => 0,
+            'failures' => []
+        ];
+
+        try {
+            // Get all vouchers for this order
+            $vouchers = $order->vouchers()->get();
+            $results['total'] = count($vouchers);
+
+            foreach ($vouchers as $voucher) {
+                if (self::generateAndSaveVoucherPDF($voucher)) {
+                    $results['success']++;
+                } else {
+                    $results['failed']++;
+                    $results['failures'][] = $voucher->voucher_code;
+                }
+
+                // Force garbage collection after each voucher to free memory
+                gc_collect_cycles();
+            }
+
+            Log::info('PDF generation completed for order', [
+                'order_id' => $order->id,
+                'total' => $results['total'],
+                'success' => $results['success'],
+                'failed' => $results['failed']
+            ]);
+
+            return $results;
+
+        } catch (\Exception $e) {
+            Log::error('Error generating PDFs for order', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            $results['error'] = $e->getMessage();
+            return $results;
+        }
+    }
+
+    /**
+     * Create and save a new voucher
+     *
+     * @param \App\Order $order
+     * @param \App\OrderItem $orderItem
+     * @param int $index Current voucher index
+     * @param int $alreadyGenerated Number of previously generated vouchers
+     * @param object $personalMessages Array of personal messages
+     * @return \App\Voucher|null
+     */
+    public static function createVoucherNew($order, $orderItem, $index, $alreadyGenerated, $personalMessages)
+    {
+        try {
+            $product = $orderItem->product;
+            $productProperties = json_decode($product->properties);
+
+            $voucher = new Voucher();
+
+            // Generate codes and dates
+            $voucher->voucher_code = $voucher->generateVoucherCode();
+            $voucher->activation_code = $voucher->generateActivationCode();
+            $voucher->end_date = $voucher->generateEndDate();
+
+            // Set relationships
+            $voucher->order()->associate($order);
+            $voucher->orderItem()->associate($orderItem);
+
+            // Set basic information
+            $voucher->title = $product->title;
+            $voucher->description = $product->voucher_description;
+
+            // Set personal message
+            $messageIndex = $alreadyGenerated > 0 ? $alreadyGenerated : $index;
+            $voucher->personal_message = isset($personalMessages[$messageIndex]) ?
+                $personalMessages[$messageIndex]->text : '';
+
+            // Set product properties
+            $voucher->weather = $productProperties->weather ?? '';
+            $voucher->duration = $productProperties->duration ?? '';
+            $voucher->location = $productProperties->location ?? '';
+            $voucher->visitors = $productProperties->visitors ?? '';
+            $voucher->dress_code = $productProperties->dress_code ?? '';
+            $voucher->za_gledaoce = $productProperties->za_gledaoce ?? '';
+            $voucher->additional_info = $productProperties->additional_info ?? '';
+
+            if ($voucher->save() && $order->customer_email !== 'abramusagency@gmail.com') {
+                $voucher->sendCompanyEmail();
+
+                Log::info('Voucher created successfully', [
+                    'order_id' => $order->id,
+                    'voucher_id' => $voucher->id,
+                    'voucher_code' => $voucher->voucher_code
+                ]);
+
+                return $voucher;
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            Log::error('Error creating voucher', [
+                'order_id' => $order->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return null;
+        }
+    }
 }
