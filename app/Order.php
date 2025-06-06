@@ -301,6 +301,7 @@ class Order extends Model
                 $already_generated = $order_item->vouchers->count();
                 $vouchers_count = $product_count - $already_generated;
                 $personal_messages = json_decode($item->personal_message);
+                $vouchers = [];
 
                 if ($vouchers_count > 0) {
                     Log::info('Generating ' . $vouchers_count . ' vouchers for order item', [
@@ -321,6 +322,7 @@ class Order extends Model
 
                             if ($voucher) {
                                 $vouchersGenerated = true;
+                                $vouchers[] = $voucher;
                             } else {
                                 Log::error('Failed to generate voucher', [
                                     'order_id' => $order->id,
@@ -335,8 +337,8 @@ class Order extends Model
 
             // Send email to customer with vouchers
             if ($vouchersGenerated) {
-                Log::info('Vouchers were generated, sending email to customer', ['order_id' => $order->id]);
-                $this->sendCustomerEmail();
+                Log::info('Vouchers were generated, sending email to customer', ['order_id' => $order->id, 'voucher' => $vouchers]);
+//                $this->sendCustomerEmail();
             }
 
             return true;

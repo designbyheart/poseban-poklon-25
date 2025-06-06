@@ -1239,12 +1239,24 @@ class OrderController extends Controller
             // Generate and send vouchers if this is an e-voucher order
 //            if ($order->shipping_method_id === 9) { // E-voucher shipping method
 //                $voucherResult = $this->handleVoucherGeneration($order);
-            $voucherResult = $this->handleVoucherGeneration($order);
-            Log::info('Vouchers generated for order ' . $order->id, [
-                'order_id' => $order->id,
-                'customer_email' => $order->customer_email,
-                'voucher_result' => $voucherResult
-            ]);
+//            $voucherResult = $this->handleVoucherGeneration($order);
+            $vouchersGenerated = $order->generateVouchers();
+
+            if (!$vouchersGenerated) {
+                Log::error('Failed to generate vouchers', ['order_id' => $order->id]);
+                return [
+                    'success' => false,
+                    'message' => 'Failed to generate vouchers'
+                ];
+            }
+
+            Log::info('Vouchers generated successfully in database', ['order_id' => $order->id]);
+
+//            Log::info('Vouchers generated for order ' . $order->id, [
+//                'order_id' => $order->id,
+//                'customer_email' => $order->customer_email,
+//                'voucher_result' => $voucherResult
+//            ]);
 
 //                if (!$voucherResult['success']) {
 //                    Log::error('Failed to generate vouchers for bank payment', [
