@@ -36,16 +36,21 @@
                                         :label-placeholder="$t('auth.password')"
                                         name="password"
                                         v-model="password"
-                                        class="w-full mt-6 no-icon-border" />
+                                        class="w-full mt-6 no-icon-border"/>
 
                                     <input type="hidden" name="_token" :value="csrf">
 
                                     <div class="flex flex-wrap justify-between my-5">
-                                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">{{ $t('auth.rememberMe') }}</vs-checkbox>
+                                        <vs-checkbox v-model="checkbox_remember_me" class="mb-3">
+                                            {{ $t('auth.rememberMe') }}
+                                        </vs-checkbox>
                                         <router-link to="#">{{ $t('auth.forgotPassword') }}</router-link>
                                     </div>
 
-                                    <vs-button class="float-right mb-3" @click="login">{{ $t('auth.login') }}</vs-button>
+                                    <vs-button class="float-right mb-3" @click="login">{{
+                                            $t('auth.login')
+                                        }}
+                                    </vs-button>
 
                                     <vs-divider></vs-divider>
 
@@ -54,7 +59,14 @@
 
                                             <!-- facebook -->
                                             <div class="bg-facebook pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
-                                              <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook-f" class="text-white h-4 w-4 svg-inline--fa fa-facebook-f fa-w-9" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264 512"><path fill="currentColor" d="M215.8 85H264V3.6C255.7 2.5 227.1 0 193.8 0 124.3 0 76.7 42.4 76.7 120.3V192H0v91h76.7v229h94V283h73.6l11.7-91h-85.3v-62.7c0-26.3 7.3-44.3 45.1-44.3z"></path></svg>
+                                                <svg aria-hidden="true" focusable="false" data-prefix="fab"
+                                                     data-icon="facebook-f"
+                                                     class="text-white h-4 w-4 svg-inline--fa fa-facebook-f fa-w-9"
+                                                     role="img" xmlns="http://www.w3.org/2000/svg"
+                                                     viewBox="0 0 264 512">
+                                                    <path fill="currentColor"
+                                                          d="M215.8 85H264V3.6C255.7 2.5 227.1 0 193.8 0 124.3 0 76.7 42.4 76.7 120.3V192H0v91h76.7v229h94V283h73.6l11.7-91h-85.3v-62.7c0-26.3 7.3-44.3 45.1-44.3z"></path>
+                                                </svg>
                                             </div>
 
                                         </div>
@@ -72,26 +84,23 @@
 
 <script>
 
-    //Library for working with requests
-    import axios from 'axios';
+//Library for working with requests
 
-    export default {
-        data() {
-            return {
-                email: '',
-                password: '',
-                checkbox_remember_me: false,
-                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        },
-        methods: {
-            login(){
-
-                document.querySelector('form[name="login"]').submit();
-
-            }
+export default {
+    data() {
+        return {
+            email: '',
+            password: '',
+            checkbox_remember_me: false,
+            csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    },
+    methods: {
+        login() {
+            document.querySelector('form[name="login"]').submit();
         }
     }
+}
 
 </script>
 
@@ -99,16 +108,19 @@
 #page-login {
     .social-login {
         .bg-facebook {
-          background-color: #1551b1;
+            background-color: #1551b1;
         }
+
         .bg-twitter {
-          background-color: #00aaff;
+            background-color: #00aaff;
         }
+
         .bg-google {
-          background-color: #4285F4;
+            background-color: #4285F4;
         }
+
         .bg-github {
-          background-color: #333;
+            background-color: #333;
         }
     }
 }

@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Services\EmailService;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -58,14 +59,16 @@ class LoginController extends Controller
         if ($this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
+            Log::info('somethings wrong here');
             return $this->sendLockoutResponse($request);
         }
 
         if ($this->attemptLogin($request)) {
             $user = Auth::user();
             $email = $user->email;
+            Log::info("user", $user);
             if ($user->role->name == 'architect' && $user->valid_to < now()) {
-
+                Log::info("user logged out");
                 Auth::logout();
 
                 $emailService = new EmailService();
@@ -87,6 +90,7 @@ class LoginController extends Controller
                 Auth::logout();
             }
 
+            Log::info('user logged in', $request->all(), $user);
             return $this->sendLoginResponse($request);
         }
 

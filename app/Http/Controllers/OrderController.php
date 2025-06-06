@@ -13,7 +13,6 @@ use App\OrderItem;
 use App\OrderStatus;
 use App\PaymentMethod;
 use App\Product;
-use App\Services\FiscalCashRegister;
 use App\Setting;
 use App\ShippingMethod;
 use App\Utilities\VoucherUtility;
@@ -32,7 +31,7 @@ class OrderController extends Controller
     public function __construct()
     {
 
-        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail', 'handleVoucherGeneration', 'testVoucherGeneration', 'sendBankPaymentInstructions']]);
+        $this->middleware('check_role:admin,editor', ['except' => ['publicIndexData', 'ordersHistory', 'calculate', 'store', 'orderSuccess', 'paymentSuccess', 'paymentFail', 'handleVoucherGeneration', 'testVoucherGeneration', 'sendBankPaymentInstructions', 'generateBankPaymentVoucher']]);
         $this->middleware('auth', ['only' => ['ordersHistory']]);
     }
 
@@ -946,14 +945,7 @@ class OrderController extends Controller
             // Generate/regenerate PDFs for all vouchers
             foreach ($order->vouchers as $voucher) {
                 $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
-
-                try {
-                    // Ensure directory exists
-                    if (!file_exists(storage_path('app/vouchers'))) {
-                        mkdir(storage_path('app/vouchers'), 0755, true);
-                    }
-
-                    // Generate and save PDF (overwrite if exists)
+                if (!file_exists($pdfPath)) {
                     $pdf = VoucherUtility::generateVoucherPDF($voucher);
                     if ($pdf) {
                         $pdf->save($pdfPath);
@@ -962,15 +954,6 @@ class OrderController extends Controller
                             'voucher_code' => $voucher->voucher_code
                         ]);
                     }
-                } catch (Exception $e) {
-                    Log::error('Exception generating PDF for voucher', [
-                        'voucher_id' => $voucher->id,
-                        'error' => $e->getMessage()
-                    ]);
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Failed to generate PDF: ' . $e->getMessage()
-                    ], 500);
                 }
             }
 
@@ -1163,12 +1146,12 @@ class OrderController extends Controller
     {
         try {
             $order = Order::with(['paymentMethod'])->find($orderId);
-            
+
             if (!$order) {
                 Log::error('Order not found when sending bank payment instructions', ['order_id' => $orderId]);
                 return response()->json(['success' => false, 'message' => 'Order not found'], 404);
             }
-            
+
             // Check if payment method is bank transfer (ID 2)
             if ($order->paymentMethod->id !== 2) {
                 Log::info('Payment instructions not sent - not a bank transfer order', [
@@ -1178,15 +1161,15 @@ class OrderController extends Controller
                 ]);
                 return response()->json(['success' => false, 'message' => 'Order does not use bank transfer payment method'], 400);
             }
-            
+
             // Send email with payment instructions
             SendNewOrderUserEmail::dispatch($order)->onConnection('sync');
-            
+
             Log::info('Bank payment instructions email sent', [
                 'order_id' => $order->id,
                 'customer_email' => $order->customer_email
             ]);
-            
+
             return response()->json(['success' => true, 'message' => 'Payment instructions sent successfully'], 200);
         } catch (Exception $e) {
             Log::error('Failed to send bank payment instructions', [
@@ -1194,8 +1177,113 @@ class OrderController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json(['success' => false, 'message' => 'Failed to send payment instructions'], 500);
+        }
+    }
+
+    /**
+     * Generate voucher for order paid via bank account
+     *
+     * @param int $orderId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function generateBankPaymentVoucher($orderId)
+    {
+        try {
+            $order = Order::with(['paymentMethod', 'shippingMethod', 'status', 'items'])->find($orderId);
+
+            if (!$order) {
+                Log::error('Order not found when generating bank payment voucher', ['order_id' => $orderId]);
+                return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            }
+
+            // Check if payment method is bank transfer (ID 2)
+//            if ($order->paymentMethod->id !== 2) {
+//                Log::info('Voucher generation failed - not a bank transfer order', [
+//                    'order_id' => $orderId,
+//                    'payment_method_id' => $order->paymentMethod->id,
+//                    'payment_method' => $order->paymentMethod->name
+//                ]);
+//                return response()->json(['success' => false, 'message' => 'Order does not use bank transfer payment method'], 400);
+//            }
+
+            // Update order status to paid (ID 2)
+//            $paidStatus = OrderStatus::find(2);
+//            if (!$paidStatus) {
+//                Log::error('Paid status (ID 2) not found in order_statuses table');
+//                return response()->json(['success' => false, 'message' => 'Paid status not found in system'], 500);
+//            }
+
+            // Set order to paid status
+//            $order->setStatus($paidStatus);
+
+            // Store transaction data for bank payment
+//            $transaction_data = [
+//                'order_id' => $order->id,
+//                'payment_method' => 'Bank Transfer',
+//                'payment_date' => Carbon::now()->format('Y-m-d H:i:s'),
+//                'status' => 'approved',
+//                'manually_approved' => true
+//            ];
+
+//            $order->transaction_data = json_encode($transaction_data);
+//            $order->save();
+
+            Log::info('Order marked as paid for bank transfer', [
+                'order_id' => $order->id,
+                'payment_method' => $order->paymentMethod->name,
+                'amount' => $order->total
+            ]);
+
+            // Generate and send vouchers if this is an e-voucher order
+//            if ($order->shipping_method_id === 9) { // E-voucher shipping method
+//                $voucherResult = $this->handleVoucherGeneration($order);
+            $voucherResult = $this->handleVoucherGeneration($order);
+            Log::info('Vouchers generated for order ' . $order->id, [
+                'order_id' => $order->id,
+                'customer_email' => $order->customer_email,
+                'voucher_result' => $voucherResult
+            ]);
+
+//                if (!$voucherResult['success']) {
+//                    Log::error('Failed to generate vouchers for bank payment', [
+//                        'order_id' => $order->id,
+//                        'error' => $voucherResult['message']
+//                    ]);
+//
+//                    return response()->json([
+//                        'success' => false,
+//                        'message' => 'Order marked as paid but voucher generation failed: ' . $voucherResult['message']
+//                    ], 500);
+//                }
+//
+//                Log::info('Vouchers generated and email sent for bank payment order', [
+//                    'order_id' => $order->id,
+//                    'customer_email' => $order->customer_email
+//                ]);
+//
+//                return response()->json([
+//                    'success' => true,
+//                    'message' => 'Order marked as paid and vouchers generated successfully',
+//                    'voucher_count' => $voucherResult['new_vouchers'] ?? 0
+//                ], 200);
+//            }
+
+            // For non-e-voucher orders, just mark as paid
+            return response()->json([
+                'success' => true,
+                'message' => 'Order marked as paid successfully'
+            ], 200);
+
+        } catch (Exception $e) {
+            Log::error('Failed to generate voucher for bank payment', [
+                'order_id' => $orderId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json(['success' => false, 'message' => 'Failed to generate voucher: ' . $e->getMessage()], 500);
         }
     }
 }

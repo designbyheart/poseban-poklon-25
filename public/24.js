@@ -9,7 +9,6 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 //Library for working with requests
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -123,7 +122,7 @@ var render = function render() {
       },
       expression: "checkbox_remember_me"
     }
-  }, [_vm._v(_vm._s(_vm.$t("auth.rememberMe")))]), _vm._v(" "), _c("router-link", {
+  }, [_vm._v("\n                                        " + _vm._s(_vm.$t("auth.rememberMe")) + "\n                                    ")]), _vm._v(" "), _c("router-link", {
     attrs: {
       to: "#"
     }
@@ -132,7 +131,7 @@ var render = function render() {
     on: {
       click: _vm.login
     }
-  }, [_vm._v(_vm._s(_vm.$t("auth.login")))]), _vm._v(" "), _c("vs-divider"), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.$t("auth.login")) + "\n                                ")]), _vm._v(" "), _c("vs-divider"), _vm._v(" "), _c("div", {
     staticClass: "social-login flex flex-wrap justify-between"
   }, [_c("div", {
     staticClass: "social-login-buttons flex flex-wrap items-center mt-4"

@@ -14,9 +14,12 @@
                 </h3>
                 <div class="signin-form">
                     <form name="login" action="/login" method="post">
-                        <input type="text" name="email" v-model="form.email" @input="$v.form.email.$touch" class="signin-input" placeholder="Email">
-                        <span class="error" v-if="$v.form.email.$anyError && $v.form.email.$dirty">Polje nije validno.</span>
-                        <input type="password" name="password" v-model="form.password" @input="$v.form.password.$touch" class="signin-input" placeholder="Šifra">
+                        <input type="text" name="email" v-model.trim="form.email" @input="$v.form.email.$touch"
+                               class="signin-input" placeholder="Email">
+                        <span class="error"
+                              v-if="$v.form.email.$anyError && $v.form.email.$dirty">Polje nije validno.</span>
+                        <input type="password" name="password" v-model.trim="form.password" @input="$v.form.password.$touch"
+                               class="signin-input" placeholder="Šifra">
                         <span class="error" v-if="$v.form.password.$anyError && $v.form.password.$dirty">Polje je obavezno.</span>
                         <input type="hidden" name="_token" :value="applicationParams.csrf">
                         <div class="signin-btn-row">
@@ -53,18 +56,26 @@
                 </h3>
                 <div class="signin-form">
                     <form name="register" action="/register" method="post">
-                        <input type="text" id="name" name="name" v-model.trim="form.name" @input="$v.form.name.$touch" class="signin-input" placeholder="Ime">
-                        <span class="error" v-if="$v.form.name.$anyError && $v.form.name.$dirty">Polje je obavezno.</span>
-                        <input type="email" id="email" name="email" v-model.trim="form.email" @input="$v.form.email.$touch" class="signin-input" placeholder="Email">
-                        <span class="error" v-if="$v.form.email.$anyError && $v.form.email.$dirty">Polje nije validno.</span>
-                        <input type="password" id="password" name="password" v-model.trim="form.password" @input="$v.form.password.$touch" class="signin-input" placeholder="Šifra">
+                        <input type="text" id="name" name="name" v-model.trim="form.name" @input="$v.form.name.$touch"
+                               class="signin-input" placeholder="Ime">
+                        <span class="error"
+                              v-if="$v.form.name.$anyError && $v.form.name.$dirty">Polje je obavezno.</span>
+                        <input type="email" id="email" name="email" v-model.trim="form.email"
+                               @input="$v.form.email.$touch" class="signin-input" placeholder="Email">
+                        <span class="error"
+                              v-if="$v.form.email.$anyError && $v.form.email.$dirty">Polje nije validno.</span>
+                        <input type="password" id="password" name="password" v-model.trim="form.password"
+                               @input="$v.form.password.$touch" class="signin-input" placeholder="Šifra">
                         <span class="error" v-if="$v.form.password.$anyError && $v.form.password.$dirty">Polje je obavezno.</span>
-                        <input type="password" id="password-confirm" name="password_confirmation" v-model.trim="form.password_confirmation" @input="$v.form.password_confirmation.$touch" class="signin-input" placeholder="Potvrdi šifru">
+                        <input type="password" id="password-confirm" name="password_confirmation"
+                               v-model.trim="form.password_confirmation" @input="$v.form.password_confirmation.$touch"
+                               class="signin-input" placeholder="Potvrdi šifru">
                         <span class="error" v-if="$v.form.password_confirmation.$anyError && $v.form.password.$dirty">Šifre se ne poklapaju.</span>
                         <input type="hidden" name="_token" :value="applicationParams.csrf">
                         <div class="modal-form-checkbox">
                             <label class="modal-item-label">
-                                <input type="checkbox" class="modal-item-checkbox" v-model="form.privacyPolicy" @change="$v.form.privacyPolicy.$touch">
+                                <input type="checkbox" class="modal-item-checkbox" v-model="form.privacyPolicy"
+                                       @change="$v.form.privacyPolicy.$touch">
                                 <span class="modal-item-check"></span>
                                 Slažem se sa Politikom Privatnosti
                             </label>
@@ -96,146 +107,102 @@
 
 <script>
 
-    //Validation library
-    import { required, minLength, email, sameAs } from 'vuelidate/lib/validators';
+//Validation library
+import {email, required, sameAs} from 'vuelidate/lib/validators';
 
-    export default {
-        name: 'AuthModal',
-        data() {
+export default {
+    name: 'AuthModal',
+    data() {
+        return {
+            isActive: false,
+            type: 'login',
+            form: {}
+        }
+    },
+    computed: {
+        isLoginForm() {
+            return this.type === 'login';
+        },
+        isRegistrationForm() {
+            return this.type === 'register';
+        }
+    },
+    validations() {
+        if (this.type === 'login') {
+            return {
+                form: {
+                    email: {
+                        email,
+                        required
+                    },
+                    password: {
+                        required
+                    }
+                }
+            }
+        } else if (this.type === 'register') {
 
             return {
-
-                isActive: false,
-                type: 'login',
-                form: {}
-
-            }
-
-        },
-        computed: {
-
-            isLoginForm(){
-
-                return this.type === 'login';
-
-            },
-            isRegistrationForm(){
-
-                return this.type === 'register';
-
-            }
-
-        },
-        validations(){
-
-            if(this.type === 'login'){
-
-                return {
-                    form: {
-
-                        email: {
-                            email,
-                            required
-                        },
-                        password: {
-                            required
-                        }
-
+                form: {
+                    name: {
+                        required
+                    },
+                    email: {
+                        required,
+                        email
+                    },
+                    password: {
+                        required
+                    },
+                    password_confirmation: {
+                        sameAsPassword: sameAs('password')
+                    },
+                    privacyPolicy: {
+                        required
                     }
                 }
-
             }
-            else if(this.type === 'register'){
+        }
+    },
+    methods: {
 
-                return {
-
-                    form: {
-
-                        name: {
-
-                            required
-
-                        },
-                        email: {
-
-                            required,
-                            email
-
-                        },
-                        password: {
-
-                            required
-
-                        },
-                        password_confirmation: {
-
-                            sameAsPassword: sameAs('password')
-
-                        },
-                        privacyPolicy: {
-                            required
-                        }
-
-                    }
-
+        listenEvents() {
+            this.EventBus.$on('open-auth-modal', (type) => {
+                this.type = type;
+                this.isActive = true;
+            });
+        },
+        submitForm() {
+            if (!this.$v.$invalid) {
+                if (this.isLoginForm) {
+                    document.querySelector('form[name="login"]').submit();
+                } else if (this.isRegistrationForm) {
+                    document.querySelector('form[name="register"]').submit();
                 }
+            }
+        },
+        switchFormType(type) {
+
+            if (type === 'login' || type === 'register') {
+
+                this.type = type;
 
             }
 
         },
-        methods: {
+        close() {
 
-            listenEvents(){
-
-                this.EventBus.$on('open-auth-modal', (type) => {
-
-                    this.type = type;
-                    this.isActive = true;
-
-                });
-
-            },
-            submitForm(){
-
-                if(!this.$v.$invalid){
-
-                   if(this.isLoginForm){
-
-                       document.querySelector('form[name="login"]').submit();
-
-                   }
-                   else if(this.isRegistrationForm){
-
-                       document.querySelector('form[name="register"]').submit();
-
-                   }
-
-                }
-
-
-            },
-            switchFormType(type){
-
-                if(type === 'login' || type === 'register'){
-
-                    this.type = type;
-
-                }
-
-            },
-            close(){
-
-                this.isActive = false;
-
-            }
-
-        },
-        mounted(){
-
-            //Listen to the external events
-            this.listenEvents();
+            this.isActive = false;
 
         }
+
+    },
+    mounted() {
+
+        //Listen to the external events
+        this.listenEvents();
+
     }
+}
 
 </script>

@@ -56,6 +56,9 @@ Route::get('/payment/fail', 'OrderController@paymentFail');
 //Send bank payment instructions
 Route::post('/orders/{orderId}/send-payment-instructions', 'OrderController@sendBankPaymentInstructions');
 
+//Generate voucher for bank payment orders
+Route::post('/orders/{orderId}/generate-bank-payment-voucher', 'OrderController@generateBankPaymentVoucher');
+
 Route::get('/emails', 'EmailController@index');
 Route::get('/send-voucher/{id}', 'EmailController@sendVoucher');
 

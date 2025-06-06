@@ -13285,9 +13285,12 @@ var render = function render() {
   }, [_c("input", {
     directives: [{
       name: "model",
-      rawName: "v-model",
+      rawName: "v-model.trim",
       value: _vm.form.email,
-      expression: "form.email"
+      expression: "form.email",
+      modifiers: {
+        trim: true
+      }
     }],
     staticClass: "signin-input",
     attrs: {
@@ -13301,17 +13304,23 @@ var render = function render() {
     on: {
       input: [function ($event) {
         if ($event.target.composing) return;
-        _vm.$set(_vm.form, "email", $event.target.value);
-      }, _vm.$v.form.email.$touch]
+        _vm.$set(_vm.form, "email", $event.target.value.trim());
+      }, _vm.$v.form.email.$touch],
+      blur: function blur($event) {
+        return _vm.$forceUpdate();
+      }
     }
   }), _vm._v(" "), _vm.$v.form.email.$anyError && _vm.$v.form.email.$dirty ? _c("span", {
     staticClass: "error"
   }, [_vm._v("Polje nije validno.")]) : _vm._e(), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
-      rawName: "v-model",
+      rawName: "v-model.trim",
       value: _vm.form.password,
-      expression: "form.password"
+      expression: "form.password",
+      modifiers: {
+        trim: true
+      }
     }],
     staticClass: "signin-input",
     attrs: {
@@ -13325,8 +13334,11 @@ var render = function render() {
     on: {
       input: [function ($event) {
         if ($event.target.composing) return;
-        _vm.$set(_vm.form, "password", $event.target.value);
-      }, _vm.$v.form.password.$touch]
+        _vm.$set(_vm.form, "password", $event.target.value.trim());
+      }, _vm.$v.form.password.$touch],
+      blur: function blur($event) {
+        return _vm.$forceUpdate();
+      }
     }
   }), _vm._v(" "), _vm.$v.form.password.$anyError && _vm.$v.form.password.$dirty ? _c("span", {
     staticClass: "error"
