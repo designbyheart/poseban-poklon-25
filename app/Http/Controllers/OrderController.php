@@ -1317,4 +1317,79 @@ class OrderController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to generate voucher: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Generate fiscal invoice using ITC service
+     *
+     * @param Order|int $orderOrId Order object or order ID
+     * @return array Response with success status and message
+     */
+    public function generateFiscalInvoice($orderOrId)
+    {
+        try {
+            // Get order object if ID was passed
+            $order = $orderOrId instanceof Order ? $orderOrId : Order::find($orderOrId);
+
+            if (!$order) {
+                Log::error('Failed to generate fiscal invoice: Order not found', [
+                    'order_id' => $orderOrId
+                ]);
+                return [
+                    'success' => false,
+                    'message' => 'Order not found'
+                ];
+            }
+
+            // Load necessary relationships if not already loaded
+            if (!$order->relationLoaded('items')) {
+                $order->load('items.product', 'shippingMethod', 'paymentMethod');
+            }
+
+            // Check if order is in paid status (usually status ID 2)
+            if ($order->order_status_id !== 2) {
+                Log::warning('Attempted to generate fiscal invoice for non-paid order', [
+                    'order_id' => $order->id,
+                    'status_id' => $order->order_status_id
+                ]);
+                return [
+                    'success' => false,
+                    'message' => 'Cannot generate fiscal invoice for non-paid order'
+                ];
+            }
+
+            Log::info('Attempting to send invoice to ITC fiscal service', [
+                'order_id' => $order->id
+            ]);
+
+            // Create ITC fiscal service
+            $fiscalService = new \App\Services\FiscalInvoiceService();
+
+            // Send invoice to fiscal service
+            $result = $fiscalService->sendInvoice($order);
+
+            Log::info('Invoice sent successfully to ITC fiscal service', [
+                'order_id' => $order->id,
+                'result' => $result
+            ]);
+
+            return [
+                'success' => true,
+                'message' => 'Fiscal invoice generated successfully',
+                'order_id' => $order->id,
+                'data' => $result['data'] ?? null
+            ];
+
+        } catch (\Exception $e) {
+            Log::error('Failed to generate fiscal invoice', [
+                'order_id' => $orderOrId instanceof Order ? $orderOrId->id : $orderOrId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Failed to generate fiscal invoice: ' . $e->getMessage()
+            ];
+        }
+    }
 }

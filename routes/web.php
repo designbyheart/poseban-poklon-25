@@ -39,7 +39,7 @@ Route::get('/postani-nas-partner', 'PageController@contactCompany')->name('conta
 
 
 // Test route for voucher generation
-Route::get('/test/generate-vouchers/{orderId}','OrderController@testVoucherGeneration');
+Route::get('/test/generate-vouchers/{orderId}', 'OrderController@testVoucherGeneration');
 
 
 //Sitemap
@@ -58,6 +58,9 @@ Route::post('/orders/{orderId}/send-payment-instructions', 'OrderController@send
 
 //Generate voucher for bank payment orders
 Route::post('/orders/{orderId}/generate-bank-payment-voucher', 'OrderController@generateBankPaymentVoucher');
+
+//Generate fiscal invoice for order
+Route::post('/orders/{orderId}/generate-fiscal-invoice', 'OrderController@generateFiscalInvoice');
 
 Route::get('/emails', 'EmailController@index');
 Route::get('/send-voucher/{id}', 'EmailController@sendVoucher');
@@ -352,7 +355,7 @@ Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.'], function () {
 
     /**
      * Statistic
- */
+     */
 
 
 
@@ -693,6 +696,26 @@ Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.'], function () {
     Route::resource('images', 'ImageController');
 });
 
+/**
+ * Fiscal Invoice Routes
+ */
+Route::group(['prefix' => '/fiscal', 'middleware' => ['auth', 'check_role:admin,editor']], function () {
+    // Check fiscal service status
+    Route::get('/status', 'FiscalInvoiceController@checkStatus')->name('fiscal.status');
+
+    // Send invoice for a specific order
+    Route::get('/send/{orderId}', 'FiscalInvoiceController@sendInvoice')->name('fiscal.send');
+
+    // Retry sending invoice for a specific order
+    Route::post('/retry/{orderId}', 'FiscalInvoiceController@sendInvoice')->name('fiscal.retry');
+
+    // Bulk send invoices
+    Route::post('/bulk', 'FiscalInvoiceController@sendBulkInvoices')->name('fiscal.bulk');
+
+    // Admin fiscal invoice management page
+    Route::get('/', 'FiscalInvoiceController@index')->name('fiscal.index');
+});
+
 //Card page
 Route::get('/card', function () {
     return view('user.cardTest');
@@ -729,4 +752,18 @@ Route::get('/test/voucher-email/{orderId}', function ($orderId) {
         'message' => 'Voucher email dispatched for order ' . $order->id,
         'customer_email' => $order->customer_email
     ]);
+});
+
+Route::get('/dash/fiscal/status', 'FiscalInvoiceController@checkStatus');
+
+// Dashboard fiscal routes
+Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.', 'middleware' => [
+    //    'auth', 'check_role:admin,editor'
+]], function () {
+    // Fiscal invoice management routes
+    Route::get('/fiscal', 'FiscalInvoiceController@index')->name('fiscal.index');
+    // Route::get('/fiscal/status', 'FiscalInvoiceController@checkStatus')->name('fiscal.dashboard.status');
+    Route::post('/fiscal/send/{orderId}', 'FiscalInvoiceController@sendInvoice')->name('fiscal.dashboard.send');
+    Route::post('/fiscal/retry/{orderId}', 'FiscalInvoiceController@retryInvoice')->name('fiscal.dashboard.retry');
+    Route::post('/fiscal/bulk', 'FiscalInvoiceController@bulkSendInvoices')->name('fiscal.dashboard.bulk');
 });

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\FiscalCashRegister;
+use App\Services\FiscalInvoiceService;
 use App\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +30,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Bind FiscalInvoiceService to the container
+        $this->app->bind(FiscalInvoiceService::class, function ($app) {
+            return new FiscalInvoiceService(
+                $app->make(FiscalCashRegister::class)
+            );
+        });
+
+        // Bind FiscalCashRegister as singleton since it's a service
+        $this->app->singleton(FiscalCashRegister::class, function ($app) {
+            return new FiscalCashRegister();
+        });
     }
 }

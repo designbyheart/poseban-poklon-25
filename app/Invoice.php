@@ -26,7 +26,25 @@ class Invoice extends Model
         'order_id',
         'user_id',
         'email',
+        'external_id',
+        'response_data',
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * Get the order that owns the invoice
+     */
+    public function order()
+    {
+        return $this->belongsTo('App\Order');
+    }
+
+    /**
+     * Get the user that owns the invoice
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }
