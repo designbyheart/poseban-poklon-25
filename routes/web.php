@@ -755,6 +755,7 @@ Route::get('/test/voucher-email/{orderId}', function ($orderId) {
 });
 
 Route::get('/dash/fiscal/status', 'FiscalInvoiceController@checkStatus');
+Route::get('/dash/fiscal/getAuthToken', 'FiscalInvoiceController@getAuthToken');
 
 // Dashboard fiscal routes
 Route::group(['prefix' => '/dashboard', 'as' => 'dashboard.', 'middleware' => [

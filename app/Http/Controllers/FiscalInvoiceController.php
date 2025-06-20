@@ -136,4 +136,8 @@ class FiscalInvoiceController extends Controller
             ], 500);
         }
     }
+
+    public function getAuthToken() {
+        return $this->fiscalInvoiceService->getAuthToken();
+    }
 }
