@@ -946,13 +946,13 @@ class OrderController extends Controller
             foreach ($order->vouchers as $voucher) {
                 $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
 
-                Log::info('PDF Voucher created', ['voucher_code' => $voucher->voucher_code]);
+                Log::log('PDF Voucher created', ['voucher_code' => $voucher->voucher_code]);
 
                 if (!file_exists($pdfPath)) {
                     $pdf = VoucherUtility::generateVoucherPDF($voucher);
                     if ($pdf) {
                         $pdf->save($pdfPath);
-                        Log::info('Generated/Updated PDF for voucher', [
+                        Log::log('Generated/Updated PDF for voucher', [
                             'voucher_id' => $voucher->id,
                             'voucher_code' => $voucher->voucher_code
                         ]);
