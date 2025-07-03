@@ -1,5 +1,5 @@
 # Use the PHP 7.4 FPM image as the base image
-FROM php:7.4-fpm AS base
+FROM php:7.4-fpm
 
 # Add Composer to the PATH
 ENV PATH="$PATH:/usr/local/bin"
@@ -20,8 +20,8 @@ RUN apt-get update && apt-get install -y \
 RUN docker-php-ext-configure zip \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Install Composer v1 (compatible with PHP 7.1)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --1
+# Install Composer v2
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Increase PHP memory limit
 RUN echo "memory_limit=-1" > /usr/local/etc/php/conf.d/memory-limit.ini
@@ -35,15 +35,11 @@ RUN mkdir -p app/ bootstrap/ config/ database/ public/ resources/ routes/ \
     storage/framework/cache/ \
     storage/framework/sessions/ \
     storage/framework/views/ \
-    storage/logs/
+    storage/logs/ \
+    tests/
 
-# Create empty files to avoid errors if they don't exist in build context
-RUN touch composer.lock .env .env.example package.json package-lock.json .editorconfig
-
-# Copy composer.json (required)
+# Copy only the essential files and directories that are guaranteed to exist
 COPY composer.json ./
-
-# Copy essential directories and files if they exist
 COPY app/ ./app/
 COPY bootstrap/ ./bootstrap/
 COPY config/ ./config/
@@ -51,21 +47,14 @@ COPY database/ ./database/
 COPY public/ ./public/
 COPY resources/ ./resources/
 COPY routes/ ./routes/
-COPY storage/ ./storage/
-COPY tests/ ./tests/
 COPY artisan ./
-COPY composer.lock ./
-COPY .env.example ./
-COPY .env ./
-COPY package.json ./
-COPY package-lock.json ./
-COPY .editorconfig ./
 
-# Configure Composer to avoid timeout issues
-RUN composer config --global process-timeout 2000
-
-# Create .env from example if needed
-RUN if [ -f ".env.example" ] && [ ! -s ".env" ]; then cp .env.example .env; fi
+# Create .env from example if it exists, otherwise create a minimal one
+RUN if [ -f "/var/www/.env.example" ]; then \
+    cp /var/www/.env.example /var/www/.env; \
+    else \
+    echo "APP_NAME=Laravel\nAPP_ENV=production\nDB_CONNECTION=mysql\nDB_HOST=db\nDB_PORT=3306\nDB_DATABASE=poklon\nDB_USERNAME=localroot\nDB_PASSWORD=localroot" > /var/www/.env; \
+    fi
 
 # Install dependencies
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
@@ -79,3 +68,5 @@ EXPOSE 9000
 
 # Start PHP-FPM
 CMD ["php-fpm"]
+
+
