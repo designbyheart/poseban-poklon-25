@@ -29,6 +29,11 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('fiscal/{id}', 'EmailController@fiscal');
 
+// Fiscal Service API Endpoints
+Route::post('/fiscal-v2/signin', 'FiscalController@signin')->name('fiscal.signin');
+Route::get('/fiscal-v2/status', 'FiscalController@status')->name('fiscal.status');
+Route::post('/fiscal-v2/generate-invoice/{orderId}', 'FiscalController@generateInvoice')->name('fiscal.generate-invoice');
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
