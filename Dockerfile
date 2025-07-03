@@ -1,5 +1,5 @@
-# Use the PHP 7.4 FPM image
-FROM php:7.4-fpm
+# Use the PHP 7.4 FPM image as the base image
+FROM php:7.4-fpm AS base
 
 # Add Composer to the PATH
 ENV PATH="$PATH:/usr/local/bin"
@@ -29,39 +29,50 @@ RUN echo "memory_limit=-1" > /usr/local/etc/php/conf.d/memory-limit.ini
 # Set working directory
 WORKDIR /var/www
 
-# Copy composer files first for better caching
-COPY composer.json composer.lock ./
+# Create required directories
+RUN mkdir -p app/ bootstrap/ config/ database/ public/ resources/ routes/ \
+    storage/app/public/ \
+    storage/framework/cache/ \
+    storage/framework/sessions/ \
+    storage/framework/views/ \
+    storage/logs/
+
+# Create empty files to avoid errors if they don't exist in build context
+RUN touch composer.lock .env .env.example package.json package-lock.json .editorconfig
+
+# Copy composer.json (required)
+COPY composer.json ./
+
+# Copy essential directories and files if they exist
+COPY app/ ./app/
+COPY bootstrap/ ./bootstrap/
+COPY config/ ./config/
+COPY database/ ./database/
+COPY public/ ./public/
+COPY resources/ ./resources/
+COPY routes/ ./routes/
+COPY storage/ ./storage/
+COPY tests/ ./tests/
+COPY artisan ./
+COPY composer.lock ./
+COPY .env.example ./
+COPY .env ./
+COPY package.json ./
+COPY package-lock.json ./
+COPY .editorconfig ./
 
 # Configure Composer to avoid timeout issues
 RUN composer config --global process-timeout 2000
 
-# Copy the rest of the application
-COPY app ./app
-COPY bootstrap ./bootstrap
-COPY config ./config
-COPY database ./database
-COPY public ./public
-COPY resources ./resources
-COPY routes ./routes
-COPY storage ./storage
-COPY tests ./tests
-COPY vendor ./vendor
-COPY artisan .
-COPY package.json .
-COPY ./.env .
-COPY .editorconfig .
-COPY package-lock.json .
+# Create .env from example if needed
+RUN if [ -f ".env.example" ] && [ ! -s ".env" ]; then cp .env.example .env; fi
 
-RUN ls database/seeds
+# Install dependencies
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+RUN composer dump-autoload --optimize
 
-# Install PHP dependencies
-# Uncomment one of these lines when ready to run composer install
-# RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --verbose
-# RUN composer install --no-interaction --optimize-autoloader --no-scripts --verbose
-RUN composer dump-autoload --verbose
-
-# Set proper permissions if needed
-# RUN chown -R www-data:www-data /var/www
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/storage
 
 # Expose PHP-FPM port
 EXPOSE 9000
