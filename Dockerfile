@@ -4,7 +4,7 @@ FROM php:7.4-fpm
 # Add Composer to the PATH
 ENV PATH="$PATH:/usr/local/bin"
 
-# Install system dependencies
+# Install system dependencies including nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
+    nginx \
+    supervisor \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Configure and install PHP extensions (including zip)
@@ -63,10 +65,20 @@ RUN composer dump-autoload --optimize
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/storage
 
-# Expose PHP-FPM port
-EXPOSE 9000
+# Copy Nginx and Supervisor configuration files
+COPY docker/nginx/default.conf /etc/nginx/sites-available/default
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Remove default Nginx configuration
+RUN rm -f /etc/nginx/sites-enabled/default
+
+# Enable our Nginx site
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
+# Expose port 80 for web traffic
+EXPOSE 80
+
+# Start supervisor to manage both nginx and php-fpm
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 
