@@ -24,7 +24,7 @@ chmod -R 775 /var/www/storage
 
 # Create symbolic link for storage
 echo "Creating storage link..."
-php artisan storage:link --force
+php artisan storage:link
 
 # Generate application key if not set
 if [ -z "$APP_KEY" ]; then
