@@ -55,7 +55,7 @@ COPY artisan ./
 RUN if [ -f "/var/www/.env.example" ]; then \
     cp /var/www/.env.example /var/www/.env; \
     else \
-    echo "APP_NAME=Laravel\nAPP_ENV=production\nDB_CONNECTION=mysql\nDB_HOST=db\nDB_PORT=3306\nDB_DATABASE=poklon\nDB_USERNAME=localroot\nDB_PASSWORD=localroot" > /var/www/.env; \
+    echo "APP_NAME=Laravel\nAPP_ENV=production\nDB_CONNECTION=mysql\nDB_HOST=\${DB_HOST}\nDB_PORT=\${DB_PORT}\nDB_DATABASE=\${DB_DATABASE}\nDB_USERNAME=\${DB_USERNAME}\nDB_PASSWORD=\${DB_PASSWORD}" > /var/www/.env; \
     fi
 
 # Install dependencies
@@ -75,10 +75,17 @@ RUN rm -f /etc/nginx/sites-enabled/default
 # Enable our Nginx site
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
-# Expose port 80 for web traffic
-EXPOSE 80
+# Create a script to update Nginx configuration with the PORT environment variable
+RUN echo '#!/bin/bash\n\
+sed -i "s/listen 80/listen \${PORT:-80}/g" /etc/nginx/sites-enabled/default\n\
+exec "$@"' > /usr/local/bin/docker-entrypoint.sh && \
+chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Expose port based on PORT environment variable (default to 80)
+EXPOSE ${PORT:-80}
+
+# Use the entrypoint script to configure Nginx with the correct port
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Start supervisor to manage both nginx and php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-
-
