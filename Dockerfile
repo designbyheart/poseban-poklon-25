@@ -41,16 +41,8 @@ RUN mkdir -p app/ bootstrap/ config/ database/ public/ resources/ routes/ \
     storage/logs/ \
     tests/
 
-# Copy only the essential files and directories that are guaranteed to exist
-COPY composer.json ./
-COPY app/ ./app/
-COPY bootstrap/ ./bootstrap/
-COPY config/ ./config/
-COPY database/ ./database/
-COPY public/ ./public/
-COPY resources/ ./resources/
-COPY routes/ ./routes/
-COPY artisan ./
+# Copy all application files
+COPY . .
 
 # Create .env from example if it exists, otherwise create a minimal one
 RUN if [ -f "/var/www/.env.example" ]; then \
@@ -63,13 +55,18 @@ RUN if [ -f "/var/www/.env.example" ]; then \
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 RUN composer dump-autoload --optimize
 
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/storage
+# Set proper permissions for storage
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Copy Nginx and Supervisor configuration files
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 COPY docker/nginx/railway.conf /etc/nginx/sites-available/railway.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/start.sh /usr/local/bin/start.sh
+
+# Make the start script executable
+RUN chmod +x /usr/local/bin/start.sh
 
 # Remove default Nginx configuration
 RUN rm -f /etc/nginx/sites-enabled/default
@@ -77,21 +74,19 @@ RUN rm -f /etc/nginx/sites-enabled/default
 # Enable our Nginx site
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 
-# Create a script to update Nginx configuration with the PORT environment variable
-RUN echo '#!/bin/bash\n\
-sed -i "s/listen 80/listen \${PORT:-80}/g" /etc/nginx/sites-enabled/default\n\
-exec "$@"' > /usr/local/bin/docker-entrypoint.sh && \
-chmod +x /usr/local/bin/docker-entrypoint.sh
-
-# Copy Railway-specific entrypoint script
-COPY docker/railway-entrypoint.sh /usr/local/bin/railway-entrypoint.sh
-RUN chmod +x /usr/local/bin/railway-entrypoint.sh
-
 # Expose port based on PORT environment variable (default to 80)
 EXPOSE ${PORT:-80}
 
-# Use the entrypoint script to configure Nginx with the correct port
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# Set Laravel environment variables
+ENV APP_ENV=production
+ENV LOG_CHANNEL=stderr
+ENV APP_DEBUG=false
+ENV CACHE_DRIVER=file
+ENV SESSION_DRIVER=file
+ENV QUEUE_CONNECTION=sync
+
+# Use the start script to configure and start the application
+ENTRYPOINT ["/usr/local/bin/start.sh"]
 
 # Start supervisor to manage both nginx and php-fpm
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
