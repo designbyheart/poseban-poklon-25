@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nginx \
     supervisor \
+    gettext-base \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Configure and install PHP extensions (including zip)
@@ -67,6 +68,7 @@ RUN chown -R www-data:www-data /var/www/storage
 
 # Copy Nginx and Supervisor configuration files
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
+COPY docker/nginx/railway.conf /etc/nginx/sites-available/railway.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Remove default Nginx configuration
@@ -80,6 +82,10 @@ RUN echo '#!/bin/bash\n\
 sed -i "s/listen 80/listen \${PORT:-80}/g" /etc/nginx/sites-enabled/default\n\
 exec "$@"' > /usr/local/bin/docker-entrypoint.sh && \
 chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Copy Railway-specific entrypoint script
+COPY docker/railway-entrypoint.sh /usr/local/bin/railway-entrypoint.sh
+RUN chmod +x /usr/local/bin/railway-entrypoint.sh
 
 # Expose port based on PORT environment variable (default to 80)
 EXPOSE ${PORT:-80}
