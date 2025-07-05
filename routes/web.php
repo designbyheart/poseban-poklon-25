@@ -27,6 +27,11 @@ use App\Http\Controllers\EmailController;
 
 Route::get('/', 'HomeController@index')->name('home');
 
+// Health check endpoint for Railway
+Route::get('/health', function() {
+    return response()->json(['status' => 'ok', 'timestamp' => time()]);
+});
+
 Route::get('fiscal/{id}', 'EmailController@fiscal');
 
 // Fiscal Service API Endpoints

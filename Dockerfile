@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
     nginx \
     supervisor \
     gettext-base \
+    net-tools \
+    procps \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Configure and install PHP extensions (including zip)
@@ -58,6 +60,9 @@ RUN composer dump-autoload --optimize
 # Set proper permissions for storage
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
+# Create supervisor log directory
+RUN mkdir -p /var/log/supervisor
 
 # Copy Nginx and Supervisor configuration files
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
