@@ -26,6 +26,17 @@ jobs:
       - name: Build frontend
         run: npm run prod
 
+      - name: Create exclude list
+        run: |
+          cat > exclude-list.txt << 'EOF'
+          .git*
+          .git*/**
+          node_modules/**
+          .env*
+          tests/**
+          .secrets
+          EOF
+
       - name: Deploy via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
@@ -35,6 +46,7 @@ jobs:
           local_path: ./
           remote_path: ${{ secrets.PROD_DEPLOY_PATH }}
           sftpArgs: '-o ConnectTimeout=5'
+          args: '-o --delete --exclude-from=exclude-list.txt'
 
       - name: Create post-deployment script
         run: |
