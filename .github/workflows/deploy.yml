@@ -24,6 +24,8 @@ jobs:
             HOST="${{ secrets.PROD_SERVER_HOST }}"
             echo " PROD_SERVER_HOST is set"
             echo "   Host: ${HOST}"
+            echo "   First 4 chars: ${HOST:0:4}"
+            echo "   Last 4 chars: ${HOST: -4}"
           else
             echo " PROD_SERVER_HOST is not set"
             exit 1
@@ -33,6 +35,8 @@ jobs:
             USER="${{ secrets.PROD_SERVER_USER }}"
             echo " PROD_SERVER_USER is set"
             echo "   User: ${USER}"
+            echo "   First 4 chars: ${USER:0:4}"
+            echo "   Last 2 chars: ${USER: -2}"
           else
             echo " PROD_SERVER_USER is not set"
             exit 1
@@ -50,10 +54,15 @@ jobs:
             echo "   Key starts with: $KEY_START"
             echo "   Key ends with: $KEY_END"
             
-            if [[ "$KEY_START" == *"BEGIN"* && "$KEY_START" == *"PRIVATE KEY"* ]]; then
-              echo "   Key appears to be in the correct format"
+            # Check if key contains specific patterns
+            if [[ "$KEY" == *"BEGIN"*"PRIVATE KEY"* && "$KEY" == *"END"*"PRIVATE KEY"* ]]; then
+              echo "   Key contains BEGIN and END PRIVATE KEY markers"
             else
-              echo " Key may not be in the correct format"
+              echo "   Key may not have proper BEGIN/END markers"
+            fi
+            
+            if [[ "$KEY" == *"ENCRYPTED"* ]]; then
+              echo "   Key appears to be encrypted (contains ENCRYPTED)"
             fi
           else
             echo " PROD_SERVER_KEY is not set"
@@ -65,14 +74,18 @@ jobs:
             PASS_LENGTH=${#PASS}
             echo " PROD_SERVER_KEY_PASS is set"
             echo "   Passphrase length: $PASS_LENGTH characters"
+            echo "   First 2 chars: ${PASS:0:2}..."
+            echo "   Last 2 chars: ...${PASS: -2}"
           else
             echo " PROD_SERVER_KEY_PASS is not set (only needed if your key has a passphrase)"
           fi
           
           if [ -n "${{ secrets.PROD_DEPLOY_PATH }}" ]; then
-            PATH="${{ secrets.PROD_DEPLOY_PATH }}"
+            DEPLOY_PATH="${{ secrets.PROD_DEPLOY_PATH }}"
             echo " PROD_DEPLOY_PATH is set"
-            echo "   Path: ${PATH}"
+            echo "   Path: ${DEPLOY_PATH}"
+            echo "   First directory: $(echo $DEPLOY_PATH | cut -d'/' -f2)"
+            echo "   Last directory: $(basename $DEPLOY_PATH)"
           else
             echo " PROD_DEPLOY_PATH is not set"
             exit 1
@@ -82,6 +95,7 @@ jobs:
             URL="${{ secrets.PROD_APP_URL }}"
             echo " PROD_APP_URL is set"
             echo "   URL: ${URL}"
+            echo "   Domain: $(echo $URL | sed -e 's|^[^/]*//||' -e 's|/.*$||')"
           else
             echo " PROD_APP_URL is not set"
             exit 1
