@@ -1,501 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[20],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=script&lang=js":
-/*!******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=script&lang=js ***!
-  \******************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select */ "./node_modules/vue-select/dist/vue-select.js");
-/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_2__);
-//Library for working with requests
-
-
-//Form helper functions
-
-
-//Vue select
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  components: {
-    vSelect: vue_select__WEBPACK_IMPORTED_MODULE_2___default.a
-  },
-  props: {
-    formModel: {
-      type: String,
-      "default": 'order'
-    },
-    indexRoute: {
-      type: String,
-      "default": 'orders'
-    }
-  },
-  data: function data() {
-    return {
-      order: {},
-      getOrderComplete: false,
-      orderForm: {},
-      orderItems: [],
-      orderStatuses: [],
-      editDetails: false,
-      shippingMethods: [],
-      paymentMethods: [],
-      itemPopup: {
-        active: false,
-        data: {}
-      },
-      itemForm: {
-        active: false,
-        data: {}
-      },
-      itemModel: {
-        order_id: '',
-        product_id: '',
-        product_quantity: 1,
-        personal_message: [{
-          text: ''
-        }]
-      },
-      voucherPopup: {
-        active: false,
-        data: {
-          title: '',
-          description: '',
-          personal_message: '',
-          additional_info: '',
-          location: '',
-          duration: '',
-          visitors: '',
-          dress_code: '',
-          weather: '',
-          voucher_code: ''
-        }
-      },
-      sendVoucherPopup: {
-        active: false,
-        data: {
-          id: null,
-          customer_email: '',
-          paper: ''
-        },
-        paperOptions: [{
-          name: 'A4',
-          value: 'a4'
-        }, {
-          name: 'A5',
-          value: 'a5'
-        }]
-      },
-      defaultCurrency: applicationParams.defaultCurrency
-    };
-  },
-  methods: {
-    //Order functions
-    //Load order data
-    getOrder: function getOrder() {
-      var _this = this;
-      var id = this.$route.params.id;
-      var requestParams = {
-        params: {
-          id: id
-        }
-      };
-      var requestUrl = this.API[this.instance].single;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl, requestParams).then(function (response) {
-        _this.order = response.data;
-
-        //Setup the order form
-        _this.setOrderForm();
-        _this.orderItems = _this.order.items;
-
-        //Update item popup data
-        if (_this.itemPopup.active) {
-          _this.updateItemPopupData();
-        }
-      });
-    },
-    //Update order
-    updateOrder: function updateOrder() {
-      var _this2 = this;
-      //Hide order form
-      this.editDetails = false;
-
-      //Convert the date
-      this.orderForm.created_at = this.convertDate(this.orderForm.created_at);
-      var id = this.$route.params.id;
-      var requestUrl = this.API[this.instance].update + '/' + id;
-      var requestParams = this.orderForm;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this2.showNotification('success', 'request.updatedSuccess', 'success');
-
-          //Load an updated order
-          _this2.getOrder();
-        }
-      })["catch"](function (error) {
-        _this2.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Delete order
-    deleteOrder: function deleteOrder() {
-      var _this3 = this;
-      var id = this.$route.params.id;
-      var requestUrl = this.API[this.instance]["delete"] + '/' + id;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](requestUrl).then(function (response) {
-        if (response.data === 'success') {
-          _this3.showNotification('success', 'request.deletedSuccess', 'success');
-
-          //Return to orders index page
-          _this3.returnToIndex();
-        }
-      })["catch"](function (error) {
-        _this3.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Set values for order details form
-    setOrderForm: function setOrderForm() {
-      var _this4 = this;
-      var orderData = {
-        customer_name: this.order.customer_name,
-        customer_surname: this.order.customer_surname,
-        customer_email: this.order.customer_email,
-        customer_phone: this.order.customer_phone,
-        rec_email: this.order.rec_email,
-        rec_name: this.order.rec_name,
-        rec_surname: this.order.rec_surname,
-        rec_phone: this.order.rec_phone,
-        address_one: this.order.address_one,
-        address_two: this.order.address_two,
-        city: this.order.city,
-        zip_code: this.order.zip_code,
-        country: this.order.country,
-        comment: this.order.comment,
-        created_at: this.convertDate(this.order.created_at),
-        order_status_id: this.order.order_status_id,
-        shipping_method_id: this.order.shipping_method_id,
-        payment_method_id: this.order.payment_method_id
-      };
-
-      //Setup the order form
-      this.orderForm = orderData;
-      this.$nextTick(function () {
-        _this4.getOrderComplete = true;
-      });
-    },
-    //Show order details form
-    editOrderDetails: function editOrderDetails() {
-      //Show or hide the order form
-      if (!this.editDetails) {
-        this.editDetails = true;
-      } else {
-        this.editDetails = false;
-      }
-    },
-    billingDetails: function billingDetails() {
-      var address = '';
-      var order = this.order;
-      if (order.customer_name !== null) {
-        address += order.customer_name + ' ';
-      }
-      if (order.customer_surname !== null) {
-        address += order.customer_surname;
-      }
-      if (order.customer_phone !== null) {
-        address += ', ' + order.customer_phone;
-      }
-      if (order.customer_email !== null) {
-        address += ', ' + order.customer_email;
-      }
-      return address;
-    },
-    //Order items functions
-    //Create order item
-    createItem: function createItem() {
-      var _this5 = this;
-      var requestUrl = this.API.orderItem.create;
-      var requestParams = this.itemForm.data;
-      if (requestParams.personal_message.length < requestParams.product_quantity) {
-        for (var i = requestParams.personal_message.length; i < requestParams.product_quantity; i++) {
-          requestParams.personal_message.push({
-            text: ''
-          });
-        }
-      }
-      requestParams.personal_message = JSON.stringify(requestParams.personal_message);
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this5.showNotification('success', 'request.addedSuccess', 'success', 'orderItem');
-
-          //Hide the item form
-          _this5.itemForm.active = false;
-
-          //Load an updated order
-          _this5.getOrder();
-        }
-      })["catch"](function (error) {
-        _this5.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Show order item details form
-    editItem: function editItem(index) {
-      this.itemPopup.data = this.orderItems[index];
-      this.itemPopup.data.personal_message = JSON.parse(this.itemPopup.data.personal_message);
-      this.itemPopup.active = true;
-    },
-    //Update order item
-    updateItem: function updateItem() {
-      var _this6 = this;
-      var item = Object.assign({}, this.itemPopup.data);
-      var id = item.id;
-
-      //Normalize personal messages quantity
-      this.normalizeMessagesQuantity(item);
-      item.personal_message = JSON.stringify(item.personal_message);
-      var requestUrl = this.API.orderItem.update + '/' + id;
-      var requestParams = item;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this6.showNotification('success', 'request.updatedSuccess', 'success', 'orderItem');
-
-          //Load an updated order
-          _this6.getOrder();
-        }
-      })["catch"](function (error) {
-        _this6.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Delete order item
-    deleteItem: function deleteItem(id) {
-      var _this7 = this;
-      var requestUrl = this.API.orderItem["delete"] + '/' + id;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](requestUrl).then(function (response) {
-        if (response.data === 'success') {
-          _this7.showNotification('success', 'request.deletedSuccess', 'success', 'orderItem');
-
-          //Hide order item popup if it's visible
-          if (_this7.itemPopup.active) {
-            _this7.itemPopup.active = false;
-          }
-
-          //Load an updated order
-          _this7.getOrder();
-        }
-      })["catch"](function (error) {
-        _this7.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Normalize personal messages quantity
-    normalizeMessagesQuantity: function normalizeMessagesQuantity(item) {
-      if (item.personal_message.length > item.product_quantity) {
-        var difference = item.personal_message.length - item.product_quantity;
-        var startPosition = item.product_quantity - 1;
-        item.personal_message.splice(startPosition, difference);
-      } else if (item.personal_message.length < item.product_quantity) {
-        var _difference = item.product_quantity - item.personal_message.length;
-        for (var i = 0; i < _difference; i++) {
-          item.personal_message.push({
-            text: ''
-          });
-        }
-      }
-    },
-    //Show order item create form
-    showItemForm: function showItemForm() {
-      //Set item form
-      this.setItemForm();
-
-      //Set order_id value
-      this.itemForm.data.order_id = this.$route.params.id;
-
-      //Load an initial list of products
-      this.getProducts();
-
-      //Show the popup
-      this.itemForm.active = true;
-    },
-    //Set initial data for order item create form
-    setItemForm: function setItemForm() {
-      this.itemForm.data = Object.assign({}, this.itemModel);
-    },
-    //Update order item details form data
-    updateItemPopupData: function updateItemPopupData() {
-      //Update item popup data
-      var item_popup = this.itemPopup;
-      var order_item = this.order.items.find(function (item) {
-        return item.id === item_popup.data.id;
-      });
-      this.itemPopup.data = Object.assign({}, order_item);
-      this.itemPopup.data.personal_message = JSON.parse(order_item.personal_message);
-    },
-    //Vouchers functions
-    //Show voucher edit form
-    showVoucherForm: function showVoucherForm(voucher_id) {
-      var targetVoucher = this.itemPopup.data.vouchers.find(function (voucher) {
-        return voucher.id === voucher_id;
-      });
-
-      //Set form data
-      this.setVoucherForm(targetVoucher);
-
-      //Show popup
-      this.voucherPopup.active = true;
-    },
-    //Set voucher edit form data
-    setVoucherForm: function setVoucherForm(targetVoucher) {
-      this.voucherPopup.data.id = targetVoucher.id;
-      this.voucherPopup.data.order_item_id = targetVoucher.order_item_id;
-      this.voucherPopup.data.title = targetVoucher.title;
-      this.voucherPopup.data.description = targetVoucher.description;
-      this.voucherPopup.data.personal_message = targetVoucher.personal_message;
-      this.voucherPopup.data.additional_info = targetVoucher.additional_info;
-      this.voucherPopup.data.location = targetVoucher.location;
-      this.voucherPopup.data.visitors = targetVoucher.visitors;
-      this.voucherPopup.data.duration = targetVoucher.duration;
-      this.voucherPopup.data.dress_code = targetVoucher.dress_code;
-      this.voucherPopup.data.za_gledaoce = targetVoucher.za_gledaoce;
-      this.voucherPopup.data.weather = targetVoucher.weather;
-      this.voucherPopup.data.voucher_code = targetVoucher.voucher_code;
-    },
-    //Update voucher
-    updateVoucher: function updateVoucher() {
-      var _this8 = this;
-      var voucher = this.voucherPopup.data;
-      var id = voucher.id;
-      var requestUrl = this.API.voucher.update + '/' + id;
-      var requestParams = voucher;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this8.showNotification('success', 'request.updatedSuccess', 'success', 'voucher');
-
-          //Hide voucher form
-          _this8.voucherPopup.active = false;
-
-          //Load an updated order
-          _this8.getOrder();
-        }
-      })["catch"](function (error) {
-        _this8.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Generate vouchers for order
-    generateVouchers: function generateVouchers() {
-      var _this9 = this;
-      var id = this.$route.params.id;
-      var requestUrl = this.API.voucher.generate;
-      var requestParams = {
-        order_id: id
-      };
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this9.showNotification('success', 'request.generatedSuccess', 'success', 'voucher');
-
-          //Load an updated order
-          _this9.getOrder();
-        }
-      })["catch"](function (error) {
-        _this9.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Delete voucher
-    deleteVoucher: function deleteVoucher(id) {
-      var _this10 = this;
-      var requestUrl = this.API.voucher["delete"] + '/' + id;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](requestUrl).then(function (response) {
-        if (response.data === 'success') {
-          _this10.showNotification('success', 'request.deletedSuccess', 'success', 'voucher');
-
-          //Remove voucher from the list
-          var voucher = _this10.itemPopup.data.vouchers.find(function (voucher) {
-            return voucher.id === id;
-          });
-          var position = _this10.itemPopup.data.vouchers.indexOf(voucher);
-          _this10.itemPopup.data.vouchers.splice(position, 1);
-
-          //Load an updated order
-          _this10.getOrder();
-        }
-      })["catch"](function (error) {
-        _this10.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    //Get link of voucher pdf
-    printVoucherLink: function printVoucherLink(id, size) {
-      return this.API.voucher.print + '/' + id + '?paper_size=' + size;
-    },
-    returnToIndex: function returnToIndex() {
-      var component = this;
-      setTimeout(function () {
-        component.redirectToIndex(component.indexRoute);
-        component.setModel();
-      }, 500);
-    },
-    showDeleteAlert: function showDeleteAlert(instance, id) {
-      var methods = {
-        order: this.deleteOrder.bind(null),
-        orderItem: this.deleteItem.bind(null, id),
-        voucher: this.deleteVoucher.bind(null, id)
-      };
-      var instanceTitle = this.$tc('models.' + instance + '.title', 1);
-      var text = this.$t('messages.confirmation.delete', {
-        instance: instanceTitle
-      });
-      this.$vs.dialog({
-        color: 'primary',
-        title: 'Confirm',
-        text: text,
-        accept: methods[instance]
-      });
-    },
-    showSendPopup: function showSendPopup(id) {
-      this.sendVoucherPopup.data.voucher_id = id;
-      this.sendVoucherPopup.data.customer_email = this.order.rec_email;
-      this.sendVoucherPopup.data.paper = this.sendVoucherPopup.paperOptions[0].value;
-      this.sendVoucherPopup.active = true;
-    },
-    sendVoucher: function sendVoucher() {
-      var _this11 = this;
-      var requestUrl = this.API.voucher.send;
-      var requestParams = this.sendVoucherPopup.data;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this11.showNotification('success', 'request.sentSuccess', 'success');
-        }
-      })["catch"](function (error) {
-        _this11.showNotification('error', 'request.error', 'danger');
-      });
-    }
-  },
-  mounted: function mounted() {
-    //Load an order
-    this.getOrder();
-
-    //Load order statuses
-    this.getOrderStatuses();
-
-    //Load shipping methods
-    this.getShippingMethods();
-
-    //Laod payment methods
-    this.getPaymentMethods();
-  },
-  created: function created() {
-    //Set an instance for the form rendering
-    this.setInstance(this.formModel);
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=template&id=382e0ee1":
-/*!****************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=template&id=382e0ee1 ***!
-  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=template&id=382e0ee1":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=template&id=382e0ee1 ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1482,10 +990,502 @@ render._withStripped = true;
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css":
-/*!***************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--24-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--24-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css ***!
-  \***************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=script&lang=js":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=script&lang=js ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@1.8.2/node_modules/axios/index.js");
+/* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select */ "./node_modules/.pnpm/vue-select@3.20.4_vue@2.7.16/node_modules/vue-select/dist/vue-select.js");
+/* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_2__);
+//Library for working with requests
+
+
+//Form helper functions
+
+
+//Vue select
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  components: {
+    vSelect: vue_select__WEBPACK_IMPORTED_MODULE_2___default.a
+  },
+  props: {
+    formModel: {
+      type: String,
+      "default": 'order'
+    },
+    indexRoute: {
+      type: String,
+      "default": 'orders'
+    }
+  },
+  data: function data() {
+    return {
+      order: {},
+      getOrderComplete: false,
+      orderForm: {},
+      orderItems: [],
+      orderStatuses: [],
+      editDetails: false,
+      shippingMethods: [],
+      paymentMethods: [],
+      itemPopup: {
+        active: false,
+        data: {}
+      },
+      itemForm: {
+        active: false,
+        data: {}
+      },
+      itemModel: {
+        order_id: '',
+        product_id: '',
+        product_quantity: 1,
+        personal_message: [{
+          text: ''
+        }]
+      },
+      voucherPopup: {
+        active: false,
+        data: {
+          title: '',
+          description: '',
+          personal_message: '',
+          additional_info: '',
+          location: '',
+          duration: '',
+          visitors: '',
+          dress_code: '',
+          weather: '',
+          voucher_code: ''
+        }
+      },
+      sendVoucherPopup: {
+        active: false,
+        data: {
+          id: null,
+          customer_email: '',
+          paper: ''
+        },
+        paperOptions: [{
+          name: 'A4',
+          value: 'a4'
+        }, {
+          name: 'A5',
+          value: 'a5'
+        }]
+      },
+      defaultCurrency: applicationParams.defaultCurrency
+    };
+  },
+  methods: {
+    //Order functions
+    //Load order data
+    getOrder: function getOrder() {
+      var _this = this;
+      var id = this.$route.params.id;
+      var requestParams = {
+        params: {
+          id: id
+        }
+      };
+      var requestUrl = this.API[this.instance].single;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl, requestParams).then(function (response) {
+        _this.order = response.data;
+
+        //Setup the order form
+        _this.setOrderForm();
+        _this.orderItems = _this.order.items;
+
+        //Update item popup data
+        if (_this.itemPopup.active) {
+          _this.updateItemPopupData();
+        }
+      });
+    },
+    //Update order
+    updateOrder: function updateOrder() {
+      var _this2 = this;
+      //Hide order form
+      this.editDetails = false;
+
+      //Convert the date
+      this.orderForm.created_at = this.convertDate(this.orderForm.created_at);
+      var id = this.$route.params.id;
+      var requestUrl = this.API[this.instance].update + '/' + id;
+      var requestParams = this.orderForm;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this2.showNotification('success', 'request.updatedSuccess', 'success');
+
+          //Load an updated order
+          _this2.getOrder();
+        }
+      })["catch"](function (error) {
+        _this2.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Delete order
+    deleteOrder: function deleteOrder() {
+      var _this3 = this;
+      var id = this.$route.params.id;
+      var requestUrl = this.API[this.instance]["delete"] + '/' + id;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](requestUrl).then(function (response) {
+        if (response.data === 'success') {
+          _this3.showNotification('success', 'request.deletedSuccess', 'success');
+
+          //Return to orders index page
+          _this3.returnToIndex();
+        }
+      })["catch"](function (error) {
+        _this3.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Set values for order details form
+    setOrderForm: function setOrderForm() {
+      var _this4 = this;
+      var orderData = {
+        customer_name: this.order.customer_name,
+        customer_surname: this.order.customer_surname,
+        customer_email: this.order.customer_email,
+        customer_phone: this.order.customer_phone,
+        rec_email: this.order.rec_email,
+        rec_name: this.order.rec_name,
+        rec_surname: this.order.rec_surname,
+        rec_phone: this.order.rec_phone,
+        address_one: this.order.address_one,
+        address_two: this.order.address_two,
+        city: this.order.city,
+        zip_code: this.order.zip_code,
+        country: this.order.country,
+        comment: this.order.comment,
+        created_at: this.convertDate(this.order.created_at),
+        order_status_id: this.order.order_status_id,
+        shipping_method_id: this.order.shipping_method_id,
+        payment_method_id: this.order.payment_method_id
+      };
+
+      //Setup the order form
+      this.orderForm = orderData;
+      this.$nextTick(function () {
+        _this4.getOrderComplete = true;
+      });
+    },
+    //Show order details form
+    editOrderDetails: function editOrderDetails() {
+      //Show or hide the order form
+      if (!this.editDetails) {
+        this.editDetails = true;
+      } else {
+        this.editDetails = false;
+      }
+    },
+    billingDetails: function billingDetails() {
+      var address = '';
+      var order = this.order;
+      if (order.customer_name !== null) {
+        address += order.customer_name + ' ';
+      }
+      if (order.customer_surname !== null) {
+        address += order.customer_surname;
+      }
+      if (order.customer_phone !== null) {
+        address += ', ' + order.customer_phone;
+      }
+      if (order.customer_email !== null) {
+        address += ', ' + order.customer_email;
+      }
+      return address;
+    },
+    //Order items functions
+    //Create order item
+    createItem: function createItem() {
+      var _this5 = this;
+      var requestUrl = this.API.orderItem.create;
+      var requestParams = this.itemForm.data;
+      if (requestParams.personal_message.length < requestParams.product_quantity) {
+        for (var i = requestParams.personal_message.length; i < requestParams.product_quantity; i++) {
+          requestParams.personal_message.push({
+            text: ''
+          });
+        }
+      }
+      requestParams.personal_message = JSON.stringify(requestParams.personal_message);
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this5.showNotification('success', 'request.addedSuccess', 'success', 'orderItem');
+
+          //Hide the item form
+          _this5.itemForm.active = false;
+
+          //Load an updated order
+          _this5.getOrder();
+        }
+      })["catch"](function (error) {
+        _this5.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Show order item details form
+    editItem: function editItem(index) {
+      this.itemPopup.data = this.orderItems[index];
+      this.itemPopup.data.personal_message = JSON.parse(this.itemPopup.data.personal_message);
+      this.itemPopup.active = true;
+    },
+    //Update order item
+    updateItem: function updateItem() {
+      var _this6 = this;
+      var item = Object.assign({}, this.itemPopup.data);
+      var id = item.id;
+
+      //Normalize personal messages quantity
+      this.normalizeMessagesQuantity(item);
+      item.personal_message = JSON.stringify(item.personal_message);
+      var requestUrl = this.API.orderItem.update + '/' + id;
+      var requestParams = item;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this6.showNotification('success', 'request.updatedSuccess', 'success', 'orderItem');
+
+          //Load an updated order
+          _this6.getOrder();
+        }
+      })["catch"](function (error) {
+        _this6.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Delete order item
+    deleteItem: function deleteItem(id) {
+      var _this7 = this;
+      var requestUrl = this.API.orderItem["delete"] + '/' + id;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](requestUrl).then(function (response) {
+        if (response.data === 'success') {
+          _this7.showNotification('success', 'request.deletedSuccess', 'success', 'orderItem');
+
+          //Hide order item popup if it's visible
+          if (_this7.itemPopup.active) {
+            _this7.itemPopup.active = false;
+          }
+
+          //Load an updated order
+          _this7.getOrder();
+        }
+      })["catch"](function (error) {
+        _this7.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Normalize personal messages quantity
+    normalizeMessagesQuantity: function normalizeMessagesQuantity(item) {
+      if (item.personal_message.length > item.product_quantity) {
+        var difference = item.personal_message.length - item.product_quantity;
+        var startPosition = item.product_quantity - 1;
+        item.personal_message.splice(startPosition, difference);
+      } else if (item.personal_message.length < item.product_quantity) {
+        var _difference = item.product_quantity - item.personal_message.length;
+        for (var i = 0; i < _difference; i++) {
+          item.personal_message.push({
+            text: ''
+          });
+        }
+      }
+    },
+    //Show order item create form
+    showItemForm: function showItemForm() {
+      //Set item form
+      this.setItemForm();
+
+      //Set order_id value
+      this.itemForm.data.order_id = this.$route.params.id;
+
+      //Load an initial list of products
+      this.getProducts();
+
+      //Show the popup
+      this.itemForm.active = true;
+    },
+    //Set initial data for order item create form
+    setItemForm: function setItemForm() {
+      this.itemForm.data = Object.assign({}, this.itemModel);
+    },
+    //Update order item details form data
+    updateItemPopupData: function updateItemPopupData() {
+      //Update item popup data
+      var item_popup = this.itemPopup;
+      var order_item = this.order.items.find(function (item) {
+        return item.id === item_popup.data.id;
+      });
+      this.itemPopup.data = Object.assign({}, order_item);
+      this.itemPopup.data.personal_message = JSON.parse(order_item.personal_message);
+    },
+    //Vouchers functions
+    //Show voucher edit form
+    showVoucherForm: function showVoucherForm(voucher_id) {
+      var targetVoucher = this.itemPopup.data.vouchers.find(function (voucher) {
+        return voucher.id === voucher_id;
+      });
+
+      //Set form data
+      this.setVoucherForm(targetVoucher);
+
+      //Show popup
+      this.voucherPopup.active = true;
+    },
+    //Set voucher edit form data
+    setVoucherForm: function setVoucherForm(targetVoucher) {
+      this.voucherPopup.data.id = targetVoucher.id;
+      this.voucherPopup.data.order_item_id = targetVoucher.order_item_id;
+      this.voucherPopup.data.title = targetVoucher.title;
+      this.voucherPopup.data.description = targetVoucher.description;
+      this.voucherPopup.data.personal_message = targetVoucher.personal_message;
+      this.voucherPopup.data.additional_info = targetVoucher.additional_info;
+      this.voucherPopup.data.location = targetVoucher.location;
+      this.voucherPopup.data.visitors = targetVoucher.visitors;
+      this.voucherPopup.data.duration = targetVoucher.duration;
+      this.voucherPopup.data.dress_code = targetVoucher.dress_code;
+      this.voucherPopup.data.za_gledaoce = targetVoucher.za_gledaoce;
+      this.voucherPopup.data.weather = targetVoucher.weather;
+      this.voucherPopup.data.voucher_code = targetVoucher.voucher_code;
+    },
+    //Update voucher
+    updateVoucher: function updateVoucher() {
+      var _this8 = this;
+      var voucher = this.voucherPopup.data;
+      var id = voucher.id;
+      var requestUrl = this.API.voucher.update + '/' + id;
+      var requestParams = voucher;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this8.showNotification('success', 'request.updatedSuccess', 'success', 'voucher');
+
+          //Hide voucher form
+          _this8.voucherPopup.active = false;
+
+          //Load an updated order
+          _this8.getOrder();
+        }
+      })["catch"](function (error) {
+        _this8.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Generate vouchers for order
+    generateVouchers: function generateVouchers() {
+      var _this9 = this;
+      var id = this.$route.params.id;
+      var requestUrl = this.API.voucher.generate;
+      var requestParams = {
+        order_id: id
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this9.showNotification('success', 'request.generatedSuccess', 'success', 'voucher');
+
+          //Load an updated order
+          _this9.getOrder();
+        }
+      })["catch"](function (error) {
+        _this9.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Delete voucher
+    deleteVoucher: function deleteVoucher(id) {
+      var _this0 = this;
+      var requestUrl = this.API.voucher["delete"] + '/' + id;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"](requestUrl).then(function (response) {
+        if (response.data === 'success') {
+          _this0.showNotification('success', 'request.deletedSuccess', 'success', 'voucher');
+
+          //Remove voucher from the list
+          var voucher = _this0.itemPopup.data.vouchers.find(function (voucher) {
+            return voucher.id === id;
+          });
+          var position = _this0.itemPopup.data.vouchers.indexOf(voucher);
+          _this0.itemPopup.data.vouchers.splice(position, 1);
+
+          //Load an updated order
+          _this0.getOrder();
+        }
+      })["catch"](function (error) {
+        _this0.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    //Get link of voucher pdf
+    printVoucherLink: function printVoucherLink(id, size) {
+      return this.API.voucher.print + '/' + id + '?paper_size=' + size;
+    },
+    returnToIndex: function returnToIndex() {
+      var component = this;
+      setTimeout(function () {
+        component.redirectToIndex(component.indexRoute);
+        component.setModel();
+      }, 500);
+    },
+    showDeleteAlert: function showDeleteAlert(instance, id) {
+      var methods = {
+        order: this.deleteOrder.bind(null),
+        orderItem: this.deleteItem.bind(null, id),
+        voucher: this.deleteVoucher.bind(null, id)
+      };
+      var instanceTitle = this.$tc('models.' + instance + '.title', 1);
+      var text = this.$t('messages.confirmation.delete', {
+        instance: instanceTitle
+      });
+      this.$vs.dialog({
+        color: 'primary',
+        title: 'Confirm',
+        text: text,
+        accept: methods[instance]
+      });
+    },
+    showSendPopup: function showSendPopup(id) {
+      this.sendVoucherPopup.data.voucher_id = id;
+      this.sendVoucherPopup.data.customer_email = this.order.rec_email;
+      this.sendVoucherPopup.data.paper = this.sendVoucherPopup.paperOptions[0].value;
+      this.sendVoucherPopup.active = true;
+    },
+    sendVoucher: function sendVoucher() {
+      var _this1 = this;
+      var requestUrl = this.API.voucher.send;
+      var requestParams = this.sendVoucherPopup.data;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this1.showNotification('success', 'request.sentSuccess', 'success');
+        }
+      })["catch"](function (error) {
+        _this1.showNotification('error', 'request.error', 'danger');
+      });
+    }
+  },
+  mounted: function mounted() {
+    //Load an order
+    this.getOrder();
+
+    //Load order statuses
+    this.getOrderStatuses();
+
+    //Load shipping methods
+    this.getShippingMethods();
+
+    //Laod payment methods
+    this.getPaymentMethods();
+  },
+  created: function created() {
+    //Set an instance for the form rendering
+    this.setInstance(this.formModel);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--24-1!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--24-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1501,15 +1501,15 @@ exports.push([module.i, "\nbody .con-vs-popup.order-item-edit .vs-popup{\n\n    
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css":
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--24-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--24-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--24-1!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--24-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--24-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--24-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css");
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--24-1!../../../../../node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--24-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css */ "./node_modules/css-loader/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -1541,7 +1541,7 @@ if(false) {}
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/.pnpm/vue@2.7.16/node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
@@ -1558,9 +1558,9 @@ var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@1.8.2/node_modules/axios/index.js");
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/dashboard/EventBus.js");
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/.pnpm/vuejs-datepicker@1.6.2_vue@2.7.16/node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 //Library for working with requests
 
 
@@ -1823,9 +1823,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader??ref--24-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--24-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader??ref--24-1!../../../../../node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--24-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=style&index=0&id=382e0ee1&lang=css");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_24_1_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_24_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_style_index_0_id_382e0ee1_lang_css__WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 
 
 /***/ }),
@@ -1839,10 +1839,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_template_id_382e0ee1__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdminShow.vue?vue&type=template&id=382e0ee1 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=template&id=382e0ee1");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_template_id_382e0ee1__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_template_id_382e0ee1__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AdminShow.vue?vue&type=template&id=382e0ee1 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/order/AdminShow.vue?vue&type=template&id=382e0ee1");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_template_id_382e0ee1__WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_template_id_382e0ee1__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_AdminShow_vue_vue_type_template_id_382e0ee1__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

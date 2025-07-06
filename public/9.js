@@ -1,127 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[9],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/attributes/Form.vue?vue&type=script&lang=js":
-/*!******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/attributes/Form.vue?vue&type=script&lang=js ***!
-  \******************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
-/* harmony import */ var _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/static/attribute/attribute */ "./resources/js/dashboard/static/attribute/attribute.js");
-//Library for working with requests
-
-
-//Form helper functions
-
-
-//Attribute model, validations and types
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  props: {
-    isEditForm: Boolean,
-    formModel: {
-      type: String,
-      "default": 'attribute'
-    }
-  },
-  data: function data() {
-    return {
-      formStructure: _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__["formStructure"]
-    };
-  },
-  validations: _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__["validations"],
-  methods: {
-    create: function create() {
-      var _this = this;
-      var requestParams = this.model;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(this.API.attribute.create, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this.showNotification('success', 'request.createdSuccess', 'success');
-          _this.afterCreateCallback();
-        }
-      })["catch"](function (error) {
-        _this.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    update: function update() {
-      var _this2 = this;
-      var requestParams = this.model;
-      var attribute_id = this.$route.params.attributeId;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(this.API.attribute.update + '/' + attribute_id, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this2.showNotification('success', 'request.updatedSuccess', 'success');
-        }
-      })["catch"](function (error) {
-        _this2.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    afterCreateCallback: function afterCreateCallback() {
-      var component = this;
-      setTimeout(function () {
-        component.redirectToIndex('attributes');
-        component.setModel();
-      }, 500);
-    },
-    setModel: function setModel() {
-      this.model = Object.assign({}, _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__["model"]);
-    },
-    getSingleAttribute: function getSingleAttribute() {
-      var _this3 = this;
-      var attribute_id = this.$route.params.attributeId;
-      var requestParams = {
-        params: {
-          attribute_id: attribute_id
-        }
-      };
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.attribute.single, requestParams).then(function (response) {
-        _this3.model = response.data;
-      });
-    },
-    loadData: function loadData() {
-      //Get models list
-      this.getFilters();
-
-      //Get the data for editing
-      if (this.isEditForm) {
-        this.getSingleAttribute();
-      }
-    },
-    submitForm: function submitForm() {
-      if (!this.$v.$invalid) {
-        if (this.isEditForm) {
-          this.update();
-        } else {
-          this.create();
-        }
-      } else {
-        this.showNotification('error', 'validation.invalidForm', 'danger');
-      }
-    }
-  },
-  mounted: function mounted() {
-    //Set the model
-    this.setModel();
-
-    //Load the necessary data
-    this.loadData();
-  },
-  created: function created() {
-    //Set an instance for the form rendering
-    this.setInstance(this.formModel);
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/attributes/Form.vue?vue&type=template&id=5c862fb2":
-/*!****************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/attributes/Form.vue?vue&type=template&id=5c862fb2 ***!
-  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/attributes/Form.vue?vue&type=template&id=5c862fb2":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/attributes/Form.vue?vue&type=template&id=5c862fb2 ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -261,6 +143,124 @@ render._withStripped = true;
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/attributes/Form.vue?vue&type=script&lang=js":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/attributes/Form.vue?vue&type=script&lang=js ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@1.8.2/node_modules/axios/index.js");
+/* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
+/* harmony import */ var _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/static/attribute/attribute */ "./resources/js/dashboard/static/attribute/attribute.js");
+//Library for working with requests
+
+
+//Form helper functions
+
+
+//Attribute model, validations and types
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  props: {
+    isEditForm: Boolean,
+    formModel: {
+      type: String,
+      "default": 'attribute'
+    }
+  },
+  data: function data() {
+    return {
+      formStructure: _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__["formStructure"]
+    };
+  },
+  validations: _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__["validations"],
+  methods: {
+    create: function create() {
+      var _this = this;
+      var requestParams = this.model;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(this.API.attribute.create, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this.showNotification('success', 'request.createdSuccess', 'success');
+          _this.afterCreateCallback();
+        }
+      })["catch"](function (error) {
+        _this.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    update: function update() {
+      var _this2 = this;
+      var requestParams = this.model;
+      var attribute_id = this.$route.params.attributeId;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(this.API.attribute.update + '/' + attribute_id, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this2.showNotification('success', 'request.updatedSuccess', 'success');
+        }
+      })["catch"](function (error) {
+        _this2.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    afterCreateCallback: function afterCreateCallback() {
+      var component = this;
+      setTimeout(function () {
+        component.redirectToIndex('attributes');
+        component.setModel();
+      }, 500);
+    },
+    setModel: function setModel() {
+      this.model = Object.assign({}, _static_attribute_attribute__WEBPACK_IMPORTED_MODULE_2__["model"]);
+    },
+    getSingleAttribute: function getSingleAttribute() {
+      var _this3 = this;
+      var attribute_id = this.$route.params.attributeId;
+      var requestParams = {
+        params: {
+          attribute_id: attribute_id
+        }
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(this.API.attribute.single, requestParams).then(function (response) {
+        _this3.model = response.data;
+      });
+    },
+    loadData: function loadData() {
+      //Get models list
+      this.getFilters();
+
+      //Get the data for editing
+      if (this.isEditForm) {
+        this.getSingleAttribute();
+      }
+    },
+    submitForm: function submitForm() {
+      if (!this.$v.$invalid) {
+        if (this.isEditForm) {
+          this.update();
+        } else {
+          this.create();
+        }
+      } else {
+        this.showNotification('error', 'validation.invalidForm', 'danger');
+      }
+    }
+  },
+  mounted: function mounted() {
+    //Set the model
+    this.setModel();
+
+    //Load the necessary data
+    this.loadData();
+  },
+  created: function created() {
+    //Set an instance for the form rendering
+    this.setInstance(this.formModel);
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/EventBus.js":
 /*!********************************************!*\
   !*** ./resources/js/dashboard/EventBus.js ***!
@@ -271,7 +271,7 @@ render._withStripped = true;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/.pnpm/vue@2.7.16/node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 
 var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
@@ -288,9 +288,9 @@ var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@1.8.2/node_modules/axios/index.js");
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/dashboard/EventBus.js");
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/.pnpm/vuejs-datepicker@1.6.2_vue@2.7.16/node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 //Library for working with requests
 
 
@@ -503,7 +503,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "model", function() { return model; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validations", function() { return validations; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formStructure", function() { return formStructure; });
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/.pnpm/vuelidate@0.7.7/node_modules/vuelidate/lib/validators/index.js");
 /* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__);
 //Validation library
 
@@ -614,10 +614,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5c862fb2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=5c862fb2 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/attributes/Form.vue?vue&type=template&id=5c862fb2");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5c862fb2__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5c862fb2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=5c862fb2 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/attributes/Form.vue?vue&type=template&id=5c862fb2");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5c862fb2__WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5c862fb2__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_5c862fb2__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

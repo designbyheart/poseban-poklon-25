@@ -1,156 +1,9 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[14],{
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=script&lang=js":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=script&lang=js ***!
-  \****************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
-/* harmony import */ var _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/static/giftCard/giftCard */ "./resources/js/dashboard/static/giftCard/giftCard.js");
-/* harmony import */ var _components_images_ImageUpload__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/images/ImageUpload */ "./resources/js/dashboard/components/images/ImageUpload.vue");
-//Library for working with requests
-
-
-//Form helper functions
-
-
-//Model, validations and types
-
-
-//Image manager
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  components: {
-    ImageUpload: _components_images_ImageUpload__WEBPACK_IMPORTED_MODULE_3__["default"]
-  },
-  props: {
-    isEditForm: Boolean,
-    formModel: {
-      type: String,
-      "default": 'giftCard'
-    },
-    indexRoute: {
-      type: String,
-      "default": 'giftCards'
-    }
-  },
-  data: function data() {
-    return {
-      formStructure: _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__["formStructure"],
-      giftCardStatuses: [{
-        title: this.$t('statuses.giftCard.activated'),
-        value: true
-      }, {
-        title: this.$t('statuses.giftCard.notActivated'),
-        value: false
-      }]
-    };
-  },
-  validations: _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__["validations"],
-  methods: {
-    create: function create() {
-      var _this = this;
-      //Assemble an item
-      this.assembleItem();
-      var requestParams = this.model;
-      var requestUrl = this.API[this.instance].create;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this.showNotification('success', 'request.createdSuccess', 'success');
-          _this.afterCreateCallback();
-        }
-      })["catch"](function (error) {
-        _this.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    update: function update() {
-      var _this2 = this;
-      //Assemble an item
-      this.assembleItem();
-      var requestParams = this.model;
-      var id = this.$route.params.id;
-      var requestUrl = this.API[this.instance].update + '/' + id;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
-        if (response.data === 'success') {
-          _this2.showNotification('success', 'request.updatedSuccess', 'success');
-        }
-      })["catch"](function (error) {
-        _this2.showNotification('error', 'request.error', 'danger');
-      });
-    },
-    afterCreateCallback: function afterCreateCallback() {
-      var component = this;
-      setTimeout(function () {
-        component.redirectToIndex(component.indexRoute);
-        component.setModel();
-      }, 500);
-    },
-    setModel: function setModel() {
-      this.model = Object.assign({}, _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__["model"]);
-    },
-    getSingleItem: function getSingleItem() {
-      var _this3 = this;
-      var id = this.$route.params.id;
-      var requestParams = {
-        params: {
-          id: id
-        }
-      };
-      var requestUrl = this.API[this.instance].single;
-      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl, requestParams).then(function (response) {
-        _this3.model = response.data;
-      });
-    },
-    loadData: function loadData() {
-      //Get products
-      this.getProducts();
-
-      //Get categories
-      this.getCategories();
-
-      //Get the data for editing
-      if (this.isEditForm) {
-        this.getSingleItem();
-      }
-    },
-    assembleItem: function assembleItem() {},
-    submitForm: function submitForm() {
-      if (!this.$v.$invalid) {
-        if (this.isEditForm) {
-          this.update();
-        } else {
-          this.create();
-        }
-      } else {
-        this.showNotification('error', 'validation.invalidForm', 'danger');
-      }
-    }
-  },
-  mounted: function mounted() {
-    //Set the model
-    this.setModel();
-
-    //Load the necessary data
-    this.loadData();
-  },
-  created: function created() {
-    //Set an instance for the form rendering
-    this.setInstance(this.formModel);
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=template&id=11ed7a49":
-/*!**************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=template&id=11ed7a49 ***!
-  \**************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=template&id=11ed7a49":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=template&id=11ed7a49 ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -314,6 +167,153 @@ render._withStripped = true;
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=script&lang=js":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=script&lang=js ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@1.8.2/node_modules/axios/index.js");
+/* harmony import */ var _mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/mixins/forms/helper */ "./resources/js/dashboard/mixins/forms/helper.js");
+/* harmony import */ var _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/static/giftCard/giftCard */ "./resources/js/dashboard/static/giftCard/giftCard.js");
+/* harmony import */ var _components_images_ImageUpload__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/images/ImageUpload */ "./resources/js/dashboard/components/images/ImageUpload.vue");
+//Library for working with requests
+
+
+//Form helper functions
+
+
+//Model, validations and types
+
+
+//Image manager
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mixins: [_mixins_forms_helper__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  components: {
+    ImageUpload: _components_images_ImageUpload__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  props: {
+    isEditForm: Boolean,
+    formModel: {
+      type: String,
+      "default": 'giftCard'
+    },
+    indexRoute: {
+      type: String,
+      "default": 'giftCards'
+    }
+  },
+  data: function data() {
+    return {
+      formStructure: _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__["formStructure"],
+      giftCardStatuses: [{
+        title: this.$t('statuses.giftCard.activated'),
+        value: true
+      }, {
+        title: this.$t('statuses.giftCard.notActivated'),
+        value: false
+      }]
+    };
+  },
+  validations: _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__["validations"],
+  methods: {
+    create: function create() {
+      var _this = this;
+      //Assemble an item
+      this.assembleItem();
+      var requestParams = this.model;
+      var requestUrl = this.API[this.instance].create;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].post(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this.showNotification('success', 'request.createdSuccess', 'success');
+          _this.afterCreateCallback();
+        }
+      })["catch"](function (error) {
+        _this.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    update: function update() {
+      var _this2 = this;
+      //Assemble an item
+      this.assembleItem();
+      var requestParams = this.model;
+      var id = this.$route.params.id;
+      var requestUrl = this.API[this.instance].update + '/' + id;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].put(requestUrl, requestParams).then(function (response) {
+        if (response.data === 'success') {
+          _this2.showNotification('success', 'request.updatedSuccess', 'success');
+        }
+      })["catch"](function (error) {
+        _this2.showNotification('error', 'request.error', 'danger');
+      });
+    },
+    afterCreateCallback: function afterCreateCallback() {
+      var component = this;
+      setTimeout(function () {
+        component.redirectToIndex(component.indexRoute);
+        component.setModel();
+      }, 500);
+    },
+    setModel: function setModel() {
+      this.model = Object.assign({}, _static_giftCard_giftCard__WEBPACK_IMPORTED_MODULE_2__["model"]);
+    },
+    getSingleItem: function getSingleItem() {
+      var _this3 = this;
+      var id = this.$route.params.id;
+      var requestParams = {
+        params: {
+          id: id
+        }
+      };
+      var requestUrl = this.API[this.instance].single;
+      axios__WEBPACK_IMPORTED_MODULE_0__["default"].get(requestUrl, requestParams).then(function (response) {
+        _this3.model = response.data;
+      });
+    },
+    loadData: function loadData() {
+      //Get products
+      this.getProducts();
+
+      //Get categories
+      this.getCategories();
+
+      //Get the data for editing
+      if (this.isEditForm) {
+        this.getSingleItem();
+      }
+    },
+    assembleItem: function assembleItem() {},
+    submitForm: function submitForm() {
+      if (!this.$v.$invalid) {
+        if (this.isEditForm) {
+          this.update();
+        } else {
+          this.create();
+        }
+      } else {
+        this.showNotification('error', 'validation.invalidForm', 'danger');
+      }
+    }
+  },
+  mounted: function mounted() {
+    //Set the model
+    this.setModel();
+
+    //Load the necessary data
+    this.loadData();
+  },
+  created: function created() {
+    //Set an instance for the form rendering
+    this.setInstance(this.formModel);
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/dashboard/mixins/forms/helper.js":
 /*!*******************************************************!*\
   !*** ./resources/js/dashboard/mixins/forms/helper.js ***!
@@ -323,9 +323,9 @@ render._withStripped = true;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@1.8.2/node_modules/axios/index.js");
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/dashboard/EventBus.js");
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/.pnpm/vuejs-datepicker@1.6.2_vue@2.7.16/node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 //Library for working with requests
 
 
@@ -538,7 +538,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "model", function() { return model; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validations", function() { return validations; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formStructure", function() { return formStructure; });
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/.pnpm/vuelidate@0.7.7/node_modules/vuelidate/lib/validators/index.js");
 /* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__);
 //Validation library
 
@@ -651,10 +651,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_11ed7a49__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=11ed7a49 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=template&id=11ed7a49");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_11ed7a49__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_11ed7a49__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Form.vue?vue&type=template&id=11ed7a49 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/.pnpm/vue-loader@15.11.1_css-loader@1.0.1_webpack@4.47.0__lodash@4.17.21_vue-template-compiler@2.7.16_webpack@4.47.0/node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/dashboard/views/giftCard/Form.vue?vue&type=template&id=11ed7a49");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_11ed7a49__WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_11ed7a49__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_pnpm_vue_loader_15_11_1_css_loader_1_0_1_webpack_4_47_0_lodash_4_17_21_vue_template_compiler_2_7_16_webpack_4_47_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Form_vue_vue_type_template_id_11ed7a49__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
