@@ -15,94 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Verify secrets and connection parameters
-        run: |
-          echo "Verifying secrets and connection parameters..."
-          
-          # Check if secrets are set and show partial values safely
-          if [ -n "${{ secrets.PROD_SERVER_HOST }}" ]; then
-            HOST="${{ secrets.PROD_SERVER_HOST }}"
-            echo " PROD_SERVER_HOST is set"
-            echo "   Host: ${HOST}"
-            echo "   First 4 chars: ${HOST:0:4}"
-            echo "   Last 4 chars: ${HOST: -4}"
-          else
-            echo " PROD_SERVER_HOST is not set"
-            exit 1
-          fi
-          
-          if [ -n "${{ secrets.PROD_SERVER_USER }}" ]; then
-            USER="${{ secrets.PROD_SERVER_USER }}"
-            echo " PROD_SERVER_USER is set"
-            echo "   User: ${USER}"
-            echo "   First 4 chars: ${USER:0:4}"
-            echo "   Last 2 chars: ${USER: -2}"
-          else
-            echo " PROD_SERVER_USER is not set"
-            exit 1
-          fi
-          
-          if [ -n "${{ secrets.PROD_SERVER_KEY }}" ]; then
-            # Get key length and first/last few characters safely
-            KEY="${{ secrets.PROD_SERVER_KEY }}"
-            KEY_LENGTH=${#KEY}
-            KEY_START=$(echo "$KEY" | head -n 1)
-            KEY_END=$(echo "$KEY" | tail -n 1)
-            
-            echo " PROD_SERVER_KEY is set"
-            echo "   Key length: $KEY_LENGTH characters"
-            echo "   Key starts with: $KEY_START"
-            echo "   Key ends with: $KEY_END"
-            
-            # Check if key contains specific patterns
-            if [[ "$KEY" == *"BEGIN"*"PRIVATE KEY"* && "$KEY" == *"END"*"PRIVATE KEY"* ]]; then
-              echo "   Key contains BEGIN and END PRIVATE KEY markers"
-            else
-              echo "   Key may not have proper BEGIN/END markers"
-            fi
-            
-            if [[ "$KEY" == *"ENCRYPTED"* ]]; then
-              echo "   Key appears to be encrypted (contains ENCRYPTED)"
-            fi
-          else
-            echo " PROD_SERVER_KEY is not set"
-            exit 1
-          fi
-          
-          if [ -n "${{ secrets.PROD_SERVER_KEY_PASS }}" ]; then
-            PASS="${{ secrets.PROD_SERVER_KEY_PASS }}"
-            PASS_LENGTH=${#PASS}
-            echo " PROD_SERVER_KEY_PASS is set"
-            echo "   Passphrase length: $PASS_LENGTH characters"
-            echo "   First 2 chars: ${PASS:0:2}..."
-            echo "   Last 2 chars: ...${PASS: -2}"
-          else
-            echo " PROD_SERVER_KEY_PASS is not set (only needed if your key has a passphrase)"
-          fi
-          
-          if [ -n "${{ secrets.PROD_DEPLOY_PATH }}" ]; then
-            DEPLOY_PATH="${{ secrets.PROD_DEPLOY_PATH }}"
-            echo " PROD_DEPLOY_PATH is set"
-            echo "   Path: ${DEPLOY_PATH}"
-            echo "   First directory: $(echo $DEPLOY_PATH | cut -d'/' -f2)"
-            echo "   Last directory: $(basename $DEPLOY_PATH)"
-          else
-            echo " PROD_DEPLOY_PATH is not set"
-            exit 1
-          fi
-          
-          if [ -n "${{ secrets.PROD_APP_URL }}" ]; then
-            URL="${{ secrets.PROD_APP_URL }}"
-            echo " PROD_APP_URL is set"
-            echo "   URL: ${URL}"
-            echo "   Domain: $(echo $URL | sed -e 's|^[^/]*//||' -e 's|/.*$||')"
-          else
-            echo " PROD_APP_URL is not set"
-            exit 1
-          fi
-          
-          echo "All required secrets are set!"
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -114,94 +26,48 @@ jobs:
       - name: Build frontend
         run: npm run prod
 
-      - name: Create exclude list
-        run: |
-          cat > exclude-list.txt << 'EOF'
-          .git*
-          .git*/**
-          node_modules/**
-          .env*
-          tests/**
-          .secrets
-          EOF
-
-      - name: Deploy via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Upload files via SCP
+        uses: appleboy/scp-action@master
         with:
-          server: ${{ secrets.PROD_SERVER_HOST }}
+          host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
-          ssh_private_key: ${{ secrets.PROD_SERVER_KEY }}
-          password: ${{ secrets.PROD_SERVER_KEY_PASS }}
-          local_path: ./
-          remote_path: ${{ secrets.PROD_DEPLOY_PATH }}
-          sftpArgs: '-o ConnectTimeout=5'
-          args: '-o --delete --exclude-from=exclude-list.txt'
+          key: ${{ secrets.PROD_SERVER_KEY }}
+          passphrase: ${{ secrets.PROD_SERVER_KEY_PASS }}
+          port: 22
+          source: "./"
+          target: "${{ secrets.PROD_DEPLOY_PATH }}"
+          rm: false
 
-      - name: Create post-deployment script
-        run: |
-          cat > post_deploy.php << 'EOF'
-          <?php
-          echo "Starting post-deployment tasks...\n";
-
-          // Copy .env file
-          echo "Copying .env file...\n";
-          if (copy('../.env', '.env')) {
-              echo "- .env file copied successfully\n";
-          } else {
-              echo "- Failed to copy .env file\n";
-          }
-
-          // Transform PROD_ variables in .env
-          echo "Transforming PROD_ variables in .env...\n";
-          $env_content = file_get_contents('.env');
-          $env_content = preg_replace('/^PROD_/m', '', $env_content);
-          file_put_contents('.env', $env_content);
-
-          // Install composer dependencies
-          echo "Installing composer dependencies...\n";
-          exec('composer install --no-dev --optimize-autoloader --no-interaction 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-
-          // Clear caches
-          echo "Clearing caches...\n";
-          exec('php artisan config:clear 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-          exec('php artisan route:clear 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-
-          // Optimize for production
-          echo "Optimizing for production...\n";
-          exec('php artisan config:cache 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-          exec('php artisan route:cache 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-          exec('php artisan view:cache 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-
-          // Set permissions
-          echo "Setting permissions...\n";
-          exec('chmod -R 775 storage bootstrap/cache 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-          exec('chown -R www-data:www-data storage bootstrap/cache 2>&1', $output, $return_var);
-          echo implode("\n", $output) . "\n";
-
-          echo "Deployment completed successfully!\n";
-          EOF
-
-      - name: Deploy post-deployment script
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Execute remote deployment commands
+        uses: appleboy/ssh-action@v1.2.1
         with:
-          server: ${{ secrets.PROD_SERVER_HOST }}
+          host: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
-          ssh_private_key: ${{ secrets.PROD_SERVER_KEY }}
-          password: ${{ secrets.PROD_SERVER_KEY_PASS }}
-          local_path: ./post_deploy.php
-          remote_path: ${{ secrets.PROD_DEPLOY_PATH }}/public/post_deploy.php
-          sftpArgs: '-o ConnectTimeout=5'
+          key: ${{ secrets.PROD_SERVER_KEY }}
+          passphrase: ${{ secrets.PROD_SERVER_KEY_PASS }}
+          port: 22
+          script: |
+            cd ${{ secrets.PROD_DEPLOY_PATH }}
+            cp ../.env .
 
-      - name: Execute post-deployment script
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: ${{ secrets.PROD_APP_URL }}/post_deploy.php
-          method: 'GET'
-          timeout: 300000
+            # Transform PROD_NESTPAY to NESTPAY in the .env file
+            sed -i 's/^PROD_//' .env
+
+            # Install composer dependencies on the server
+            composer install --no-dev --optimize-autoloader --no-interaction
+
+            # Clear any previous caches
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+
+            # Optimize for production
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            # Set proper permissions
+            chmod -R 775 storage bootstrap/cache
+            chown -R www-data:www-data storage bootstrap/cache
+
+            echo "Deployed successfully"
