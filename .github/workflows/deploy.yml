@@ -70,4 +70,6 @@ jobs:
             chmod -R 775 storage bootstrap/cache
             chown -R www-data:www-data storage bootstrap/cache
 
+            cp /var/www/.env /var/www/html/
+
             echo "Deployed successfully"
