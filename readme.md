@@ -1,74 +1,138 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Poseban Poklon
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+![Poseban Poklon Logo](public/images/posebanpoklon_logo.png)
 
-## About Laravel
+[![.github/workflows/deploy.yml](https://github.com/designbyheart/poseban-poklon-25/actions/workflows/deploy.yml/badge.svg)](https://github.com/designbyheart/poseban-poklon-25/actions/workflows/deploy.yml)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+## About Poseban Poklon
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Poseban Poklon ("Special Gift" in English) is an e-commerce platform specializing in gift experiences in Serbia. The application allows users to browse, purchase, and gift unique experiences to their loved ones.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+## Features
 
-## Learning Laravel
+- **Gift Experience Marketplace**: Browse and purchase unique gift experiences
+- **User Accounts**: Register, login, and manage your profile
+- **Wishlist System**: Save your favorite experiences for later
+- **Order Management**: Track your orders and view order history
+- **Voucher System**: Generate and redeem gift vouchers
+- **Payment Processing**: Multiple payment methods supported
+- **Admin Dashboard**: Comprehensive management of products, orders, and users
+- **Responsive Design**: Works on desktop and mobile devices
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+## Technology Stack
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+- **Framework**: Laravel 5.8
+- **PHP Version**: 7.1.3+
+- **Frontend**: Vue.js, JavaScript, HTML5, CSS3
+- **Database**: MySQL
+- **Deployment**: Docker, Railway
+- **Email**: Brevo (SendinBlue)
+- **PDF Generation**: DomPDF
+- **Queue Management**: Laravel Horizon
+- **Testing**: Codeception
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+### Prerequisites
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
+- PHP 7.1.3 or higher
+- Composer
+- Node.js and NPM
+- MySQL
 
-## Contributing
+### Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/designbyheart/poseban-poklon-25.git
+   cd poseban-poklon
+   ```
 
-## Security Vulnerabilities
+2. Install PHP dependencies:
+   ```bash
+   composer install
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. Install JavaScript dependencies:
+   ```bash
+   npm install
+   ```
+
+4. Create environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+5. Generate application key:
+   ```bash
+   php artisan key:generate
+   ```
+
+6. Configure your database in the `.env` file:
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database_name
+   DB_USERNAME=your_database_username
+   DB_PASSWORD=your_database_password
+   ```
+
+7. Run migrations and seed the database:
+   ```bash
+   php artisan migrate --seed
+   ```
+
+8. Compile assets:
+   ```bash
+   npm run dev
+   ```
+
+9. Start the development server:
+   ```bash
+   php artisan serve
+   ```
+
+## Docker Setup
+
+The project includes Docker configuration for easy deployment:
+
+```bash
+# Build and start containers
+docker-compose up -d
+
+# Run migrations
+docker-compose exec app php artisan migrate
+```
+
+## Deployment
+
+The project is configured for deployment on Railway with GitHub Actions CI/CD pipeline. See `.github/workflows/deploy.yml` for details.
+
+## API Endpoints
+
+The application provides various API endpoints for frontend interaction. Key endpoints include:
+
+- Products: `/products/list`
+- Categories: `/categories/list`
+- Orders: `/orders/list`
+- Wishlist: `/wishlist/list`
+
+## Testing
+
+Run tests using Codeception:
+
+```bash
+composer test
+```
+
+## Contact
+
+Turistička agencija Republika 031
+- Email: kontakt@posebanpoklon.rs
+- Phone: +381 60 533 5325
+- Address: Svetozara Lazovića Gonga 4, 31000 Užice, Serbia
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## Carousel
-
-
-https://vue3-carousel.ismail9k.com/getting-started.html
+This project is licensed under the MIT License - see the LICENSE file for details.
