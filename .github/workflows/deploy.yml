@@ -67,8 +67,10 @@ jobs:
             php artisan view:cache
 
             # Set proper permissions
-            chmod -R 775 storage bootstrap/cache
             chown -R www-data:www-data storage bootstrap/cache
+            sudo usermod -a -G www-data root
+            sudo chmod -R 775 storage bootstrap/cache
+            sudo -u www-data php artisan cache:clear
 
             cp /var/www/.env /var/www/html/
             php artisan key:generate
