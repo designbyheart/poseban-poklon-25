@@ -47,29 +47,31 @@ jobs:
           passphrase: ${{ secrets.PROD_SERVER_KEY_PASS }}
           port: 22
           script: |
-            cd ${{ secrets.PROD_DEPLOY_PATH }}
-            cp ../.env .
+                    cd ${{ secrets.PROD_DEPLOY_PATH }}
+                    cp ../.env .
 
-            # Transform PROD_NESTPAY to NESTPAY in the .env file
-            sed -i 's/^PROD_//' .env
+                    # Transform PROD_NESTPAY to NESTPAY in the .env file
+                    sed -i 's/^PROD_//' .env
 
-            # Install composer dependencies on the server
-            composer install --no-dev --optimize-autoloader --no-interaction
+                    # Install composer dependencies on the server
+                    composer install --no-dev --optimize-autoloader --no-interaction
 
-            # Clear any previous caches
-            php artisan config:clear
-            php artisan route:clear
+                    # Clear any previous caches
+                    php artisan config:clear
+                    php artisan route:clear
+                    php artisan view:clear
 
-            # Optimize for production
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+                    # Optimize for production
+                    php artisan config:cache
+                    php artisan route:cache
+                    php artisan view:cache
 
-            # Run migrations (with --force for production)
-            php artisan migrate --force
+
+            #          Run migrations (with --force for production)
+            #           php artisan migrate --force
 
             # Set proper permissions
-            chmod -R 775 storage bootstrap/cache
-            chown -R www-data:www-data storage bootstrap/cache
+                    chmod -R 775 storage bootstrap/cache
+                    chown -R www-data:www-data storage bootstrap/cache
 
-            echo "Deployed successfully"
+                    echo "Deployed successfully"
