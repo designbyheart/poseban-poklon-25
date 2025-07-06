@@ -71,5 +71,6 @@ jobs:
             chown -R www-data:www-data storage bootstrap/cache
 
             cp /var/www/.env /var/www/html/
+            php artisan key:generate
 
             echo "Deployed successfully"
