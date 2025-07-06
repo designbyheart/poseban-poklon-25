@@ -15,6 +15,80 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Verify secrets and connection parameters
+        run: |
+          echo "Verifying secrets and connection parameters..."
+          
+          # Check if secrets are set and show partial values safely
+          if [ -n "${{ secrets.PROD_SERVER_HOST }}" ]; then
+            HOST="${{ secrets.PROD_SERVER_HOST }}"
+            echo " PROD_SERVER_HOST is set"
+            echo "   Host: ${HOST}"
+          else
+            echo " PROD_SERVER_HOST is not set"
+            exit 1
+          fi
+          
+          if [ -n "${{ secrets.PROD_SERVER_USER }}" ]; then
+            USER="${{ secrets.PROD_SERVER_USER }}"
+            echo " PROD_SERVER_USER is set"
+            echo "   User: ${USER}"
+          else
+            echo " PROD_SERVER_USER is not set"
+            exit 1
+          fi
+          
+          if [ -n "${{ secrets.PROD_SERVER_KEY }}" ]; then
+            # Get key length and first/last few characters safely
+            KEY="${{ secrets.PROD_SERVER_KEY }}"
+            KEY_LENGTH=${#KEY}
+            KEY_START=$(echo "$KEY" | head -n 1)
+            KEY_END=$(echo "$KEY" | tail -n 1)
+            
+            echo " PROD_SERVER_KEY is set"
+            echo "   Key length: $KEY_LENGTH characters"
+            echo "   Key starts with: $KEY_START"
+            echo "   Key ends with: $KEY_END"
+            
+            if [[ "$KEY_START" == *"BEGIN"* && "$KEY_START" == *"PRIVATE KEY"* ]]; then
+              echo "   Key appears to be in the correct format"
+            else
+              echo " Key may not be in the correct format"
+            fi
+          else
+            echo " PROD_SERVER_KEY is not set"
+            exit 1
+          fi
+          
+          if [ -n "${{ secrets.PROD_SERVER_KEY_PASS }}" ]; then
+            PASS="${{ secrets.PROD_SERVER_KEY_PASS }}"
+            PASS_LENGTH=${#PASS}
+            echo " PROD_SERVER_KEY_PASS is set"
+            echo "   Passphrase length: $PASS_LENGTH characters"
+          else
+            echo " PROD_SERVER_KEY_PASS is not set (only needed if your key has a passphrase)"
+          fi
+          
+          if [ -n "${{ secrets.PROD_DEPLOY_PATH }}" ]; then
+            PATH="${{ secrets.PROD_DEPLOY_PATH }}"
+            echo " PROD_DEPLOY_PATH is set"
+            echo "   Path: ${PATH}"
+          else
+            echo " PROD_DEPLOY_PATH is not set"
+            exit 1
+          fi
+          
+          if [ -n "${{ secrets.PROD_APP_URL }}" ]; then
+            URL="${{ secrets.PROD_APP_URL }}"
+            echo " PROD_APP_URL is set"
+            echo "   URL: ${URL}"
+          else
+            echo " PROD_APP_URL is not set"
+            exit 1
+          fi
+          
+          echo "All required secrets are set!"
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -106,6 +180,7 @@ jobs:
           server: ${{ secrets.PROD_SERVER_HOST }}
           username: ${{ secrets.PROD_SERVER_USER }}
           ssh_private_key: ${{ secrets.PROD_SERVER_KEY }}
+          password: ${{ secrets.PROD_SERVER_KEY_PASS }}
           local_path: ./post_deploy.php
           remote_path: ${{ secrets.PROD_DEPLOY_PATH }}/public/post_deploy.php
           sftpArgs: '-o ConnectTimeout=5'
