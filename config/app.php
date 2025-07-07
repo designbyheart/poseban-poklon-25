@@ -80,6 +80,8 @@ return [
     |
     */
 
+    'charset' => 'utf-8',
+
     'locale' => 'sr',
 
     /*

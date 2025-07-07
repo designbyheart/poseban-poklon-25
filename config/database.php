@@ -13,8 +13,6 @@ $mysqlConnection = [
     'prefix' => '',
     'prefix_indexes' => true,
     'strict' => true,
-    'engine' => null,
-    'options' => [] // $options
 ];
 
 return [
