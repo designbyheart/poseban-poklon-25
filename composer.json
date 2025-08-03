@@ -19,7 +19,8 @@
         "laravel/tinker": "^1.0",
         "moontoast/math": "^1.2",
         "sendinblue/api-v3-sdk": "*",
-        "simplesoftwareio/simple-qrcode": "^2.0"
+        "simplesoftwareio/simple-qrcode": "^2.0",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

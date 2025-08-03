@@ -66,7 +66,7 @@ class LoginController extends Controller
         if ($this->attemptLogin($request)) {
             $user = Auth::user();
             $email = $user->email;
-            Log::info("user", $user);
+            Log::info("user", [$user]);
             if ($user->role->name == 'architect' && $user->valid_to < now()) {
                 Log::info("user logged out");
                 Auth::logout();
@@ -90,7 +90,7 @@ class LoginController extends Controller
                 Auth::logout();
             }
 
-            Log::info('user logged in', $request->all(), $user);
+            Log::info('user logged in', [$request->all(), $user]);
             return $this->sendLoginResponse($request);
         }
 

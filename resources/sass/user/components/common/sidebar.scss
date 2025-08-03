@@ -309,12 +309,13 @@ a.parent-title:active {
     font-family: Rubik-bold;
 }
 
-// Category Sidebar Title
+// Categorly Sidebar Title
 .cat-sidebar-title-row {
     width: 100%;
     .cat-sidebar-title {
         padding: 0 10px 20px 10px;
-        font-family: Rubik-medium;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 500;
         font-size: 30px;
         color: $main-text-color;
     }

@@ -945,7 +945,7 @@ class OrderController extends Controller
             // Generate/regenerate PDFs for all vouchers
             foreach ($order->vouchers as $voucher) {
                 $pdfPath = storage_path("app/vouchers/{$voucher->voucher_code}.pdf");
-                Log::info('PDF Voucher created', $voucher->voucher_code);
+                Log::info('PDF Voucher created', [$voucher->voucher_code]);
 
                 if (!file_exists($pdfPath)) {
                     $pdf = VoucherUtility::generateVoucherPDF($voucher);

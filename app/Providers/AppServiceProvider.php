@@ -30,6 +30,18 @@ class AppServiceProvider extends ServiceProvider
         DB::statement('SET character_set_results=utf8mb4');
         DB::statement('SET character_set_client=utf8mb4');
 
+        // Performance optimization for DB queries
+        if (config('app.env') === 'production') {
+            // Disable query log in production to save memory
+            \DB::disableQueryLog();
+            
+            // Set default timeouts to prevent hanging connections
+            \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_TIMEOUT, 5);
+            \DB::connection()->getPdo()->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        } else {
+            // Enable query log in non-production environments
+            \DB::enableQueryLog();
+        }
     }
 
     /**

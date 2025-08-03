@@ -10,6 +10,8 @@
 |
 */
 
+set_time_limit(120); // increases to 120 seconds
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );

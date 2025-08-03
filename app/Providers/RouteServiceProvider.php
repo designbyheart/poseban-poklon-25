@@ -24,7 +24,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
+        \DB::statement('SET NAMES utf8mb4');
         parent::boot();
     }
 

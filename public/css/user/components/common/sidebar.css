@@ -1,21 +1,25 @@
 @font-face {
-  font-family: Rubik, sans-serif;
+  font-family: "Rubik";
+  font-weight: 500;
   src: url("/fonts/user/Rubik-Regular.ttf");
 }
 @font-face {
-  font-family: Rubik-Light, sans-serif;
+  font-family: "Rubik";
+  font-weight: 300;
   src: url("/fonts/user/Rubik-Light.ttf");
 }
 @font-face {
-  font-family: Rubik-bold;
+  font-family: "Rubik";
+  font-weight: 700;
   src: url("/fonts/user/Rubik-Bold.ttf");
 }
 @font-face {
-  font-family: Rubik-medium;
+  font-family: "Rubik";
+  font-weight: 500;
   src: url("/fonts/user/Rubik-Medium.ttf");
 }
 @font-face {
-  font-family: Atziluth;
+  font-family: "Atziluth";
   src: url("/fonts/user/Atziluth-Script.ttf");
 }
 .is-open {
@@ -288,7 +292,8 @@ a.parent-title:active {
 }
 .cat-sidebar-title-row .cat-sidebar-title {
   padding: 0 10px 20px 10px;
-  font-family: Rubik-medium;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
   font-size: 30px;
   color: #000;
 }

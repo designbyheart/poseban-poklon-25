@@ -24,20 +24,14 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
+        // Cache categories for 24 hours
+        $categories = \Cache::remember('admin.categories.all', now()->addHours(24), function () {
+            return Category::with('parent')->get();
+        });
 
-        $categories = Category::all();
-
-        foreach ($categories as $category){
-
-            $category->properties = '{"priority":0,"visibility":true}';
-
-            $category->save();
-
-        }
-
-        return view('admin.category.index');
+        return view('admin.category.index', compact('categories'));
     }
 
     /**
@@ -171,10 +165,40 @@ class CategoryController extends Controller
      */
     public function show(Request $request)
     {
-        $categories = Category::where('parent_id', null)->with('allChildren.banner.image', 'banner.image')->get();
-        $category = Category::where('slug', $request->slug)->firstOrFail();
-        $category->load('allChildren', 'banner.image');
+//        dd('here');
+        // Start DB query logging
+//        \DB::connection()->enableQueryLog();
+//        $startTime = microtime(true);
+
+
+        // Cache categories for 24 hours
+        $categories = \Cache::remember('categories.parent_null', now()->addHours(24), function () {
+            return Category::where('parent_id', null)->with('allChildren.banner.image', 'banner.image')->get();
+        });
+
+        // Cache individual category by slug for 24 hours
+        $slug = $request->slug;
+        $category = \Cache::remember("category.{$slug}", now()->addHours(24), function () use ($slug) {
+            $category = Category::where('slug', $slug)->firstOrFail();
+            $category->load('allChildren', 'banner.image');
+            return $category;
+        });
+
+        // Calculate breadcrumbs (this is likely fast enough not to cache)
         $breadcrumbs = collect($category->getBreadcrumbs());
+
+        // End logging and output results
+//        $endTime = microtime(true);
+//        $queries = \DB::getQueryLog();
+//        $totalQueries = count($queries);
+//        $totalTime = $endTime - $startTime;
+
+//        if ($totalTime > 1.0) { // Log only if total time > 1 second
+//            \Log::channel('daily')->info("Slow DB queries: {$totalQueries} queries took {$totalTime}s", [
+//                'queries' => $queries,
+//                'url' => $request->fullUrl()
+//            ]);
+//        }
 
         return view('user.category.show', compact('category', 'breadcrumbs', 'categories'));
     }
@@ -291,6 +315,22 @@ class CategoryController extends Controller
             $filters = $filters->merge($category->fitersWithAttributes);
         }
         return response()->json($filters, 200);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function welcome()
+    {
+        // Cache top categories for 24 hours
+        $top_categories = \Cache::remember('categories.top', now()->addHours(24), function () {
+            return Category::whereNull('parent_id')
+                        ->take(3)
+                        ->with('allChildren')
+                        ->get();
+        });
+
+        return view('user.welcome', compact('top_categories'));
     }
 
     //For Generating Unique Slug Our Custom function

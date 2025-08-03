@@ -7,7 +7,7 @@ use App\Product;
 use App\ApprovalRequest;
 use App\Rate;
 use App\Setting;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Producent;
 use App\Store;
 use App\Category;
@@ -15,16 +15,19 @@ use App\Attribute;
 use http\Env\Url;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Filter;
-use Storage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
 
         $this->middleware('check_role:admin,editor,shop_editor', ['except' => ['show', 'publicIndexData', 'filterByAttributes']]);
-
     }
 
     /**
@@ -34,13 +37,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->is('dashboard/products')){
+        if ($request->is('dashboard/products')) {
             return view('admin.product.index');
-        }
-        elseif($request->is('dashboard/shop-editor/products')){
+        } elseif ($request->is('dashboard/shop-editor/products')) {
             return view('shop-editor.product.index');
-        }
-        else{
+        } else {
             return view('user.product.index');
         }
     }
@@ -54,11 +55,11 @@ class ProductController extends Controller
 
         $per_page = $request->per_page ?? 20;
 
-        if(!empty($request->search)){
+        if (!empty($request->search)) {
             $products = $products->where('title', 'like', '%' . $request->search . '%');
         }
 
-        if(!empty($request->sort_key) && !empty($request->sort_order)){
+        if (!empty($request->sort_key) && !empty($request->sort_order)) {
             $products = $products->orderBy($request->sort_key, $request->sort_order);
         }
 
@@ -71,122 +72,147 @@ class ProductController extends Controller
     }
 
     // Get list of products for public index page
-    public function publicIndexData(Request $request){
+    public function publicIndexData(Request $request)
+    {
+        // Start DB query logging
+        \DB::connection()->enableQueryLog();
+        $startTime = microtime(true);
 
-        $products = new Product();
-        $per_page = $request->per_page ?? 20;
+        // Build cache key based on request parameters
+        $cacheKey = 'products';
+        $cacheTags = ['products'];
 
-        $products = $products->where('status', true);
-
-        if(!empty($request->category_id)){
-
-            $currentCategory = Category::find($request->category_id);
-
-            $categories = $currentCategory->getCategoriesList();
-
-            $products = $products->whereHas('categories', function($products) use ($categories){
-                $products->whereIn('category_id', $categories->flatten());
-            });
-
+        if (!empty($request->per_page)) {
+            $cacheKey .= '.per_page_' . $request->per_page;
         }
 
-        if(!empty($request->category_slug)){
-
-            $currentCategory = Category::where('slug', $request->category_slug)->first();
-
-            $categories = $currentCategory->getCategoriesList();
-
-            $products = $products->whereHas('categories', function($products) use ($categories){
-                $products->whereIn('category_id', $categories->flatten());
-            });
-
+        if (!empty($request->category_id)) {
+            $cacheKey .= '.category_id_' . $request->category_id;
+            $cacheTags[] = 'category_' . $request->category_id;
         }
 
-        if(!empty($request->category_attributes)){
+        if (!empty($request->category_slug)) {
+            $cacheKey .= '.category_slug_' . $request->category_slug;
+            $cacheTags[] = 'category_' . $request->category_slug;
+        }
 
-            $attributes = $request->category_attributes;
+        if (!empty($request->category_attributes)) {
+            $cacheKey .= '.attributes_' . implode('_', $request->category_attributes);
+        }
 
-            foreach ($attributes as $attribute){
+        if (!empty($request->search)) {
+            $cacheKey .= '.search_' . $request->search;
+        }
 
-                $products = $products->whereHas('attributes', function($products) use ($attribute){
-                    $products->where('attribute_id', $attribute);
+        if (!empty($request->sort_key) && !empty($request->sort_order)) {
+            $cacheKey .= '.sort_' . $request->sort_key . '_' . $request->sort_order;
+        }
+
+        // Use cache remember to store product results for 24 hours
+        $products = \Cache::remember($cacheKey, now()->addHours(24), function () use ($request) {
+            $products = new Product();
+            $per_page = $request->per_page ?? 20;
+
+            $products = $products->where('status', true);
+
+            if (!empty($request->category_id)) {
+                $currentCategory = Category::find($request->category_id);
+                $categories = $currentCategory->getCategoriesList();
+
+                $products = $products->whereHas('categories', function ($products) use ($categories) {
+                    $products->whereIn('category_id', $categories->flatten());
                 });
-
             }
 
-        }
+            if (!empty($request->category_slug)) {
+                $currentCategory = Category::where('slug', $request->category_slug)->first();
+                $categories = $currentCategory->getCategoriesList();
 
-        if(!empty($request->search)){
-
-            $products = $products->where('title', 'like', '%' . $request->search . '%');
-
-        }
-
-        if(!empty($request->sort_key) && !empty($request->sort_order)){
-            $products = $products->orderBy($request->sort_key, $request->sort_order);
-        }
-
-        $products = $products->with('images');
-
-        $products = $products->where('product_id', null)->paginate($per_page);
-
-        $products->getCollection()->transform(function ($product, $key){
-
-            //checks if category contains product in relations
-            $vip_category = Category::where('slug', 'vip')->whereHas('products', function($q) use ($product){
-                $q->where('products_categories.product_id', $product->id);
-            })->exists();
-
-            $product->vip = $vip_category;
-
-            $promo_category = Category::where('slug', 'promo')->whereHas('products', function($q) use ($product){
-                $q->where('products_categories.product_id', $product->id);
-            })->exists();
-
-            $product->promo = $promo_category;
-
-            $new_category = Category::where('slug', 'novi')->whereHas('products', function($q) use ($product){
-                $q->where('products_categories.product_id', $product->id);
-            })->exists();
-
-            $product->new = $new_category;
-
-            if($product->children()->exists()){
-                $product->price = $product->children->min('price');
+                $products = $products->whereHas('categories', function ($products) use ($categories) {
+                    $products->whereIn('category_id', $categories->flatten());
+                });
             }
 
-            if($product->reviews()->exists()){
+            if (!empty($request->category_attributes)) {
+                $attributes = $request->category_attributes;
 
-                $product->reviews_count = $product->reviews->count();
-
-                $product->rating = $product->calculateRating();
-
-            }
-            else{
-
-                $product->reviews_count = 0;
-                $product->rating = 0;
-
+                foreach ($attributes as $attribute) {
+                    $products = $products->whereHas('attributes', function ($products) use ($attribute) {
+                        $products->where('attribute_id', $attribute);
+                    });
+                }
             }
 
-            if(Auth::check() && Auth::user()->wishlist->products->contains($product)){
-
-                $product->in_wishlist = true;
-
-            }
-            else{
-
-                $product->in_wishlist = false;
-
+            if (!empty($request->search)) {
+                $products = $products->where('title', 'like', '%' . $request->search . '%');
             }
 
-            $product->discount_price = $product->getDiscountPrice();
+            if (!empty($request->sort_key) && !empty($request->sort_order)) {
+                $products = $products->orderBy($request->sort_key, $request->sort_order);
+            }
 
-            $product->location = $product->getLocation();
+            $products = $products->with('images');
+            $products = $products->where('product_id', null)->paginate($per_page);
 
-            return $product;
+            $products->getCollection()->transform(function ($product, $key) {
+                //checks if category contains product in relations
+                $vip_category = Category::where('slug', 'vip')->whereHas('products', function ($q) use ($product) {
+                    $q->where('products_categories.product_id', $product->id);
+                })->exists();
 
+                $product->vip = $vip_category;
+
+                $promo_category = Category::where('slug', 'promo')->whereHas('products', function ($q) use ($product) {
+                    $q->where('products_categories.product_id', $product->id);
+                })->exists();
+
+                $product->promo = $promo_category;
+
+                $new_category = Category::where('slug', 'novi')->whereHas('products', function ($q) use ($product) {
+                    $q->where('products_categories.product_id', $product->id);
+                })->exists();
+
+                $product->new = $new_category;
+
+                if ($product->children()->exists()) {
+                    $product->price = $product->children->min('price');
+                }
+
+                if ($product->reviews()->exists()) {
+                    $product->reviews_count = $product->reviews->count();
+                    $product->rating = $product->calculateRating();
+                } else {
+                    $product->reviews_count = 0;
+                    $product->rating = 0;
+                }
+
+                if (Auth::check() && Auth::user()->wishlist->products->contains($product)) {
+                    $product->in_wishlist = true;
+                } else {
+                    $product->in_wishlist = false;
+                }
+
+                $product->discount_price = $product->getDiscountPrice();
+                $product->location = $product->getLocation();
+
+                return $product;
+            });
+
+            return $products;
         });
+
+        // End logging and output results
+        $endTime = microtime(true);
+        $queries = \DB::getQueryLog();
+        $totalQueries = count($queries);
+        $totalTime = $endTime - $startTime;
+
+        if ($totalTime > 1.0) { // Log only if total time > 1 second
+            \Log::channel('daily')->info("Slow DB queries in publicIndexData: {$totalQueries} queries took {$totalTime}s", [
+                'queries' => $queries,
+                'url' => $request->fullUrl()
+            ]);
+        }
 
         return response()->json($products, 200);
     }
@@ -194,16 +220,41 @@ class ProductController extends Controller
     /**
      * Get a single product
      */
-    public function getSingleProduct(Request $request){
+    public function getSingleProduct(Request $request)
+    {
+        // Start DB query logging
+        \DB::connection()->enableQueryLog();
+        $startTime = microtime(true);
 
-        $product = Product::find($request->product_id);
+        // Cache product by ID for 24 hours
+        $productId = $request->product_id;
+        $product = \Cache::remember("product_id.{$productId}", now()->addHours(24), function () use ($productId) {
+            $product = Product::find($productId);
 
-        $product->load('categories', 'attributes', 'images', 'producent', 'children');
+            if ($product) {
+                $product->load('categories', 'attributes', 'images', 'producent', 'children');
+                $product->attributes->load('filter.attributes');
+            }
 
-        $product->attributes->load('filter.attributes');
+            return $product;
+        });
 
-        return response()->json($product);
+        // End logging and output results
+        $endTime = microtime(true);
+        $queries = \DB::getQueryLog();
+        $totalQueries = count($queries);
+        $totalTime = $endTime - $startTime;
 
+        if ($totalTime > 1.0) { // Log only if total time > 1 second
+            \Log::channel('daily')->info("Slow DB queries in getSingleProduct: {$totalQueries} queries took {$totalTime}s", [
+                'queries' => $queries,
+                'url' => $request->fullUrl()
+            ]);
+        }
+
+        if ($product) {
+            return response()->json($product);
+        }
     }
 
     /**
@@ -217,10 +268,9 @@ class ProductController extends Controller
         $attributes = Attribute::all();
         $producents = Producent::all();
 
-        if($request->is('dashboard/products/create')){
+        if ($request->is('dashboard/products/create')) {
             return view('admin.product.create', compact('categories', 'attributes', 'producents'));
-        }
-        elseif($request->is('dashboard/shop-editor/products/create')){
+        } elseif ($request->is('dashboard/shop-editor/products/create')) {
             return view('shop-editor.product.create', compact('categories', 'attributes', 'producents'));
         }
     }
@@ -236,59 +286,56 @@ class ProductController extends Controller
         $product = new Product($request->all());
         $product->user()->associate(Auth::user());
 
-        if(!empty($request->slug)){
+        if (!empty($request->slug)) {
             $product->slug = createSlug($product, $request->slug);
-        }
-        else{
+        } else {
             $product->slug = createSlug($product, $product->title);;
         }
 
-        if(empty($product->slug)){
+        if (empty($product->slug)) {
 
             return response()->json('Can not create a unique slug', 500);
-
         }
 
-        if(!empty($request->producent_id)){
+        if (!empty($request->producent_id)) {
             $producent = Producent::find($request->producent_id);
             $product->producent()->associate($producent);
         }
 
-        if(!empty($request->product_id)){
+        if (!empty($request->product_id)) {
             $parent = Product::find($request->product_id);
             $product->parent()->associate($parent);
         }
 
-        if(!empty($request->properties)){
+        if (!empty($request->properties)) {
             $product->properties = json_encode($request->properties);
         }
 
-        if(!empty($request->za_koga)){
+        if (!empty($request->za_koga)) {
             $product->za_koga = $request->za_koga;
         }
 
-        if($product->save()){
+        if ($product->save()) {
 
-            if(!empty($request->categories)){
+            if (!empty($request->categories)) {
                 $product->categories()->sync($request->input('categories'));
             }
-            if(!empty($request->attributes)){
+            if (!empty($request->attributes)) {
                 $product->attributes()->sync($request->input('attributes'));
             }
-            if(!empty($request->images)){
+            if (!empty($request->images)) {
                 $product->images()->sync($request->input('images'));
             }
 
-//            $approval_request = new ApprovalRequest(['product_id' => $product->id]);
-//            if($approval_request->save()){
-//                $approval_request->reviewingStatus();
-//            }
+            //            $approval_request = new ApprovalRequest(['product_id' => $product->id]);
+            //            if($approval_request->save()){
+            //                $approval_request->reviewingStatus();
+            //            }
 
             $this->generateQrCode($product);
 
             return response()->json(['message' => 'success', 'id' => $product->id], 200);
         }
-
     }
 
     /**
@@ -299,20 +346,27 @@ class ProductController extends Controller
      */
     public function show(Request $request)
     {
-        $product = Product::with('stockItems')->where('status', true)->where('slug', $request->slug)->first();
+        // Start DB query logging
+        \DB::connection()->enableQueryLog();
+        $startTime = microtime(true);
 
-        if(!empty($product)) {
+        // Cache product by slug for 24 hours
+        $slug = $request->slug;
+        $product = \Cache::remember("product.{$slug}", now()->addHours(24), function () use ($slug) {
+            return Product::with('stockItems')
+                ->where('status', true)
+                ->where('slug', $slug)
+                ->first();
+        });
 
+        if (!empty($product)) {
+            // Load relationships with the product
             $product = $product->load('children', 'images');
 
             if (Auth::check() && Auth::user()->wishlist->products->contains($product)) {
-
                 $product->in_wishlist = true;
-
             } else {
-
                 $product->in_wishlist = false;
-
             }
 
             $category = $product->categories()->first();
@@ -326,27 +380,30 @@ class ProductController extends Controller
             }
 
             $reviews_count = $product->reviews()->count();
-
             $product_rating = $product->calculateRating();
-
             $product['discount_price'] = $product->getDiscountPrice();
             $discount_price = $product->getDiscountPrice();
-
             $location = $product->getLocation();
-
             $visitors_number = $product->getVisitorsNumber();
-
             $properties = json_decode($product->properties, true);
 
+            // End logging and output results
+            $endTime = microtime(true);
+            $queries = \DB::getQueryLog();
+            $totalQueries = count($queries);
+            $totalTime = $endTime - $startTime;
+
+            if ($totalTime > 1.0) { // Log only if total time > 1 second
+                \Log::channel('daily')->info("Slow DB queries in product show: {$totalQueries} queries took {$totalTime}s", [
+                    'queries' => $queries,
+                    'url' => $request->fullUrl()
+                ]);
+            }
+
             return view('user.product.show', compact('product', 'properties', 'reviews_count', 'product_rating', 'discount_price', 'location', 'visitors_number', 'breadcrumbs'));
-
-        }
-        else{
-
+        } else {
             return redirect('/');
-
         }
-
     }
 
     /**
@@ -364,10 +421,9 @@ class ProductController extends Controller
         $selected_producent = $product->producent;
         $selected_attributes = $product->attributes;
 
-        if($request->is('dashboard/products/*')){
+        if ($request->is('dashboard/products/*')) {
             return view('admin.product.edit', compact('product', 'images', 'categories', 'selected_categories', 'selected_attributes', 'selected_producent'));
-        }
-        elseif($request->is('dashboard/shop-editor/products/*')){
+        } elseif ($request->is('dashboard/shop-editor/products/*')) {
             return view('shop-editor.product.edit', compact('product', 'images', 'categories', 'selected_categories', 'selected_attributes', 'selected_producent'));
         }
     }
@@ -381,56 +437,51 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        if(Product::where('slug', $request->slug)->where('id', '!=', $product->id)->exists()){
+        if (Product::where('slug', $request->slug)->where('id', '!=', $product->id)->exists()) {
             return response()->json('Slug should be unique', 500);
         }
 
-        if(!empty($request->slug) && ($product->slug != $request->slug)){
+        if (!empty($request->slug) && ($product->slug != $request->slug)) {
             $product->slug = createSlug($product, $request->slug);
             $this->generateQrCode($product);
-        }
-        elseif(empty($request->slug)){
+        } elseif (empty($request->slug)) {
             $product->slug = createSlug($product, $product->title);
         }
 
-        if(empty($product->slug)){
+        if (empty($product->slug)) {
 
             return response()->json('Can not create a unique slug', 500);
-
         }
 
-        if(!empty($request->producent_id)){
+        if (!empty($request->producent_id)) {
             $producent = Producent::find($request->producent_id);
             $product->producent()->associate($producent);
         }
 
-        if(!empty($request->product_id)){
+        if (!empty($request->product_id)) {
             $parent = Product::find($request->product_id);
             $product->parent()->associate($parent);
-        }
-        elseIf(is_null($request->product_id)){
+        } elseif (is_null($request->product_id)) {
 
             $product->parent()->dissociate();
-
         }
 
-        if(!empty($request->properties)){
+        if (!empty($request->properties)) {
 
             $request['properties'] = json_encode($request->properties);
-
         }
 
         $product->za_koga = $request['za_koga'];
 
-        if($product->update($request->all())){
+        if ($product->update($request->all())) {
 
-            if(!empty($request->categories)){
+            if (!empty($request->categories)) {
                 $product->categories()->sync($request->input('categories'));
             }
-            if(!empty($request->attributes)){
+            if (!empty($request->attributes)) {
                 $product->attributes()->sync($request->input('attributes'));
             }
-            if(!empty($request->input('images'))){
+            if (!empty($request->input('images'))) {
                 $product->images()->sync($request->input('images'));
             }
             return response()->json('success', 200);
@@ -445,8 +496,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if($product->delete())
-        {
+        if ($product->delete()) {
             return response()->json('success', 200);
         }
     }
@@ -459,8 +509,8 @@ class ProductController extends Controller
         $products = Product::with('attributes');
 
         $attributes = $request->input('attributes');
-        foreach($attributes as $attribute){
-            $products = $products->whereHas('attributes', function($products) use ($attribute){
+        foreach ($attributes as $attribute) {
+            $products = $products->whereHas('attributes', function ($products) use ($attribute) {
                 // $products->whereIn('attribute_id', $attributes);
                 $products->where('attribute_id', $attribute);
             });
@@ -469,7 +519,8 @@ class ProductController extends Controller
     }
 
     //Generate QR with product page url
-    public function generateQrCode($product){
+    public function generateQrCode($product)
+    {
 
         $image = QrCode::size(500)
             ->format('png')
